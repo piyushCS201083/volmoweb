@@ -1,0 +1,1250 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import {
+  ModelSpec,
+  AccessoryItem,
+  LeadAcidBatteryItem,
+  LithiumLfpBatteryModel,
+  ChargerModelItem,
+  AccessoriesPageConfig,
+  BatteryChargerPageConfig
+} from "./types";
+
+export const MODELS_DATA: ModelSpec[] = [
+  {
+    id: "vista",
+    name: "VISTA",
+    tagline: "The Lightweight Swift - Sporty & Agile City Commuter",
+    speed: "45 km/hr",
+    motor: "1000 Watt High-Efficiency Hub Motor",
+    controller: "Advanced Sine Wave Controller",
+    warranty: "1 Year Standard Warranty (Motor, Controller, Converter, Charger)",
+    isRtoFree: true,
+    colors: [
+      { name: "Glossy White", hex: "#FFFFFF", image: "/src/assets/images/volmo_vista_1780058817114.png" },
+      { name: "Tech Grey", hex: "#52525B", image: "/src/assets/images/vista_tech_grey_1790182554836.jpg" },
+      { name: "Midnight Black", hex: "#18181B", image: "/src/assets/images/vista_midnight_black_1790182569741.jpg" }
+    ],
+    image: "/src/assets/images/volmo_vista_1780058817114.png",
+    basePriceEstimate: "₹59,999",
+    featured: true,
+    frontBrake: "Hydraulic Disc Brake (Right-Hand Lever)",
+    rearBrake: "Mechanical Expanded Drum Brake (Left-Hand Lever)",
+    groundClearance: "170 mm",
+    wheelSize: "10-inch Alloy Wheels with 90/90 Tubeless Tyres",
+    batterySpecs: "60V 24Ah Lithium NMC or 60V 28Ah Lead-Acid Optional Pack",
+    ridingModes: [
+      "ECO Mode (20 km/h for maximum range)",
+      "City Mode (32 km/h for standard commuting)",
+      "Sport Mode (45 km/h for full acceleration)"
+    ]
+  },
+  {
+    id: "glider",
+    name: "GLIDER",
+    tagline: "Aerodynamic Clean Lines - Sleek Design with Fluid Handling",
+    speed: "45 km/hr",
+    motor: "1000 Watt Whisper-Quiet Brushless Hub Motor",
+    controller: "Advanced Sine Wave Controller",
+    warranty: "1 Year Standard Warranty (Motor, Controller, Converter, Charger)",
+    isRtoFree: true,
+    colors: [
+      { name: "Cherry Red", hex: "#DC2626", image: "/src/assets/images/volmo_glider_1780058835594.png" },
+      { name: "Apple Green", hex: "#22C55E", image: "/src/assets/images/glider_apple_green_1790182589580.jpg" },
+      { name: "Ocean Blue", hex: "#2563EB", image: "/src/assets/images/glider_ocean_blue_1790182609366.jpg" }
+    ],
+    image: "/src/assets/images/volmo_glider_1780058835594.png",
+    basePriceEstimate: "₹63,999",
+    featured: false,
+    frontBrake: "Ventilated Wave Disc Brake (Right-Hand Lever)",
+    rearBrake: "Premium Spring Drum Brake with High Durability Liners",
+    groundClearance: "165 mm",
+    wheelSize: "10-inch Designer Alloys with Sports Profile Tubeless Tyres",
+    batterySpecs: "60V 26Ah High-Grade Lithium-Ion or 60V 28Ah Gel Lead-Acid Battery",
+    ridingModes: [
+      "Smooth ECO (18 km/h comfort glide)",
+      "Glide Pro (30 km/h balanced torque)",
+      "Sprint Boost (45 km/h instant raw response)"
+    ]
+  },
+  {
+    id: "classic",
+    name: "CLASSIC",
+    tagline: "Vintage Body, Contemporary Soul - Power Meets Heritage Aesthetic",
+    speed: "60 km/hr",
+    motor: "1200 Watt High-Torque Heavy Duty Motor",
+    controller: "Intelligent Sine Wave Vector Chip",
+    warranty: "1 Year Direct Replacement Warranty on Key Electronics",
+    isRtoFree: true,
+    colors: [
+      { name: "Royal Blue", hex: "#1D4ED8", image: "/src/assets/images/volmo_classic_1780058851300.png" },
+      { name: "Crimson Red", hex: "#B91C1C", image: "/src/assets/images/classic_crimson_red_1790182628879.jpg" },
+      { name: "Charcoal Grey", hex: "#4B5563", image: "/src/assets/images/classic_sleek_black_1790182659642.jpg" },
+      { name: "Sleek Black", hex: "#0F172A", image: "/src/assets/images/classic_sleek_black_1790182659642.jpg" },
+      { name: "Pearl White", hex: "#F8FAFC", image: "/src/assets/images/classic_pearl_white_1790182643917.jpg" }
+    ],
+    image: "/src/assets/images/volmo_classic_1780058851300.png",
+    basePriceEstimate: "₹69,999",
+    featured: true,
+    frontBrake: "Large Diameter Hydraulic Disc Brake",
+    rearBrake: "Heavy-Duty Expanded Shoe Drum Brake",
+    groundClearance: "180 mm (High Clearance for Rough Terrains)",
+    wheelSize: "10-inch Classic Polished Alloy Wheels with Heavy-Duty Carcass",
+    batterySpecs: "60V 34Ah Smart Lithium-Ion NMC Block or 60V 32Ah Lead-Acid Bank",
+    ridingModes: [
+      "Vintage Cruise (25 km/h classic stroll)",
+      "Standard Drive (45 km/h traffic weaver)",
+      "Power Surge (60 km/h peak performance)"
+    ]
+  },
+  {
+    id: "phantom",
+    name: "PHANTOM",
+    tagline: "The Sovereign Cruiser - Ultimate Luxury & Top-Tier Retro Perfection",
+    speed: "60 km/hr",
+    motor: "1200 Watt Peak-Performance Heavy Duty Motor",
+    controller: "Intel-Vector Intelligent Sine Wave Chip",
+    warranty: "1 Year Fully Integrated Direct Replacement Warranty",
+    isRtoFree: true,
+    colors: [
+      { name: "Cream Beige", hex: "#F5F5DC", image: "/src/assets/images/volmo_phantom_1780058868036.png" },
+      { name: "Apple Green", hex: "#16A34A", image: "/src/assets/images/phantom_apple_green_1790182691216.jpg" },
+      { name: "Steel Blue", hex: "#4682B4", image: "/src/assets/images/phantom_steel_blue_1790182675033.jpg" }
+    ],
+    image: "/src/assets/images/volmo_phantom_1780058868036.png",
+    basePriceEstimate: "₹76,999",
+    featured: true,
+    frontBrake: "Signature Dual Piston Hydraulic Disc Brake",
+    rearBrake: "Synchronized Compound Drum Brake with Combi-Brake System (CBS)",
+    groundClearance: "175 mm (Optimized Weight-Loaded Height)",
+    wheelSize: "12-inch Premium Machined Alloys with Low Profile Radial Tyres",
+    batterySpecs: "72V 38Ah Ultra-Dense NMC Lithium-Ion or 72V 32Ah Deep-Cycle VRLA Lead-Acid",
+    ridingModes: [
+      "Ambient Eco (22 km/h silent cruise)",
+      "Urban Elite (42 km/h fluent overtake)",
+      "Phantom Sport (60 km/h high energy trigger)"
+    ]
+  }
+];
+
+export const PULSE_DATA = {
+  id: "pulse",
+  name: "VOLMO PULSE",
+  tagline: "The Cyberpunk Revolution. Coming Soon.",
+  image: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+  description: "Specifications are strictly top secret. Engineered for the next generation of extreme electric mobility with a custom aerodynamic frame, sleek integrated LED architecture, and intelligent underglow technology. Get ready for unmatched acceleration and peak performance.",
+  isReleased: false
+};
+
+export const COMMON_FEATURES = [
+  {
+    name: "Anti-Theft Alarm",
+    description: "Smart remote lock with motion sensors and active engine immobilization.",
+    icon: "ShieldAlert"
+  },
+  {
+    name: "USB Mobile Charging",
+    description: "Charge your smartphone on the go with integrated smart protection USB port.",
+    icon: "Usb"
+  },
+  {
+    name: "Disc Brakes",
+    description: "Front & rear disc brakes with a regenerative braking system for maximum safety.",
+    icon: "Disc"
+  },
+  {
+    name: "Reverse Gear",
+    description: "Effortless reverse drive assist toggle for seamless tight-spot parking.",
+    icon: "RotateCcw"
+  },
+  {
+    name: "Tubeless Tyres",
+    description: "Anti-puncture high-grip tubeless compound tyres ready for all terrains.",
+    icon: "CircleDot"
+  },
+  {
+    name: "Digital Instrument Cluster",
+    description: "High-visibility LCD screen display with real-time speed and battery telemetry.",
+    icon: "Activity"
+  }
+];
+
+export const CONTACT_INFO = {
+  email: "sales@volmoelectrical.com",
+  phone: "7880008401",
+  factoryAddress: "Behind Arogyadhaam Hospital, City Center, Gwalior, Madhya Pradesh - 474011",
+  headOfficeAddress: "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006"
+};
+
+export type ContactInfo = typeof CONTACT_INFO;
+
+export interface HeroConfig {
+  badgeText: string;
+  headlinePart1: string;
+  headlinePart2: string;
+  description: string;
+  coverPhoto: string;
+  floatingTag: string;
+  ctaPrimaryText: string;
+  ctaSecondaryText: string;
+  trustBadge1Title: string;
+  trustBadge1Subtitle: string;
+  trustBadge2Title: string;
+  trustBadge2Subtitle: string;
+}
+
+export const DEFAULT_HERO_CONFIG: HeroConfig = {
+  badgeText: "No Registration · No License Required",
+  headlinePart1: "Sustainably Engineered.",
+  headlinePart2: "Effortlessly Electric.",
+  description: "Crafting advanced electric two-wheelers that combine intelligent technology, premium comfort, and sustainable mobility for the roads of tomorrow.",
+  coverPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+  floatingTag: "Volmo Professional Series",
+  ctaPrimaryText: "Explore EV Fleet",
+  ctaSecondaryText: "Apply For Dealership",
+  trustBadge1Title: "German Sine Wave Controller",
+  trustBadge1Subtitle: "Ultra-quiet, responsive hub motor control",
+  trustBadge2Title: "3-Year Warranty Cover",
+  trustBadge2Subtitle: "Comprehensive peace-of-mind security",
+};
+
+export interface TestimonialItem {
+  id: number;
+  name: string;
+  role: string;
+  location: string;
+  model: string;
+  config: string;
+  avatarUrl: string;
+  rating: number;
+  text: string;
+  highlightText: string;
+}
+
+export const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
+  {
+    id: 1,
+    name: "Rajesh Sharma",
+    role: "Local Business Owner",
+    location: "Gwalior (City Center)",
+    model: "VOLMO CLASSIC",
+    config: "60V 30Ah Lithium-Ion Pack (120km Range)",
+    avatarUrl: "",
+    rating: 5,
+    highlightText: "Absolutely zero registration paper work & ₹0 petrol bills!",
+    text: "I have been riding my Volmo Classic to my shop in City Center every single day for the past six months. Choosing the 120km range Lithium pack was the best decision. Zero license required, zero road tax, and complete peace of mind. Highly recommended for daily urban commuting!"
+  },
+  {
+    id: 2,
+    name: "Ananya Gupta",
+    role: "Software Professional",
+    location: "Morar, Gwalior",
+    model: "VOLMO VISTA",
+    config: "60V Lead-Acid (60km Range)",
+    avatarUrl: "",
+    rating: 5,
+    highlightText: "Ultra-quiet motor and amazing pickup with the sine wave controller.",
+    text: "The first thing you notice about Volmo is how silent it is. Thanks to their sine-wave controller chip, there's absolutely none of that annoying squealing sound cheap EVs make. It rides extremely smoothly, and the built-in USB mobile charger is a lifesaver when my phone is dying."
+  },
+  {
+    id: 3,
+    name: "Vikram Singh Bhadoria",
+    role: "Government Servant",
+    location: "Sardar Bazaar, Morar",
+    model: "VOLMO PHANTOM",
+    config: "72V 42Ah Premium Lithium (180km Custom Range)",
+    avatarUrl: "",
+    rating: 5,
+    highlightText: "Retro elegance meets top-tier performance.",
+    text: "My family is super satisfied with the Volmo Phantom. The retro aesthetic is a head-turner wherever we go in Gwalior. The ride stability is great, easily seating two people. Best of all, my college-going son can ride it safely without wanting to race, and I didn't have to wait in RTO queues!"
+  },
+  {
+    id: 4,
+    name: "Dr. Sandeep Verma",
+    role: "Senior Consultant Paediatrician",
+    location: "Near Arogyadhaam Hospital",
+    model: "VOLMO GLIDER",
+    config: "60V 24Ah Lithium-Ion (100km Range)",
+    avatarUrl: "",
+    rating: 5,
+    highlightText: "High-quality build and convenient charging.",
+    text: "As a doctor, quietness and eco-friendliness are high priorities for me. The Glider fits right in for my commute to the clinic. The regenerative braking feel is very natural and returns a visible charge on the console telemetry display. Great build quality!"
+  }
+];
+
+export interface FAQItem {
+  id: number;
+  category: string;
+  question: string;
+  answer: string;
+  iconName: string;
+}
+
+export const DEFAULT_FAQS: FAQItem[] = [
+  {
+    id: 1,
+    category: "Legal & RTO Exemption",
+    question: "Do I really not need a driving license or RTO registration?",
+    answer: "Yes, absolutely! Under Indian Central Motor Vehicle Rules (CMVR) guidelines, electric two-wheelers engineered with a top speed cap of 25 km/h and motor output under 250W do not require RTO registration, driving license, or road tax. It is 100% legal to ride for students, seniors, and daily commuters with zero administrative hassles.",
+    iconName: "Shield",
+  },
+  {
+    id: 2,
+    category: "Battery Maintenance",
+    question: "How do I maximize and care for my Volmo battery?",
+    answer: "For Lithium-Ion packs, avoid draining the cells to 0% and try keeping them between 20% to 90% state-of-charge for optimal cycles. For Lead-Acid setups, avoid keeping them in a discharged status; charge immediately after riding and complete a full cycle every two weeks. Always use the auto-cut Volmo smart charger supplied.",
+    iconName: "Battery",
+  },
+  {
+    id: 3,
+    category: "Service & Support",
+    question: "Where and how can I get my Volmo scooter serviced?",
+    answer: "Volmo operates dedicated factory service teams based in Gwalior. Regular mechanical consumables (brakes, tires, shock absorbers) are easily serviceable by any local workshop or standard mechanic. For special electric components (controller, motor, battery/wiring), our corporate manufacturing plant and dealerships offer express diagnostic support.",
+    iconName: "Wrench",
+  },
+  {
+    id: 4,
+    category: "Warranty details",
+    question: "What is covered under the 1-Year Bumper Warranty?",
+    answer: "Our 1-Year Bumper Warranty covers key engineering systems with comprehensive, hassle-free replacement: the high-torque BLDC wheel motor, German sine-wave intelligence controller, DCDC converter, and auto-shutoff smart charger. In addition, Lead-Acid batteries carry 1 Year of warranty, while our premium Lithium-Ion packs feature a 3-Year advanced warranty.",
+    iconName: "Award",
+  },
+  {
+    id: 5,
+    category: "Charging Guidelines",
+    question: "Can I charge my Volmo EV using standard domestic wall outlets?",
+    answer: "Yes, every model is designed to plug directly into standard 5A or 15A home and office sockets (the same used for wall chargers). Charging draws minimal load, similar to a ceiling fan, costing under ₹10-15 per full charge. On select high-capacity Lithium models, batteries are easily detachable to charge indoors.",
+    iconName: "Zap",
+  },
+];
+
+export interface ShowroomItem {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  address: string;
+  phone: string;
+  status: "Active" | "Expanding" | "Service Hub";
+}
+
+export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
+  {
+    id: "mp-1",
+    name: "Volmo Gwalior Smart EV Fleet Flagship",
+    city: "Gwalior",
+    state: "Madhya Pradesh",
+    address: "Opposite Arogyadhaam Hospital, City Center, Gwalior - 474011",
+    phone: "7880008401",
+    status: "Active",
+  },
+  {
+    id: "mp-2",
+    name: "Volmo Indore Cyber Electric",
+    city: "Indore",
+    state: "Madhya Pradesh",
+    address: "G-11, Royal Gold Building, YN Road, Vijay Nagar, Indore - 452001",
+    phone: "9111333151",
+    status: "Active",
+  },
+  {
+    id: "mp-3",
+    name: "Volmo Bhopal Eco-Wheels",
+    city: "Bhopal",
+    state: "Madhya Pradesh",
+    address: "Plot 42, Commercial Zone, MP Nagar Zone II, Bhopal - 462011",
+    phone: "7554902182",
+    status: "Active",
+  },
+  {
+    id: "mp-4",
+    name: "Volmo Jabalpur Mobility",
+    city: "Jabalpur",
+    state: "Madhya Pradesh",
+    address: "Civic Center, Napier Town, Jabalpur - 482001",
+    phone: "7612409811",
+    status: "Active",
+  },
+  {
+    id: "up-1",
+    name: "Volmo Agra Heritage EV Hub",
+    city: "Agra",
+    state: "Uttar Pradesh",
+    address: "Shop 14, Sanjay Place Commercial Complex, Agra - 282002",
+    phone: "9837102941",
+    status: "Active",
+  },
+  {
+    id: "up-2",
+    name: "Volmo Jhansi Bundelkhand Point",
+    city: "Jhansi",
+    state: "Uttar Pradesh",
+    address: "Elite Crossing, Civil Lines, Jhansi - 284001",
+    phone: "9450012891",
+    status: "Active",
+  },
+  {
+    id: "dl-1",
+    name: "Volmo Delhi NCR Experience Center",
+    city: "Delhi NCR",
+    state: "Delhi NCR",
+    address: "Sector 18 Metro Station Arcade, Noida, Delhi NCR - 201301",
+    phone: "9811002345",
+    status: "Active",
+  },
+  {
+    id: "rj-1",
+    name: "Volmo Jaipur Pink City EV",
+    city: "Jaipur",
+    state: "Rajasthan",
+    address: "Tonk Road, Near Gopalpura Bypass, Jaipur - 302018",
+    phone: "9414008761",
+    status: "Active",
+  },
+];
+
+export interface BrandingConfig {
+  brandName: string;
+  brandTagline: string;
+  customLogoUrl: string;
+  footerCopyright: string;
+}
+
+export const DEFAULT_BRANDING: BrandingConfig = {
+  brandName: "VOLMO",
+  brandTagline: "Electric Scooters & Smart Mobility",
+  customLogoUrl: "",
+  footerCopyright: "Volmo Electrical Private Limited. All Rights Reserved. Produced in India.",
+};
+
+export interface SiteSectionsConfig {
+  // Fleet Section
+  fleetBadge: string;
+  fleetHeading: string;
+  fleetSubtitle: string;
+
+  // Pulse Concept Section
+  pulseBadge: string;
+  pulseSecretCode: string;
+  pulseCustomerCount: string;
+  pulseCustomerText: string;
+  pulseButtonText: string;
+
+  // Features Section
+  featuresBadge: string;
+  featuresHeading: string;
+  featuresSubtitle: string;
+
+  // Sine Wave Technology Banner
+  sineBadge: string;
+  sineHeading: string;
+  sineDescription: string;
+  sineCard1Title: string;
+  sineCard1Text: string;
+  sineCard2Title: string;
+  sineCard2Text: string;
+  sineWarrantyTitle: string;
+
+  // Testimonials Section
+  testimonialsBadge: string;
+  testimonialsHeading: string;
+  testimonialsSubtitle: string;
+
+  // Locate Us / Showroom Section
+  locatorBadge: string;
+  locatorHeading: string;
+  locatorSubtitle: string;
+  plantTitle: string;
+  plantType: string;
+  plantHours: string;
+  plantPhoto: string;
+  hqTitle: string;
+  hqType: string;
+  hqHours: string;
+  hqPhoto: string;
+
+  // FAQ Section
+  faqBadge: string;
+  faqHeading: string;
+  faqSubtitle: string;
+
+  // Navigation & Footer
+  navDealershipBtn: string;
+  footerRtoText: string;
+  footerCustomRangesLeadAcid: string;
+  footerCustomRangesLithium: string;
+  footerPartnerText: string;
+  footerPartnerBtn: string;
+
+  // Hero section
+  heroScrollText?: string;
+}
+
+export const DEFAULT_SITE_SECTIONS: SiteSectionsConfig = {
+  heroScrollText: "Scroll to Discover",
+
+  fleetBadge: "India's Leading RTO-Free Fleet",
+  fleetHeading: "Choose Your Volmo Ride",
+  fleetSubtitle: "Zero registration. Zero license requirements. Zero road tax. Base models start from Vista, up to our flagship Phantom Top Model. Customize exactly to your required budget and range.",
+
+  pulseBadge: "Coming Soon Hyped",
+  pulseSecretCode: "Top Secret Project Volmo Rx",
+  pulseCustomerCount: "1,840+ Customers",
+  pulseCustomerText: "Already pre-registered for the release drop inbox.",
+  pulseButtonText: "Notify Me first",
+
+  featuresBadge: "High-Performance Standards",
+  featuresHeading: "Next-Gen Features. Fully Integrated.",
+  featuresSubtitle: "Every Volmo electric scooter is equipped with premium security, utility, and safety features at no additional cost. Ready to conquer Indian city streets.",
+
+  sineBadge: "Full Bumper Protection Guarantee",
+  sineHeading: "Advanced Sine Wave Intelligence & Bumper 1-Year Warranty",
+  sineDescription: "Generic electric scooters use square-wave motor currents that result in jerky acceleration and noisy hums. Every Volmo EV is integrated with custom-tuned Sine Wave controllers. By regulating raw electricity in perfect, smooth digital sine curves, we deliver completely silent operation, optimized torque transition, and up to 15% better range efficiency.",
+  sineCard1Title: "100% Silent",
+  sineCard1Text: "Smooth harmonic waves prevent high-frequency engine whine.",
+  sineCard2Title: "Regen Brakes",
+  sineCard2Text: "Converts braking inertial momentum directly into state of charge.",
+  sineWarrantyTitle: "Bumper 1-Year Active Warranties",
+
+  testimonialsBadge: "Over 5,000+ Happy Riders",
+  testimonialsHeading: "Hear from Volmo Riders",
+  testimonialsSubtitle: "Discover why EV owners in Gwalior prefer our RTO-free intelligent electric scooters for daily transit. Real people, genuine savings, pure electric power.",
+
+  locatorBadge: "Pan-India EV Retail Network",
+  locatorHeading: "Find Volmo Showrooms Near You",
+  locatorSubtitle: "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!",
+  plantTitle: "Volmo EV Manufacturing Plant",
+  plantType: "Factory & assembly line",
+  plantHours: "Monday - Saturday: 09:00 AM - 07:00 PM",
+  plantPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+  hqTitle: "Volmo Corporate Head Office",
+  hqType: "Registered headquarters",
+  hqHours: "Monday - Friday: 10:00 AM - 06:05 PM",
+  hqPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+
+  faqBadge: "Support Headquarters",
+  faqHeading: "Frequently Asked Queries",
+  faqSubtitle: "Find prompt, comprehensive answers to regulatory compliance, optimized battery maintenance, and local servicing for your custom electric scooter.",
+
+  navDealershipBtn: "Apply Dealership",
+  footerRtoText: "Guaranteed 100% RTO Free · No registration required",
+  footerCustomRangesLeadAcid: "48 km (4 batteries) · 60 km (5 batteries) · 72 km (6 batteries)",
+  footerCustomRangesLithium: "60 km · 80 km · 100 km · 120 km · 145 km · 180 km packs",
+  footerPartnerText: "Partner with Volmo today",
+  footerPartnerBtn: "Apply For Dealership",
+};
+
+export const ALL_STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Delhi NCR",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+];
+
+export const PRESET_MEDIA_ASSETS = [
+  { label: "Hero Cover Banner (Cyberpunk Street)", url: "/src/assets/images/volmo_hero_banner_1780063638602.png", category: "Cover / Banners" },
+  { label: "Volmo Vista (Pearl White / Tech Silver)", url: "/src/assets/images/volmo_vista_1780058817114.png", category: "Fleet Models" },
+  { label: "Volmo Vista (Tech Grey Metallic)", url: "/src/assets/images/vista_tech_grey_1790182554836.jpg", category: "Fleet Models" },
+  { label: "Volmo Vista (Midnight Black)", url: "/src/assets/images/vista_midnight_black_1790182569741.jpg", category: "Fleet Models" },
+  { label: "Volmo Glider (Cherry Red)", url: "/src/assets/images/volmo_glider_1780058835594.png", category: "Fleet Models" },
+  { label: "Volmo Glider (Apple Green)", url: "/src/assets/images/glider_apple_green_1790182589580.jpg", category: "Fleet Models" },
+  { label: "Volmo Glider (Ocean Blue)", url: "/src/assets/images/glider_ocean_blue_1790182609366.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Royal Blue)", url: "/src/assets/images/volmo_classic_1780058851300.png", category: "Fleet Models" },
+  { label: "Volmo Classic (Crimson Red)", url: "/src/assets/images/classic_crimson_red_1790182628879.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Pearl White)", url: "/src/assets/images/classic_pearl_white_1790182643917.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Sleek Black)", url: "/src/assets/images/classic_sleek_black_1790182659642.jpg", category: "Fleet Models" },
+  { label: "Volmo Phantom (Cream Beige)", url: "/src/assets/images/volmo_phantom_1780058868036.png", category: "Fleet Models" },
+  { label: "Volmo Phantom (Steel Blue)", url: "/src/assets/images/phantom_steel_blue_1790182675033.jpg", category: "Fleet Models" },
+  { label: "Volmo Phantom (Apple Green)", url: "/src/assets/images/phantom_apple_green_1790182691216.jpg", category: "Fleet Models" },
+  { label: "Volmo Pulse Concept (Side View)", url: "/src/assets/images/volmo_pulse_1780058885037.png", category: "Concept Prototypes" },
+  { label: "Volmo Pulse Cyberpunk (Studio 3D)", url: "/src/assets/images/volmo_pulse_premium_1780068389740.png", category: "Concept Prototypes" },
+  { label: "Volmo High-Grade Steel Guard Frame Set", url: "/src/assets/images/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
+  { label: "Volmo Certified Helmets & Merch", url: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
+  { label: "Volmo Lead-Acid Graphene Battery", url: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
+  { label: "Volmo Lithium Smart Energy Pack", url: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg", category: "Batteries" },
+  { label: "Volmo LFP Prismatic Energy Pack", url: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg", category: "Batteries" },
+  { label: "Volmo German Tech Smart Fast Charger", url: "/src/assets/images/volmo_smart_charger_1790255476376.jpg", category: "Chargers" },
+  { label: "Volmo German Tech Charger Lineup", url: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg", category: "Chargers" },
+];
+
+export const COLOR_PHOTO_MAP: Record<string, Record<string, string>> = {
+  vista: {
+    "Glossy White": "/src/assets/images/volmo_vista_1780058817114.png",
+    "Tech Grey": "/src/assets/images/vista_tech_grey_1790182554836.jpg",
+    "Midnight Black": "/src/assets/images/vista_midnight_black_1790182569741.jpg",
+  },
+  glider: {
+    "Cherry Red": "/src/assets/images/volmo_glider_1780058835594.png",
+    "Apple Green": "/src/assets/images/glider_apple_green_1790182589580.jpg",
+    "Ocean Blue": "/src/assets/images/glider_ocean_blue_1790182609366.jpg",
+  },
+  classic: {
+    "Royal Blue": "/src/assets/images/volmo_classic_1780058851300.png",
+    "Crimson Red": "/src/assets/images/classic_crimson_red_1790182628879.jpg",
+    "Charcoal Grey": "/src/assets/images/classic_sleek_black_1790182659642.jpg",
+    "Sleek Black": "/src/assets/images/classic_sleek_black_1790182659642.jpg",
+    "Pearl White": "/src/assets/images/classic_pearl_white_1790182643917.jpg",
+  },
+  phantom: {
+    "Cream Beige": "/src/assets/images/volmo_phantom_1780058868036.png",
+    "Apple Green": "/src/assets/images/phantom_apple_green_1790182691216.jpg",
+    "Steel Blue": "/src/assets/images/phantom_steel_blue_1790182675033.jpg",
+  },
+};
+
+export function getModelActivePhoto(model: ModelSpec, colorName: string): string {
+  // 1. Direct color config on model
+  const matchedColor = model.colors?.find(
+    (c) => c.name.toLowerCase().trim() === colorName?.toLowerCase().trim()
+  );
+  if (matchedColor?.image) {
+    return matchedColor.image;
+  }
+
+  // 2. Lookup in standard COLOR_PHOTO_MAP
+  const modelMap = COLOR_PHOTO_MAP[model.id?.toLowerCase()];
+  if (modelMap && colorName && modelMap[colorName]) {
+    return modelMap[colorName];
+  }
+
+  // 3. Fallback to model's default image
+  return model.image || "/src/assets/images/volmo_vista_1780058817114.png";
+}
+
+export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
+  {
+    id: "volmo-steel-frame-guard-set",
+    category: "protection",
+    categoryLabel: "Vehicle Protection",
+    title: "Volmo Manufactured High-Grade Steel Guard Frame Set",
+    subtitle: "360° All-Around Heavy-Duty Stainless Steel Body Protection",
+    badge: "High Grade Stainless Steel · Rust Proof",
+    description: "Volmo manufactured high-grade steel accessories steel frame set engineered to protect Volmo vehicles from scratches, side impacts, and daily parking hazards. Robotic precision-welded from premium stainless steel tubes with mirror chrome or electro-black finishes, offering full perimeter safeguarding.",
+    warranty: "2 Years Corrosion & Structure Warranty",
+    highlights: [
+      "Volmo manufactured high-grade steel frame set custom-molded for Volmo scooters",
+      "Front wrap-around bumper bar shielding the apron body panels and headlight",
+      "Heavy-duty side crash guards preventing costly body repairs during accidental falls",
+      "Integrated foldable passenger pillion footrests for added ergonomics",
+      "Rear perimeter protective arch safeguarding taillight and license bracket",
+      "Direct chassis bolt-on mounting with heavy-duty anti-vibration rubber bushings"
+    ],
+    specs: [
+      { label: "Material Grade", value: "High-Grade 18-Gauge Heavy Tubular Stainless Steel" },
+      { label: "Finish Options", value: "Mirror Polish Chrome & Matte Electro-Black" },
+      { label: "Compatibility", value: "Custom Fit for Vista, Glider, Classic & Phantom" },
+      { label: "Protection Scope", value: "360° Front, Side Aprons, Floorboard & Tail" },
+      { label: "Mounting Type", value: "Zero-Drilling Factory Chassis Bolt-On" },
+      { label: "Pillion Footrest", value: "Dual Integrated Spring-Loaded Foldable Pegs" }
+    ],
+    image: "/src/assets/images/volmo_steel_frame_1790255503151.jpg",
+    inStock: true
+  },
+  {
+    id: "volmo-helmets-safety",
+    category: "helmet",
+    categoryLabel: "Helmets & Safety",
+    title: "Volmo Certified Aerodynamic Safety Helmets",
+    subtitle: "Official Volmo ISI & DOT Certified Impact-Resistant Protection",
+    badge: "ISI Certified · Optical Grade Visor",
+    description: "Volmo helmets are designed with high-impact engineering to ensure top-tier rider safety and aerodynamic comfort. Features an engineered ABS shell, multi-density EPS shock absorption liner, dynamic ventilation ports, and an anti-scratch UV-resistant visor with a quick-release micrometric buckle.",
+    warranty: "1 Year Manufacturer Guarantee",
+    highlights: [
+      "Official Volmo ISI certified safety standards for two-wheeler riders",
+      "High-impact resistant thermoplastic ABS shell with high-density EPS core",
+      "Anti-scratch optical grade polycarbonate visor with UV400 shield",
+      "Multi-channel dynamic air vents for cool airflow during warm commutes",
+      "Micrometric quick-release chin strap buckle for secure, effortless fastening",
+      "Removable, washable, sweat-wicking hypoallergenic interior lining"
+    ],
+    specs: [
+      { label: "Safety Certification", value: "ISI (IS:4151) & DOT Compliant" },
+      { label: "Shell Material", value: "Virgin High-Impact Engineering ABS" },
+      { label: "Visor Specification", value: "Optical Grade Polycarbonate (Anti-Scratch)" },
+      { label: "Available Sizes", value: "Medium (57-58cm) & Large (59-60cm)" },
+      { label: "Colors / Finishes", value: "Matte Stealth Black & Volmo Signature Orange" },
+      { label: "Closure Mechanism", value: "Micrometric Quick-Release Steel Buckle" }
+    ],
+    image: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg",
+    inStock: true
+  },
+  {
+    id: "volmo-official-merchandise",
+    category: "merchandise",
+    categoryLabel: "Official Merchandise",
+    title: "Volmo Official Merchandise & Rider Gear",
+    subtitle: "Premium Volmo Lifestyle Apparel & Scooter Utility Upgrades",
+    badge: "Official Volmo Merchandise",
+    description: "Explore official Volmo merchandise designed to complement your electric scooter lifestyle. From all-weather riding windcheater jackets and touchscreen riding gloves to precision-molded waterproof floor mats and durable vehicle covers.",
+    warranty: "6 Months Craftsmanship Warranty",
+    highlights: [
+      "Official Volmo rider apparel and utility gear collection",
+      "All-weather windproof riding jackets with 3M reflective safety accents",
+      "Ergonomic riding gloves with touchscreen conductive fingertips",
+      "Custom non-slip heavy-duty rubber floor mats custom-embossed with Volmo logo",
+      "All-weather dustproof and waterproof scooter body covers",
+      "Laser-engraved stainless steel Volmo official brand keychain"
+    ],
+    specs: [
+      { label: "Included Items", value: "Rider Jacket, Gloves, Floor Mat, Cover, Keyring" },
+      { label: "Material Standards", value: "Heavy-Duty Cordura, Water-Resistant Polyester" },
+      { label: "Branding", value: "Volmo Electrical Pvt. Ltd. Authenticated" },
+      { label: "Floor Mat Fit", value: "Laser-Molded for Vista, Glider, Classic & Phantom" },
+      { label: "Warranty", value: "6 Months Official Manufacturing Warranty" }
+    ],
+    image: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg",
+    inStock: true
+  }
+];
+
+export const LEAD_ACID_GRAPHENE_BATTERIES: LeadAcidBatteryItem[] = [
+  {
+    id: "volmo-graphene-48v",
+    title: "Volmo Original Lead-Acid Graphene Battery Array (48V 28Ah / 32Ah)",
+    voltageRating: "48V Array (4x 12V High-Density Graphene Units)",
+    capacity: "28Ah - 32Ah High Torque",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · Graphene Tech",
+    description: "Volmo vehicles are equipped with original Volmo manufactured Lead-Acid Graphene batteries engineered with top-notch quality and long durable life. Infused with graphene nano-carbon additives on the negative tubular plates for rapid charge acceptance, superior vibration resistance, and zero acid maintenance.",
+    specs: [
+      { label: "Configuration", value: "4x 12V 28Ah/32Ah deep-cycle series" },
+      { label: "Typical Range", value: "50 km - 60 km per charge" },
+      { label: "Warranty Period", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Technology", value: "Graphene Nano-Carbon Tubular AGM" },
+      { label: "Discharge Current", value: "High instant torque for steep slopes" },
+      { label: "Operating Temp", value: "-10°C to +55°C Indian Road Certified" }
+    ],
+    features: [
+      "Original Volmo manufactured Lead-Acid Graphene technology with top-notch quality",
+      "1 Year Hassle-Free Warranty with direct dealer replacement assurance",
+      "Graphene-infused tubular grid reduces internal resistance and thermal degradation",
+      "Zero maintenance 100% Sealed Maintenance Free (SMF) design",
+      "Reinforced heavy-duty ABS case resistant to harsh road vibrations and shocks",
+      "Engineered specifically for Volmo Vista & Glider low-speed urban commuters"
+    ],
+    image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"
+  },
+  {
+    id: "volmo-graphene-60v",
+    title: "Volmo Original Lead-Acid Graphene Battery Array (60V 32Ah / 36Ah)",
+    voltageRating: "60V Array (5x 12V Heavy-Duty Graphene Units)",
+    capacity: "32Ah - 36Ah Deep-Cycle",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · Top Seller",
+    description: "Original Volmo manufactured 60V Lead-Acid Graphene power system designed for high-capacity performance, exceptional hill-climbing torque, and long durable service life. Graphene nano-sheets enhance cycle longevity by up to 45% compared to standard lead-acid packs.",
+    specs: [
+      { label: "Configuration", value: "5x 12V 32Ah/36Ah deep-cycle series" },
+      { label: "Typical Range", value: "65 km - 75 km per charge" },
+      { label: "Warranty Period", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Cycle Life", value: "Over 650+ deep discharge cycles" },
+      { label: "Plate Metallurgy", value: "Antimony-Free Graphene Carbon Alloy" },
+      { label: "Maintenance", value: "Zero Acid Topping Required" }
+    ],
+    features: [
+      "Original Volmo manufactured high-density Graphene formulation with durable life",
+      "1 Year Hassle-Free Warranty backed by Volmo authorized service network",
+      "Provides sustained 60V power curve preventing sudden battery drops under acceleration",
+      "Vibration-isolated battery trays for silent and safe city navigation",
+      "Pairs natively with Volmo 60V German Technology smart fast charger",
+      "Standard equipment on Volmo Classic & Phantom Graphene editions"
+    ],
+    image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"
+  },
+  {
+    id: "volmo-graphene-72v",
+    title: "Volmo Original Lead-Acid Graphene Battery Array (72V 32Ah / 36Ah)",
+    voltageRating: "72V Array (6x 12V Maximum Torque Units)",
+    capacity: "32Ah - 36Ah Commercial Grade",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · Heavy Duty",
+    description: "The peak of high-torque Lead-Acid Graphene engineering. Volmo 72V commercial array features 6 heavy-duty graphene units built for heavy pillion loads, steep flyovers, and tough commercial delivery routes with long durable life.",
+    specs: [
+      { label: "Configuration", value: "6x 12V 32Ah/36Ah heavy-duty array" },
+      { label: "Typical Range", value: "75 km - 85 km per charge" },
+      { label: "Warranty Period", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Max Peak Draw", value: "Up to 55A burst discharge" },
+      { label: "Terminal Type", value: "Heavy-Duty Brass Bolt Terminals" },
+      { label: "Enclosure", value: "Reinforced Anti-Acid Flame-Retardant ABS" }
+    ],
+    features: [
+      "Original Volmo manufactured 72V high-torque graphene array",
+      "1 Year Hassle-Free Warranty with factory swap protection",
+      "Superior cold-cranking and high-heat tolerance in 48°C Indian summer weather",
+      "Tubular positive plates prevent active material shedding over rough terrain",
+      "Engineered for heavy-duty commercial riders and dual-passenger comfort",
+      "Fully compatible with Volmo 72V 3A German semiconductor fast chargers"
+    ],
+    image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"
+  }
+];
+
+export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
+  {
+    id: "lithium-60v-24ah",
+    title: "Volmo Lithium Smart Energy Pack — 60V 24Ah",
+    voltage: "60V",
+    capacity: "24Ah",
+    powerKw: "1.4 kW (1,440 Wh)",
+    mileageKm: "60 km mileage",
+    chemistry: "Lithium-Ion",
+    warranty: "3 Years Long Warranty",
+    highlightBadge: "60V 24Ah · 1.4 kW · 60 km Mileage",
+    description: "Compact, ultra-lightweight original Volmo lithium power pack delivering 60 km real-world mileage per charge. Designed with Grade-A prismatic cells, intelligent Smart BMS, and an ergonomic carrying handle for easy indoor socket charging.",
+    specs: [
+      { label: "Voltage & Capacity", value: "60V 24Ah Nominal" },
+      { label: "Total Energy Capacity", value: "1.4 kW (1.44 kWh)" },
+      { label: "Certified Mileage", value: "60 km per full charge" },
+      { label: "Warranty Coverage", value: "3 Years Long Official Warranty" },
+      { label: "Charging Time", value: "3.5 - 4 Hours with 6A Fast Charger" },
+      { label: "Pack Weight", value: "approx. 10.5 kg (Portable with Handle)" }
+    ],
+    features: [
+      "Original Volmo manufactured Grade-A Lithium energy cells",
+      "Long 3 Years official hassle-free warranty cover",
+      "Real-world certified 60 km mileage on single charge",
+      "Intelligent multi-tier Smart BMS with thermal sensors and cell auto-balancing",
+      "Shock-resistant metal casing with ergonomic top handle for indoor charging",
+      "Over 2,000+ deep discharge cycles with over 80% health retention"
+    ],
+    image: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg"
+  },
+  {
+    id: "lithium-60v-30ah",
+    title: "Volmo Lithium / LFP Smart Energy Pack — 60V 30Ah",
+    voltage: "60V",
+    capacity: "30Ah",
+    powerKw: "1.8 kW (1,800 Wh)",
+    mileageKm: "80 km mileage",
+    chemistry: "Lithium-Ion",
+    warranty: "3 Years Long Warranty",
+    highlightBadge: "60V 30Ah · 1.8 kW · 80 km Mileage",
+    description: "High-density 1.8 kW energy storage system delivering 80 km true riding mileage. Perfectly balanced for daily city commuters seeking freedom from daily recharging, backed by Volmo's 3 Years long warranty.",
+    specs: [
+      { label: "Voltage & Capacity", value: "60V 30Ah Nominal" },
+      { label: "Total Energy Capacity", value: "1.8 kW (1.8 kWh)" },
+      { label: "Certified Mileage", value: "80 km per full charge" },
+      { label: "Warranty Coverage", value: "3 Years Long Official Warranty" },
+      { label: "Charging Time", value: "4 - 4.5 Hours with Fast Charger" },
+      { label: "Cell Chemistry", value: "Grade-A High Density Cells" }
+    ],
+    features: [
+      "Original Volmo manufactured lithium battery module",
+      "Long 3 Years official warranty with full replacement protocol",
+      "80 km mileage per charge for uninterrupted multi-day commuting",
+      "Integrated BMS with thermal protection and short-circuit cutoff",
+      "Rugged powder-coated steel casing with shock absorption brackets",
+      "Zero maintenance and high continuous discharge rate"
+    ],
+    image: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg"
+  },
+  {
+    id: "lithium-60v-36ah",
+    title: "Volmo Lithium / LFP High-Range Pack — 60V 36Ah",
+    voltage: "60V",
+    capacity: "36Ah",
+    powerKw: "2.16 kW (2,160 Wh)",
+    mileageKm: "100 km mileage",
+    chemistry: "LFP (Lithium Iron Phosphate)",
+    warranty: "3 Years Long Warranty",
+    highlightBadge: "60V 36Ah · 2.16 kW · 100 km Mileage",
+    description: "The flagship 2.16 kW power pack unlocking a century of freedom with 100 km single-charge mileage. Built with high thermal stability LFP / Lithium chemistry and Volmo's signature 3 Years Long Warranty.",
+    specs: [
+      { label: "Voltage & Capacity", value: "60V 36Ah Nominal" },
+      { label: "Total Energy Capacity", value: "2.16 kW (2.16 kWh)" },
+      { label: "Certified Mileage", value: "100 km per full charge" },
+      { label: "Warranty Coverage", value: "3 Years Long Official Warranty" },
+      { label: "Chemistry", value: "LFP / Lithium-Ion High Safety" },
+      { label: "Portability", value: "Detachable with heavy-duty handle" }
+    ],
+    features: [
+      "Original Volmo manufactured battery system with top-tier durability",
+      "Long 3 Years official warranty cover across all Indian dealerships",
+      "100 km mileage for long intra-city rides without range anxiety",
+      "Advanced Smart BMS with real-time temperature telemetry",
+      "Certified Make in India & AIS-156 Phase 2 thermal safety compliant",
+      "Rapid recharge capability with Volmo German Tech 6A chargers"
+    ],
+    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+  },
+  {
+    id: "lithium-60v-45ah",
+    title: "Volmo Lithium Extended Endurance Pack — 60V 45Ah",
+    voltage: "60V",
+    capacity: "45Ah",
+    powerKw: "2.7 kW (2,700 Wh)",
+    mileageKm: "120 km mileage",
+    chemistry: "LFP (Lithium Iron Phosphate)",
+    warranty: "3 Years Long Warranty",
+    highlightBadge: "60V 45Ah · 2.7 kW · 120 km Mileage",
+    description: "High-capacity 2.7 kW energy powerhouse providing an incredible 120 km mileage on a single charge. Engineered for delivery professionals and frequent long-distance riders, backed by a 3 Years Long Warranty.",
+    specs: [
+      { label: "Voltage & Capacity", value: "60V 45Ah Nominal" },
+      { label: "Total Energy Capacity", value: "2.7 kW (2.7 kWh)" },
+      { label: "Certified Mileage", value: "120 km per full charge" },
+      { label: "Warranty Coverage", value: "3 Years Long Official Warranty" },
+      { label: "Thermal Stability", value: "Flame retardant LFP prismatic cells" },
+      { label: "Cycle Durability", value: "Over 2,500+ full cycles" }
+    ],
+    features: [
+      "Original Volmo manufactured high-capacity energy system",
+      "3 Years Long Warranty with immediate service and swap coverage",
+      "120 km mileage on single charge for heavy-duty daily operations",
+      "LFP chemistry ensures unmatched safety even in extreme 50°C climates",
+      "Heavy-duty laser-welded busbars for zero vibration resistance loss",
+      "Pairs seamlessly with Volmo 60V 6A High-Power fast chargers"
+    ],
+    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+  },
+  {
+    id: "lithium-ultra-36kw",
+    title: "Volmo Ultra-Endurance Lithium / LFP Pack — 3.6 kW",
+    voltage: "60V / 72V",
+    capacity: "60Ah / 50Ah",
+    powerKw: "3.6 kW (3,600 Wh)",
+    mileageKm: "150 km mileage",
+    chemistry: "LFP (Lithium Iron Phosphate)",
+    warranty: "3 Years Long Warranty",
+    highlightBadge: "3.6 kW · 150 km Mileage · Ultra Long Range",
+    description: "Massive 3.6 kW long-distance energy storage engineered to deliver 150 km true mileage on Indian roads. Features aerospace-grade cell packaging, smart telemetry, and 3 Years Long Warranty.",
+    specs: [
+      { label: "Energy Capacity", value: "3.6 kW (3.6 kWh High Energy Density)" },
+      { label: "Certified Mileage", value: "150 km per full charge" },
+      { label: "Voltage Options", value: "60V 60Ah or 72V 50Ah" },
+      { label: "Warranty Coverage", value: "3 Years Long Official Warranty" },
+      { label: "Cycle Durability", value: "Over 3,000+ charge cycles" },
+      { label: "BMS Intelligence", value: "Smart CAN-bus / Bluetooth monitoring" }
+    ],
+    features: [
+      "Original Volmo manufactured 3.6 kW ultra-range power system",
+      "3 Years Long Warranty with dedicated nationwide support",
+      "Massive 150 km mileage for cross-city travel and high-mileage fleets",
+      "LFP thermal stability provides zero fire risk and long lasting health",
+      "Dual thermal sensors per cell module with automated fan ventilation",
+      "Compatible with high-amp fast charging infrastructure"
+    ],
+    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+  },
+  {
+    id: "lithium-mega-43kw",
+    title: "Volmo Mega-Fleet Commercial Energy Pack — 4.3 kW",
+    voltage: "72V / 60V",
+    capacity: "60Ah / 72Ah",
+    powerKw: "4.3 kW (4,320 Wh)",
+    mileageKm: "180 km mileage",
+    chemistry: "LFP (Lithium Iron Phosphate)",
+    warranty: "3 Years Long Warranty",
+    highlightBadge: "4.3 kW · 180 km Mileage · Maximum Capacity",
+    description: "The undisputed heavyweight champion: 4.3 kW monster capacity delivering up to 180 km certified mileage per charge. Engineered for commercial fleets, inter-city delivery, and premium touring, accompanied by Volmo's 3 Years Long Warranty.",
+    specs: [
+      { label: "Energy Capacity", value: "4.3 kW (4.32 kWh Maximum Capacity)" },
+      { label: "Certified Mileage", value: "180 km per full charge" },
+      { label: "Voltage Options", value: "72V 60Ah High Torque Architecture" },
+      { label: "Warranty Coverage", value: "3 Years Long Official Warranty" },
+      { label: "Continuous Current", value: "Up to 60A continuous / 100A peak" },
+      { label: "Protection Level", value: "IP67 Dust & Water Immersion Proof" }
+    ],
+    features: [
+      "Original Volmo manufactured 4.3 kW commercial powerhouse",
+      "3 Years Long Warranty with comprehensive coverage",
+      "Industry-leading 180 km mileage per charge",
+      "Engineered with industrial Grade-A LFP prismatic cells",
+      "Reinforced heavy-duty aluminum structural case with anti-shock dampers",
+      "Optimized for 72V 6A commercial fast chargers"
+    ],
+    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+  }
+];
+
+export const CHARGER_MODELS: ChargerModelItem[] = [
+  {
+    id: "lead-acid-charger-48v-3a",
+    type: "lead-acid",
+    typeLabel: "Lead-Acid Battery Charger",
+    modelCode: "VEPL-LA-483A",
+    voltage: "48V",
+    amperage: "3Ah (3.0A)",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 48V 3A",
+    description: "Volmo Branded German technology smart fast charger for 48V Lead-Acid & Graphene arrays. Equipped with high-tech German semiconductors ensuring long durable life, rapid heat dissipation, and an integrated 6-Light smart fast charging LED indicator.",
+    compatibility: "48V Lead-Acid & Graphene 4-Battery Systems (Vista / Glider)",
+    specs: [
+      { label: "Model Code", value: "VEPL-LA-483A" },
+      { label: "Input Voltage", value: "180V - 260V AC ~ 50Hz (Standard Wall Socket)" },
+      { label: "DC Output", value: "48V - 59.2V Float @ 3.0A ± 0.2A" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Semiconductor", value: "German High-Efficiency Power IC" },
+      { label: "Display", value: "6-LED Multi-Stage Intelligent Gauge" }
+    ],
+    features: [
+      "German semiconductor technology delivering long life and cool running operation",
+      "1 Year Hassle-Free Warranty with direct replacement support",
+      "6-Light Smart Fast Charging LED telemetry (Power, 20%, 40%, 60%, 80%, 100%)",
+      "New generation pulse repair battery technology that revives sulfated lead plates",
+      "6-Point Protection: Overvoltage, overheat, short circuit, flame-retardant casing, auto shutdown, temp chip",
+      "Domestic 3-pin AC plug with rugged heavy-duty copper wiring"
+    ],
+    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+  },
+  {
+    id: "lead-acid-charger-60v-3a",
+    type: "lead-acid",
+    typeLabel: "Lead-Acid Battery Charger",
+    modelCode: "VEPL-LA-603A",
+    voltage: "60V",
+    amperage: "3Ah (3.0A)",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 60V 3A",
+    description: "Volmo Branded German technology 60V 3A smart fast charger engineered for 60V 5-battery Lead-Acid & Graphene arrays. Features pulse repair technology and high-tech semiconductors for durable, reliable charging.",
+    compatibility: "60V Lead-Acid & Graphene 5-Battery Systems (Classic / Phantom)",
+    specs: [
+      { label: "Model Code", value: "VEPL-LA-603A" },
+      { label: "Input Voltage", value: "180V - 260V AC ~ 50Hz" },
+      { label: "DC Output", value: "60V - 74.0V Float @ 3.0A ± 0.2A" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Cooling", value: "High-Speed Silent Dual Ball-Bearing Fan" },
+      { label: "Indicator", value: "6-Light Smart Fast Charging Telemetry" }
+    ],
+    features: [
+      "German technology semiconductors with long durable life and cool operation",
+      "1 Year Hassle-Free Warranty with quick dealer turnaround",
+      "6-Light Smart Fast Charging LED telemetry for real-time charge progress",
+      "Pulse repair technology prevents lead plate sulfation and extends battery life",
+      "Flame-retardant shell with automatic full-charge cutoff",
+      "High surge suppression for unstable rural power grids"
+    ],
+    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+  },
+  {
+    id: "lead-acid-charger-72v-3a",
+    type: "lead-acid",
+    typeLabel: "Lead-Acid Battery Charger",
+    modelCode: "VEPL-LA-723A",
+    voltage: "72V",
+    amperage: "3Ah (3.0A)",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 72V 3A",
+    description: "Volmo Branded German technology 72V 3A charger built for 6-battery 72V Lead-Acid & Graphene power systems. Engineered with advanced semiconductor switches and high-voltage isolation for safe, effortless recharging.",
+    compatibility: "72V Lead-Acid & Graphene 6-Battery Arrays",
+    specs: [
+      { label: "Model Code", value: "VEPL-LA-723A" },
+      { label: "Input Voltage", value: "180V - 260V AC ~ 50Hz" },
+      { label: "DC Output", value: "72V - 88.8V Float @ 3.0A" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Display", value: "6-LED Charge Level Indicator" },
+      { label: "Protection", value: "Full 6-Point Circuit Safeguard Suite" }
+    ],
+    features: [
+      "German semiconductor architecture offering high electrical efficiency",
+      "1 Year Hassle-Free Warranty guarantee",
+      "6-Light Smart Fast Charging LED gauge with automated trickle-charge stage",
+      "Pulse repair rejuvenate cycle ensures deep electrolyte penetration",
+      "Thermal cutoff sensor shuts down power if ambient temperature exceeds safety limits",
+      "Heavy-duty output cable with high-current Anderson / 3-pin connector"
+    ],
+    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+  },
+  {
+    id: "lithium-charger-48v-6a",
+    type: "lithium",
+    typeLabel: "Lithium Fast Charger",
+    modelCode: "VEPL-LI-486A",
+    voltage: "48V",
+    amperage: "6Ah (6.0A Fast Charge)",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 48V 6A Fast",
+    description: "Volmo Branded high-power 48V 6A Lithium Smart Fast Charger. Charges lithium battery packs twice as fast as standard chargers using German high-speed switching semiconductors and CCCV intelligent profiling.",
+    compatibility: "48V Lithium-Ion Battery Packs (13S / 14S NMC)",
+    specs: [
+      { label: "Model Code", value: "VEPL-LI-486A Fast" },
+      { label: "Charge Current", value: "6.0A High-Speed Rapid Charge" },
+      { label: "Cutoff Voltage", value: "54.6V / 58.8V CCCV Precision Cutoff" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Technology", value: "German High-Frequency Resonant LLC" },
+      { label: "Efficiency", value: "> 93.5% Energy Conversion" }
+    ],
+    features: [
+      "German technology semiconductors with low heat dissipation and long life",
+      "1 Year Hassle-Free Warranty with complete factory replacement support",
+      "6-Light Smart Fast Charging telemetry with microsecond cutoff accuracy",
+      "Doubled 6A charging speed cuts recharge time down to ~3 hours",
+      "Soft-start pre-charge prevents inrush sparks and preserves cell chemistry",
+      "Flame-retardant casing with intelligent active temperature control fan"
+    ],
+    image: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg"
+  },
+  {
+    id: "lithium-charger-60v-6a",
+    type: "lithium",
+    typeLabel: "Lithium Fast Charger",
+    modelCode: "VEPL-LI-606A",
+    voltage: "60V",
+    amperage: "6Ah (6.0A Fast Charge)",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 60V 6A Fast",
+    description: "Volmo Branded flagship 60V 6A Lithium Smart Fast Charger. Specifically tuned to charge Volmo 60V 24Ah, 30Ah, 36Ah, and 45Ah lithium batteries safely and quickly with German semiconductor intelligence and 1 Year Hassle-Free Warranty.",
+    compatibility: "Volmo 60V Lithium Fleet (24Ah, 30Ah, 36Ah, 45Ah Packs)",
+    specs: [
+      { label: "Model Code", value: "VEPL-LI-606A Pro" },
+      { label: "Charge Current", value: "6.0A Continuous Fast Charge" },
+      { label: "Cutoff Voltage", value: "71.4V Precision Auto Cutoff" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Indicators", value: "6-LED Multi-Stage Progress Telemetry" },
+      { label: "Protections", value: "Zero-Spark, Reverse Polarity, Overheat Cut" }
+    ],
+    features: [
+      "German semiconductor power ICs built for heavy daily cycling and long life",
+      "1 Year Hassle-Free Warranty directly backed by Volmo Electrical",
+      "6-Light Smart Fast Charging display gives instant visibility from 20% to 100%",
+      "Rapid 6A charging fills 36Ah pack from 0 to 80% in just under 4 hours",
+      "Built-in temperature compensation chip automatically scales output in high heat",
+      "Heavy-gauge insulated copper wiring with high-grade lock-in DC plug"
+    ],
+    image: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg"
+  },
+  {
+    id: "lithium-charger-72v-6a",
+    type: "lithium",
+    typeLabel: "Lithium Fast Charger",
+    modelCode: "VEPL-LI-726A",
+    voltage: "72V",
+    amperage: "6Ah (6.0A Fast Charge)",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 72V 6A Commercial",
+    description: "Heavy-duty 72V 6A Lithium Smart Fast Charger for high-performance 72V commercial and long-range energy systems (3.6 kW & 4.3 kW). Equipped with German semiconductors and complete 6-point circuit protection.",
+    compatibility: "72V High-Output Lithium & Mega-Fleet Energy Systems",
+    specs: [
+      { label: "Model Code", value: "VEPL-LI-726A Fleet" },
+      { label: "Charge Current", value: "6.0A Rapid High-Current Output" },
+      { label: "Cutoff Voltage", value: "84.0V Precision CCCV Cutoff" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Cooling", value: "Dual High-CFM Temperature-Controlled Fans" },
+      { label: "Enclosure", value: "Heavy-Duty Anodized Aluminum / ABS" }
+    ],
+    features: [
+      "German technology semiconductors delivering commercial-grade reliability",
+      "1 Year Hassle-Free Warranty with nationwide service priority",
+      "6-Light Smart Fast Charging LED telemetry for clear status monitoring",
+      "Fast 6A current output minimizes downtime for delivery fleets and riders",
+      "Zero battery back-feed protection prevents drainage when disconnected",
+      "Overcurrent, overvoltage, short circuit, and flame-retardant safety envelope"
+    ],
+    image: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg"
+  },
+  {
+    id: "lfp-charger-69v-cutoff",
+    type: "lfp",
+    typeLabel: "LFP Battery Charger",
+    modelCode: "VEPL-LFP-69VCUT",
+    voltage: "60V LFP Architecture",
+    amperage: "5A - 6A Smart Current",
+    cutoffVoltage: "69.0V Precision Cutoff",
+    warranty: "1 Year Hassle-Free Warranty",
+    badge: "1 Year Hassle-Free Warranty · 69V Precision Cutoff",
+    description: "Volmo Branded German technology specialized LFP (Lithium Iron Phosphate) charger engineered with an exact 69V cutoff. LFP cells require exacting voltage thresholds to prevent cell swelling and maximize lifecycle past 3,000 cycles. Comes with 1 Year Hassle-Free Warranty.",
+    compatibility: "All Volmo 60V LFP Prismatic Energy Packs (20S / 21S LFP Chemistry)",
+    specs: [
+      { label: "Model Code", value: "VEPL-LFP-69VCUT Special Edition" },
+      { label: "Precision Cutoff", value: "69.0V ± 0.1V Automatic Full Shutdown" },
+      { label: "Charge Current", value: "Up to 6.0A Constant Current Stage" },
+      { label: "Warranty", value: "1 Year Hassle-Free Factory Warranty" },
+      { label: "Semiconductor", value: "German Microcontroller Precision CCCV" },
+      { label: "Display", value: "6-Light Smart Fast Charging Telemetry" }
+    ],
+    features: [
+      "Specialized 69V Cutoff prevents LFP cell overvoltage and maximizes 3,000+ cycle lifespan",
+      "Equipped with German semiconductors having long life, high stability, and cool operation",
+      "1 Year Hassle-Free Warranty with instant authorized replacement guarantee",
+      "6-Light Smart Fast Charging LED telemetry (Power, 20%, 40%, 60%, 80%, 100%)",
+      "New generation pulse conditioning tuned for Lithium Iron Phosphate crystal structure",
+      "Full 6-Point Protection: Temp chip, auto cutoff, flame-retardant shell, overvoltage, short-circuit, overheat"
+    ],
+    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+  }
+];
+
+export const DEFAULT_ACCESSORIES_PAGE_CONFIG: AccessoriesPageConfig = {
+  heroBadge: "Original Volmo Equipment · Genuine Accessories",
+  heroTitlePart1: "Vehicle Protection",
+  heroTitlePart2: "& Official Gear",
+  heroSubtitle: "Safeguard your electric scooter with Volmo manufactured high-grade steel accessories steel frame sets, ISI certified aerodynamic helmets, and official Volmo rider lifestyle merchandise.",
+  metrics: [
+    { title: "360° Steel", subtitle: "Heavy-Duty Frame Guards" },
+    { title: "ISI IS:4151", subtitle: "Certified Safety Helmets" },
+    { title: "Zero-Drill", subtitle: "Factory Chassis Direct Fit" },
+    { title: "Official Gear", subtitle: "All-Weather Apparel & Mats" }
+  ],
+  powerBannerBadge: "Dedicated Power Page",
+  powerBannerTitle: "Looking for Original Volmo Batteries & German Tech Chargers?",
+  powerBannerDescription: "Visit our new dedicated Battery & Charger page for complete specs on Lead-Acid Graphene packs (1-Year Warranty), Lithium/LFP models from 1.4 kW to 4.3 kW (3-Years Warranty), and German Technology Fast Chargers (48V/60V/72V 3A & 6A, 69V LFP Cutoff).",
+  powerBannerButtonText: "Go To Battery & Charger"
+};
+
+export const DEFAULT_BATTERY_CHARGER_PAGE_CONFIG: BatteryChargerPageConfig = {
+  heroBadge: "Volmo Energy Systems · Factory Direct",
+  heroTitlePart1: "Battery & Charger",
+  heroTitlePart2: "Power Solutions",
+  heroSubtitle: "Original Volmo manufactured Lead-Acid Graphene batteries with 1 Year Hassle-Free Warranty, high-efficiency Lithium & LFP battery models from 1.4 kW to 4.3 kW with 3 Years Long Warranty, and Volmo Branded German Technology Smart Fast Chargers with 1 Year Hassle-Free Warranty.",
+  metrics: [
+    { label: "Graphene Battery", value: "1 Year", subtitle: "Hassle-Free Warranty" },
+    { label: "Lithium & LFP", value: "3 Years", subtitle: "Long Official Warranty" },
+    { label: "German Tech Charger", value: "1 Year", subtitle: "Hassle-Free Warranty" },
+    { label: "Max Certified Range", value: "180 km", subtitle: "Per Full Charge (4.3 kW)" }
+  ],
+  grapheneSectionBadge: "Original Volmo Manufactured",
+  grapheneSectionTitle: "Original Lead-Acid Graphene Batteries",
+  grapheneSectionSubtitle: "Volmo vehicles are powered with original Volmo manufactured Lead-Acid Graphene batteries engineered with top-notch quality and long durable life. Infused with graphene nano-sheets that prevent active material shedding and provide 1 Year Hassle-Free Warranty.",
+  grapheneSpotlightTitle: "Engineered with Top-Notch Quality & Long Durable Life",
+  grapheneSpotlightSubtitle: "Unlike conventional lead-acid packs that degrade quickly under tropical heat, Volmo's Graphene additive forms a microscopic conductive web across the tubular positive and negative plates. This delivers faster charge absorption, cold weather starting torque, and zero maintenance.",
+  grapheneSpotlightImage: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg",
+  grapheneSpotlightBadge: "1 Year Hassle-Free Warranty",
+
+  lithiumSectionBadge: "High-Density Energy Storage",
+  lithiumSectionTitle: "Lithium-Ion & LFP High-Performance Batteries",
+  lithiumSectionSubtitle: "Engineered with original Volmo Grade-A cells, multi-tier intelligent Battery Management Systems (BMS), and backed by a comprehensive 3 Years Long Official Warranty. Available from 1.4 kW up to 4.3 kW high-capacity configurations delivering up to 180 km range per charge.",
+  lithiumSpotlightTitle: "Premium Performance with 3 Years Long Official Warranty",
+  lithiumSpotlightSubtitle: "Original Volmo manufactured Lithium-Ion (NMC) and Lithium Iron Phosphate (LFP) power packs are engineered for extreme thermal endurance, high cycle life, and lightweight handling. Each pack features real-time cell balancing, short-circuit cutoffs, and IP67 weather-sealed aluminum casings.",
+  lithiumSpotlightImage: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg",
+  lithiumSpotlightBadge: "3 Years Long Official Warranty",
+
+  chargerSectionBadge: "Intelligent Charging Systems",
+  chargerSectionTitle: "Volmo Branded German Technology Smart Fast Chargers",
+  chargerSectionSubtitle: "Equipped with advanced German microcontroller technology, our smart fast chargers incorporate high-tech semiconductors with exceptionally long service life. Fully compatible with both Lead-Acid Graphene and Lithium/LFP arrays, backed by 1 Year Hassle-Free Warranty.",
+  chargerSpotlightTitle: "German Microcontroller Technology & Pulse Repair",
+  chargerSpotlightSubtitle: "Engineered with precision German semiconductor ICs, Volmo smart chargers feature dynamic multi-stage constant current, constant voltage, and trickle floating algorithms. High-efficiency cooling fins ensure cool operation even during hot summer charging cycles.",
+  chargerSpotlightImage: "/src/assets/images/volmo_smart_charger_1790255476376.jpg",
+  chargerSpotlightBadge: "1 Year Hassle-Free Warranty · German Tech",
+
+  consultationBadge: "Custom Engineering Support",
+  consultationTitle: "Need Custom Energy or Battery Configuration?",
+  consultationSubtitle: "Whether you require a custom 72V 60Ah delivery fleet pack, specialized fast charging stations for commercial operations, or custom frame guards, talk to our power engineering team today.",
+  consultationButtonText: "Talk To Power Engineer"
+};
+

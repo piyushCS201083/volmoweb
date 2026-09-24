@@ -1,0 +1,70 @@
+{
+  "inquiries": [
+    {
+      "id": "I-98231",
+      "name": "Suresh Sharma",
+      "phone": "9826019283",
+      "model": "glider",
+      "color": "Ocean Blue",
+      "batteryType": "LA",
+      "batteryConfig": "Lead-Acid Pack: 60V / 28Ah (1 Year Warranty)",
+      "rangeKm": 60,
+      "status": "new",
+      "createdAt": "2026-09-24T14:57:04.099Z"
+    },
+    {
+      "id": "I-44912",
+      "name": "Pooja Verma",
+      "phone": "9893452109",
+      "model": "classic",
+      "color": "Pearl White",
+      "batteryType": "LI",
+      "batteryConfig": "Lithium-Ion Pack: Ultra-Range (3 Years Warranty)",
+      "rangeKm": 80,
+      "status": "contacted",
+      "createdAt": "2026-09-23T22:57:04.099Z"
+    },
+    {
+      "id": "I-12904",
+      "name": "Rohan Gupta",
+      "phone": "9111822304",
+      "model": "vista",
+      "color": "Midnight Black",
+      "batteryType": "LI",
+      "batteryConfig": "Lithium-Ion Pack: High-Density (3 Years Warranty)",
+      "rangeKm": 100,
+      "status": "completed",
+      "createdAt": "2026-09-22T16:57:04.099Z"
+    }
+  ],
+  "dealers": [
+    {
+      "id": "D-89402",
+      "name": "Prakash Auto Agency",
+      "email": "contact@prakashauto.com",
+      "phone": "8889212001",
+      "city": "Indore",
+      "state": "Madhya Pradesh",
+      "experience": "12 Years in Two-Wheeler Franchise",
+      "pastBusiness": "Authorized sub-dealer for major ICE Scooter brand. Handling 200+ unit sales monthly.",
+      "investmentRange": "₹25 Lakhs - ₹50 Lakhs",
+      "message": "Interested in establishing a flagship Volmo showroom on MG Road, Indore. Highly interested in RTO-free models.",
+      "status": "applied",
+      "createdAt": "2026-09-24T11:57:04.099Z"
+    },
+    {
+      "id": "D-10294",
+      "name": "Singh Electric Mobiles",
+      "email": "singh.electric@gmail.com",
+      "phone": "9425102831",
+      "city": "Bhopal",
+      "state": "Madhya Pradesh",
+      "experience": "3 Years in Battery Spare Parts Distribution",
+      "pastBusiness": "Distributor of Lead-Acid and Lithium EV battery packs in central India.",
+      "investmentRange": "₹15 Lakhs - ₹25 Lakhs",
+      "message": "Seeking exclusive dealership for Bhopal. Ready to set up workshop and charging points.",
+      "status": "reviewing",
+      "createdAt": "2026-09-23T04:57:04.099Z"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Volmo Electric",
+  "description": "The official website for Volmo Electrical Private Limited, highlighting their premium, RTO-free electric scooters (Vista, Glider, Classic, Phantom, and Pulse), custom battery configurations, dealership applications, and lead management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
