@@ -84,8 +84,8 @@ You can deploy the Front-End and Back-End to two completely different hosting pr
      - `ADMIN_PASSWORD`: Your custom admin password
 3. Render will now start the server smoothly without any missing module errors!
 
-2. Once deployed, note your backend URL, e.g.:
-   `https://api-volmo.onrender.com`
+2. Once deployed, note your backend URL:
+   `https://volmoweb-1.onrender.com`
 
 ### B. Deploying the Frontend Separately (Vite SPA)
 
@@ -93,7 +93,7 @@ You can deploy the Front-End and Back-End to two completely different hosting pr
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
    - **Environment Variables**:
-     - `VITE_API_URL`: `https://api-volmo.onrender.com` (Your deployed backend URL)
+     - `VITE_API_URL`: `https://volmoweb-1.onrender.com` (Your deployed Render backend URL)
 
 2. The frontend will now automatically direct all API calls (Authentication, Lead submissions, and CMS updates) to your standalone backend server!
 

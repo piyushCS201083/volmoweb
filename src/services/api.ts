@@ -5,8 +5,14 @@
 
 import { PriceInquiry, DealershipApp } from "../types";
 
-// Base API URL supports standalone frontend deployment via VITE_API_URL or relative /api
-const API_BASE_URL = (((import.meta as any).env?.VITE_API_URL as string) || "").replace(/\/$/, "");
+// Deployed server URL on Render
+export const RENDER_BACKEND_URL = "https://volmoweb-1.onrender.com";
+
+// Base API URL supports standalone frontend deployment via VITE_API_URL or defaults to the deployed Render server
+export const API_BASE_URL = (
+  ((import.meta as any).env?.VITE_API_URL as string) ||
+  RENDER_BACKEND_URL
+).replace(/\/$/, "");
 
 class ApiError extends Error {
   status: number;
@@ -238,5 +244,9 @@ export const api = {
     async check(): Promise<{ status: string; uptime: number; service: string }> {
       return request<{ status: string; uptime: number; service: string }>("/api/health");
     },
+  },
+
+  getBaseUrl(): string {
+    return API_BASE_URL;
   },
 };

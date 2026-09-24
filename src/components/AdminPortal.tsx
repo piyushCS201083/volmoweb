@@ -907,12 +907,12 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                       Volmo Management &amp; CMS Panel
                     </h2>
                     {backendStatus === "connected" ? (
-                      <span className="text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/40 px-2.5 py-0.5 rounded-full font-mono font-bold flex items-center gap-1.5 shadow-xs">
+                      <span className="text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/40 px-2.5 py-0.5 rounded-full font-mono font-bold flex items-center gap-1.5 shadow-xs" title={`Connected to ${api.getBaseUrl()}`}>
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        BACKEND API CONNECTED
+                        RENDER BACKEND CONNECTED
                       </span>
                     ) : (
-                      <span className="text-[10px] bg-amber-500/15 text-amber-400 border border-amber-500/40 px-2.5 py-0.5 rounded-full font-mono font-bold flex items-center gap-1.5">
+                      <span className="text-[10px] bg-amber-500/15 text-amber-400 border border-amber-500/40 px-2.5 py-0.5 rounded-full font-mono font-bold flex items-center gap-1.5" title={`Target: ${api.getBaseUrl()}`}>
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                         LOCAL CACHE
                       </span>
