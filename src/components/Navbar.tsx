@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import SVGLogo from "./SVGLogo";
+import Logo from "./Logo";
 import { Store, Folders, Phone, FileText, Menu, X, BarChart2, Sliders } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
 
@@ -42,7 +42,7 @@ export default function Navbar({ activePage, onPageChange, onDealershipClick, on
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex-shrink-0 cursor-pointer" onClick={() => handleNavClick("home")}>
-            <SVGLogo size="md" />
+            <Logo size="md" />
           </div>
 
           {/* Desktop Nav Items */}

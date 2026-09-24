@@ -416,7 +416,7 @@ export interface BrandingConfig {
 export const DEFAULT_BRANDING: BrandingConfig = {
   brandName: "VOLMO",
   brandTagline: "Electric Scooters & Smart Mobility",
-  customLogoUrl: "",
+  customLogoUrl: "/volmo_logo.png",
   footerCopyright: "Volmo Electrical Private Limited. All Rights Reserved. Produced in India.",
 };
 

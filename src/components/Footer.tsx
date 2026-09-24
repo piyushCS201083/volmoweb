@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import SVGLogo from "./SVGLogo";
+import Logo from "./Logo";
 import { Mail, Phone, MapPin, ExternalLink, ShieldCheck, Lock } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
 
@@ -27,7 +27,7 @@ export default function Footer({ onDealershipClick, onAdminClick, onModelSelect,
         {/* Brand & Tagline */}
         <div className="space-y-4">
           <div className="flex items-center -ml-2 mb-2">
-            <SVGLogo size="md" />
+            <Logo size="md" />
           </div>
           <p className="text-sm text-slate-600 leading-relaxed font-normal">
             {brandingConfig?.brandTagline

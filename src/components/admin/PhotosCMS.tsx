@@ -225,16 +225,16 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
                 </h4>
               </div>
               <span className="text-[11px] text-slate-400">
-                Optional: replaces default vector SVG logo
+                Custom override for the official Volmo PNG logo
               </span>
             </div>
 
             <ImageUploader
-              label="Custom Brand Logo Image (PNG / SVG)"
+              label="Custom Brand Logo Image (PNG)"
               value={brandingConfig.customLogoUrl || ""}
               onChange={(newVal) => {
                 updateBrandingConfig({ customLogoUrl: newVal });
-                onShowToast(newVal ? "Custom logo image uploaded!" : "Reset to vector logo.");
+                onShowToast(newVal ? "Custom logo image uploaded!" : "Reset to official PNG logo.");
               }}
               helperText="Transparent background PNG recommended"
               aspectRatio="wide"
@@ -244,11 +244,11 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
                 type="button"
                 onClick={() => {
                   updateBrandingConfig({ customLogoUrl: "" });
-                  onShowToast("Reverted back to default Volmo vector logo.");
+                  onShowToast("Restored official Volmo PNG logo.");
                 }}
                 className="text-xs text-red-400 hover:text-red-300 font-bold underline"
               >
-                Clear custom logo &amp; restore default vector logo
+                Clear custom logo &amp; restore official PNG logo
               </button>
             )}
           </div>

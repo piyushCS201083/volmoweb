@@ -62,7 +62,7 @@ Runs `server.ts` with `tsx`, mounting Vite in middleware mode on port 3000.
 npm run build
 npm start
 ```
-`npm run build` compiles frontend assets to `dist/`, and `node server.ts` starts Express, serving the production build and API endpoints simultaneously.
+`npm run build` compiles frontend assets to `dist/`, and `npm start` (runs `tsx server.ts`) starts Express, serving the production build and API endpoints simultaneously.
 
 ---
 
@@ -70,17 +70,19 @@ npm start
 
 You can deploy the Front-End and Back-End to two completely different hosting providers (e.g., Frontend on **Vercel / Netlify / Cloudflare Pages** and Backend on **Render / Railway / Cloud Run / VPS**).
 
-### A. Deploying the Backend Separately (Node.js)
+### A. Deploying the Backend Separately on Render (Web Service)
 
-1. **Deploy `/server` directory to your host** (e.g. Render, Railway, AWS, DigitalOcean):
-   - **Root Directory**: `server` (or project root with `server.ts`)
+1. In Render, create a new **Web Service** connected to your repository (`piyushCS201083/volmoweb`).
+2. Configure settings:
+   - **Root Directory**: `server`
+   - **Environment**: `Node`
    - **Build Command**: `npm install`
-   - **Start Command**: `npx tsx server.ts` or `npm start`
+   - **Start Command**: `npm start` (or `npx tsx server.ts`)
    - **Environment Variables**:
-     - `PORT`: `3000` (or `8080`)
-     - `STANDALONE_BACKEND`: `true`
-     - `CORS_ORIGIN`: `https://your-frontend-domain.com` (or `*`)
-     - `ADMIN_PASSWORD`: Your secret admin password
+     - `NODE_VERSION`: `20` or `22` or `24`
+     - `CORS_ORIGIN`: `*` (or your frontend Vercel/Netlify URL)
+     - `ADMIN_PASSWORD`: Your custom admin password
+3. Render will now start the server smoothly without any missing module errors!
 
 2. Once deployed, note your backend URL, e.g.:
    `https://api-volmo.onrender.com`

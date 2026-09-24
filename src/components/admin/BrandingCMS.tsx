@@ -105,10 +105,10 @@ export default function BrandingCMS({ onShowToast }: BrandingCMSProps) {
           </div>
 
           <ImageUploader
-            label="Custom Logo Image (Optional PNG/SVG)"
+            label="Custom Logo Image (Optional PNG)"
             value={brandingForm.customLogoUrl || ""}
             onChange={(newVal) => setBrandingForm({ ...brandingForm, customLogoUrl: newVal })}
-            helperText="Leave empty to use high-res vector triangle logo"
+            helperText="Leave empty to use official Volmo PNG logo"
             aspectRatio="wide"
           />
           {brandingForm.customLogoUrl && (
@@ -116,11 +116,11 @@ export default function BrandingCMS({ onShowToast }: BrandingCMSProps) {
               type="button"
               onClick={() => {
                 setBrandingForm({ ...brandingForm, customLogoUrl: "" });
-                onShowToast("Reverted to vector logo.");
+                onShowToast("Restored official Volmo PNG logo.");
               }}
               className="text-xs text-red-400 hover:text-red-300 underline"
             >
-              Clear custom logo and restore built-in vector logo
+              Clear custom logo and restore official PNG logo
             </button>
           )}
         </div>
