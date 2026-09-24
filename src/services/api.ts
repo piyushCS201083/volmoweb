@@ -246,6 +246,21 @@ export const api = {
     },
   },
 
+  // ==========================================
+  // AI CHATBOT (GEMINI MULTI-TURN FAQ & TECH)
+  // ==========================================
+  chatbot: {
+    async sendChat(
+      messages: Array<{ role: "user" | "model" | "assistant"; content: string }>,
+      model: "gemini-3.5-flash" | "gemini-3.1-flash-lite" | "gemini-3.8-flash" = "gemini-3.5-flash"
+    ): Promise<{ success: boolean; model: string; reply: string }> {
+      return request<{ success: boolean; model: string; reply: string }>("/api/chatbot/chat", {
+        method: "POST",
+        body: JSON.stringify({ messages, model }),
+      });
+    },
+  },
+
   getBaseUrl(): string {
     return API_BASE_URL;
   },

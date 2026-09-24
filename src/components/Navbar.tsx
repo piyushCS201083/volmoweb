@@ -26,7 +26,7 @@ export default function Navbar({ activePage, onPageChange, onDealershipClick, on
     { label: "Our Models", pageId: "models" },
     { label: "Accessories", pageId: "accessories" },
     { label: "Battery & Charger", pageId: "battery-charger" },
-    { label: "Rider Reviews", pageId: "reviews" },
+    { label: "Media & Blogs", pageId: "media-blogs" },
     { label: "Tech & FAQs", pageId: "technology" },
     { label: "Locate Us", pageId: "locator" }
   ];

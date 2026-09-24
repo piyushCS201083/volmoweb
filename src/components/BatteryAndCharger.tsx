@@ -17,6 +17,9 @@ import {
   Layers,
   ThermometerSnowflake,
   ChevronRight,
+  ChevronLeft,
+  ArrowRight,
+  ArrowLeft,
   PhoneCall,
   MessageCircle,
   Clock,
@@ -51,6 +54,39 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
   const currentChargers = chargersData || CHARGER_MODELS;
 
   const [activeTab, setActiveTab] = useState<"all" | "graphene" | "lithium" | "chargers">("all");
+
+  // Model Slider Indices and Handlers
+  const [leadAcidIdx, setLeadAcidIdx] = useState(0);
+  const [lithiumIdx, setLithiumIdx] = useState(0);
+  const [chargerIdx, setChargerIdx] = useState(0);
+  const [chargerFilter, setChargerFilter] = useState<"all" | "lead-acid" | "lithium" | "lfp">("all");
+
+  const filteredChargers = chargerFilter === "all"
+    ? currentChargers
+    : currentChargers.filter((c) => c.type === chargerFilter);
+
+  const safeLeadAcidIdx = leadAcidIdx % currentLeadAcid.length;
+  const activeLeadAcid = currentLeadAcid[safeLeadAcidIdx] || currentLeadAcid[0];
+  const nextLeadAcidModel = currentLeadAcid[(safeLeadAcidIdx + 1) % currentLeadAcid.length];
+
+  const safeLithiumIdx = lithiumIdx % currentLithium.length;
+  const activeLithium = currentLithium[safeLithiumIdx] || currentLithium[0];
+  const nextLithiumModel = currentLithium[(safeLithiumIdx + 1) % currentLithium.length];
+
+  const safeChargerList = filteredChargers.length > 0 ? filteredChargers : currentChargers;
+  const safeChargerIdx = chargerIdx % safeChargerList.length;
+  const activeCharger = safeChargerList[safeChargerIdx] || safeChargerList[0];
+  const nextChargerModel = safeChargerList[(safeChargerIdx + 1) % safeChargerList.length];
+
+  const nextLeadAcid = () => setLeadAcidIdx((prev) => (prev + 1) % currentLeadAcid.length);
+  const prevLeadAcid = () => setLeadAcidIdx((prev) => (prev - 1 + currentLeadAcid.length) % currentLeadAcid.length);
+
+  const nextLithium = () => setLithiumIdx((prev) => (prev + 1) % currentLithium.length);
+  const prevLithium = () => setLithiumIdx((prev) => (prev - 1 + currentLithium.length) % currentLithium.length);
+
+  const nextCharger = () => setChargerIdx((prev) => (prev + 1) % safeChargerList.length);
+  const prevCharger = () => setChargerIdx((prev) => (prev - 1 + safeChargerList.length) % safeChargerList.length);
+
   const [quoteModalItem, setQuoteModalItem] = useState<{
     title: string;
     specs: string;
@@ -284,67 +320,185 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
               </div>
             </div>
 
-            {/* Graphene Array Lineup Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-              {currentLeadAcid.map((battery) => (
-                <div
-                  key={battery.id}
-                  className="bg-white rounded-2xl border border-slate-200 hover:border-amber-500/50 p-6 flex flex-col justify-between space-y-5 hover:shadow-lg transition-all"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-50 text-amber-700 px-2.5 py-1 rounded-md border border-amber-200">
-                        {battery.voltageRating}
-                      </span>
-                      <span className="text-[10px] font-mono font-bold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md">
-                        {battery.capacity}
-                      </span>
-                    </div>
-
-                    <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                      {battery.title}
-                    </h4>
-
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      {battery.description}
-                    </p>
-
-                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-1.5">
-                      {battery.specs.slice(0, 3).map((sp, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-xs">
-                          <span className="text-slate-500 font-medium">{sp.label}:</span>
-                          <span className="font-bold text-slate-900 font-mono">{sp.value}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <ul className="space-y-1.5 text-xs text-slate-700">
-                      {battery.features.slice(0, 3).map((ft, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 size={13} className="text-amber-600 shrink-0 mt-0.5" />
-                          <span>{ft}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
-                    <div className="text-[11px] font-mono font-bold text-amber-700">
-                      1 Year Warranty
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleOpenQuote(battery.title, battery.voltageRating, battery.warranty, "Lead-Acid Graphene")
-                      }
-                      className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center gap-1"
-                    >
-                      <span>Quote Price</span>
-                      <ChevronRight size={13} />
-                    </button>
-                  </div>
+            {/* Graphene Array Lineup Interactive Model Switcher & Slider */}
+            <div className="space-y-6 pt-2">
+              {/* Header Controls: Model Selector Pills and Sliding Right Button */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                {/* Model Pills */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider mr-1">
+                    Select Model:
+                  </span>
+                  {currentLeadAcid.map((battery, idx) => {
+                    const isSelected = safeLeadAcidIdx === idx;
+                    return (
+                      <button
+                        key={battery.id}
+                        type="button"
+                        onClick={() => setLeadAcidIdx(idx)}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                          isSelected
+                            ? "bg-amber-600 text-white shadow-md shadow-amber-600/30 scale-102"
+                            : "bg-white hover:bg-slate-100 text-slate-700 border border-slate-200"
+                        }`}
+                      >
+                        <span>{battery.voltageRating.split(" ")[0]} Array</span>
+                        <span
+                          className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${
+                            isSelected ? "bg-amber-700/60 text-white" : "bg-slate-100 text-slate-600"
+                          }`}
+                        >
+                          {battery.capacity.split(" ")[0]}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
+
+                {/* Sliding Switcher Controls */}
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <span className="text-xs font-mono font-bold text-slate-500">
+                    Model {safeLeadAcidIdx + 1} of {currentLeadAcid.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={prevLeadAcid}
+                    className="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-all cursor-pointer shadow-xs active:scale-95"
+                    title="Previous Lead-Acid Model"
+                    aria-label="Previous Lead-Acid Model"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextLeadAcid}
+                    className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-amber-600/25 cursor-pointer active:scale-95 group"
+                    title="Slide to Next Model"
+                    aria-label="Next Lead-Acid Model"
+                  >
+                    <span>Next Model</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Active Model Showcase Card */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeLeadAcid.id}
+                  initial={{ opacity: 0, x: 25 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -25 }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-white rounded-2xl border-2 border-amber-500/30 p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Left Column: Model Details & Specs */}
+                    <div className="lg:col-span-8 space-y-6">
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-xs font-mono font-bold uppercase tracking-wider bg-amber-100 text-amber-900 px-3 py-1 rounded-lg border border-amber-300">
+                            {activeLeadAcid.voltageRating}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+                            {activeLeadAcid.capacity}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200">
+                            {activeLeadAcid.warranty}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                          {activeLeadAcid.title}
+                        </h3>
+
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                          {activeLeadAcid.description}
+                        </p>
+                      </div>
+
+                      {/* Technical Specs Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 rounded-2xl p-4.5 border border-slate-200/80">
+                        {activeLeadAcid.specs.map((sp, idx) => (
+                          <div key={idx} className="flex justify-between items-center text-xs p-1.5 border-b border-slate-200/50 last:border-0">
+                            <span className="text-slate-500 font-medium">{sp.label}:</span>
+                            <span className="font-bold text-slate-900 font-mono text-right">{sp.value}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Features Highlights */}
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
+                          Key Engineering Highlights
+                        </h4>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+                          {activeLeadAcid.features.map((ft, idx) => (
+                            <li key={idx} className="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-slate-100">
+                              <CheckCircle2 size={14} className="text-amber-600 shrink-0 mt-0.5" />
+                              <span>{ft}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Sliding Action Box & Quote Button */}
+                    <div className="lg:col-span-4 bg-gradient-to-br from-amber-50/70 to-orange-50/50 rounded-2xl p-6 border border-amber-200/80 flex flex-col justify-between space-y-6">
+                      <div className="space-y-3">
+                        <span className="text-[10px] font-mono font-bold text-amber-800 uppercase tracking-widest block">
+                          Instant Model Switcher
+                        </span>
+
+                        <div className="bg-white rounded-xl p-4 border border-amber-200/60 shadow-xs space-y-1">
+                          <span className="text-[10px] font-mono text-slate-400 uppercase block">
+                            Up Next in Lineup
+                          </span>
+                          <div className="font-bold text-slate-900 text-sm">
+                            {nextLeadAcidModel.voltageRating.split("(")[0]}
+                          </div>
+                          <div className="text-xs text-slate-500 font-medium">
+                            {nextLeadAcidModel.capacity}
+                          </div>
+                        </div>
+
+                        {/* Prominent Sliding Right Button */}
+                        <button
+                          type="button"
+                          onClick={nextLeadAcid}
+                          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-amber-600/30 cursor-pointer flex items-center justify-center gap-2 group active:scale-98"
+                        >
+                          <span>Slide to Next Model</span>
+                          <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                        </button>
+                      </div>
+
+                      <div className="pt-4 border-t border-amber-200/60 space-y-3">
+                        <div className="flex items-center justify-between text-xs font-mono">
+                          <span className="text-slate-500">Official Factory Warranty:</span>
+                          <span className="font-bold text-amber-700">1 Year Hassle-Free</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleOpenQuote(
+                              activeLeadAcid.title,
+                              activeLeadAcid.voltageRating,
+                              activeLeadAcid.warranty,
+                              "Lead-Acid Graphene"
+                            )
+                          }
+                          className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
+                        >
+                          <span>Quote Price for {activeLeadAcid.voltageRating.split(" ")[0]}</span>
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </section>
@@ -431,97 +585,201 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
               </div>
             </div>
 
-            {/* Grid of the 6 Specific Models Requested by User */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-              {currentLithium.map((model) => (
-                <div
-                  key={model.id}
-                  className="bg-white rounded-2xl border border-slate-200 hover:border-orange-500/50 p-6 flex flex-col justify-between space-y-5 hover:shadow-xl transition-all duration-300 group"
-                >
-                  <div className="space-y-4">
-                    {/* Badge and Chemistry Header */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md border border-orange-200">
-                        {model.chemistry}
-                      </span>
-                      <span className="text-[10px] font-mono font-bold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-md">
-                        {model.powerKw}
-                      </span>
-                    </div>
-
-                    <div>
-                      <span className="text-xs font-mono font-bold text-orange-600 block mb-0.5">
-                        {model.voltage} &middot; {model.capacity}
-                      </span>
-                      <h4 className="text-xl font-black text-slate-900 leading-snug group-hover:text-orange-600 transition-colors">
-                        {model.title}
-                      </h4>
-                    </div>
-
-                    {/* Mileage and Power Feature Callout */}
-                    <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20 rounded-xl p-3 flex items-center justify-between">
-                      <div>
-                        <span className="text-[10px] font-mono font-bold text-slate-500 uppercase block">Certified Mileage</span>
-                        <span className="text-lg font-black text-orange-700 font-mono">{model.mileageKm}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[10px] font-mono font-bold text-slate-500 uppercase block">Power Rating</span>
-                        <span className="text-sm font-bold text-slate-900 font-mono">{model.powerKw}</span>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      {model.description}
-                    </p>
-
-                    {/* Specs Table Snapshot */}
-                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-1.5">
-                      {model.specs.slice(0, 4).map((sp, idx) => (
-                        <div key={idx} className="flex justify-between items-center text-xs">
-                          <span className="text-slate-500 font-medium">{sp.label}:</span>
-                          <span className="font-bold text-slate-900 font-mono">{sp.value}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Features checklist */}
-                    <ul className="space-y-1.5 text-xs text-slate-700">
-                      {model.features.slice(0, 3).map((ft, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-0.5" />
-                          <span>{ft}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Card Footer with 3 Years Warranty and Quote Price Button */}
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <span className="text-[10px] font-mono text-slate-400 uppercase block">Warranty</span>
-                      <span className="text-xs font-mono font-bold text-orange-600 block">
-                        3 Years Long Warranty
-                      </span>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleOpenQuote(
-                          model.title,
-                          `${model.powerKw} · ${model.mileageKm}`,
-                          model.warranty,
-                          "Lithium/LFP Battery"
-                        )
-                      }
-                      className="px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-orange-600/20 cursor-pointer flex items-center gap-1.5 active:scale-95"
-                    >
-                      <span>Quote Price</span>
-                      <ChevronRight size={14} />
-                    </button>
-                  </div>
+            {/* Lithium & LFP Interactive Model Switcher & Slider */}
+            <div className="space-y-6 pt-2">
+              {/* Header Controls: Model Selector Pills and Sliding Right Button */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                {/* Model Pills */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider mr-1">
+                    Select Model:
+                  </span>
+                  {currentLithium.map((model, idx) => {
+                    const isSelected = safeLithiumIdx === idx;
+                    return (
+                      <button
+                        key={model.id}
+                        type="button"
+                        onClick={() => setLithiumIdx(idx)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                          isSelected
+                            ? "bg-orange-600 text-white shadow-md shadow-orange-600/30 scale-102"
+                            : "bg-white hover:bg-slate-100 text-slate-700 border border-slate-200"
+                        }`}
+                      >
+                        <span>{model.voltage} {model.capacity}</span>
+                        <span
+                          className={`text-[10px] px-1.5 py-0.5 rounded-md font-mono ${
+                            isSelected ? "bg-orange-700/60 text-white" : "bg-slate-100 text-slate-600"
+                          }`}
+                        >
+                          {model.powerKw}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
+
+                {/* Sliding Switcher Controls */}
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <span className="text-xs font-mono font-bold text-slate-500">
+                    Model {safeLithiumIdx + 1} of {currentLithium.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={prevLithium}
+                    className="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-all cursor-pointer shadow-xs active:scale-95"
+                    title="Previous Lithium Model"
+                    aria-label="Previous Lithium Model"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextLithium}
+                    className="px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-orange-600/25 cursor-pointer active:scale-95 group"
+                    title="Slide to Next Model"
+                    aria-label="Next Lithium Model"
+                  >
+                    <span>Next Model</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Active Lithium Model Showcase Card */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeLithium.id}
+                  initial={{ opacity: 0, x: 25 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -25 }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-white rounded-2xl border-2 border-orange-500/30 p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Left Column: Model Details, Range, Specs */}
+                    <div className="lg:col-span-8 space-y-6">
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-xs font-mono font-bold uppercase tracking-wider bg-orange-100 text-orange-950 px-3 py-1 rounded-lg border border-orange-300">
+                            {activeLithium.chemistry}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+                            {activeLithium.voltage} &middot; {activeLithium.capacity}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-orange-700 bg-orange-50 px-3 py-1 rounded-lg border border-orange-200">
+                            {activeLithium.warranty}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                          {activeLithium.title}
+                        </h3>
+
+                        {/* Mileage and Power Callout Badges */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+                          <div className="bg-gradient-to-r from-orange-500/10 to-amber-500/10 border border-orange-500/20 rounded-xl p-3">
+                            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase block">Certified Range</span>
+                            <span className="text-lg font-black text-orange-700 font-mono">{activeLithium.mileageKm}</span>
+                          </div>
+                          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase block">Energy Output</span>
+                            <span className="text-lg font-black text-slate-900 font-mono">{activeLithium.powerKw}</span>
+                          </div>
+                          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 col-span-2 sm:col-span-1">
+                            <span className="text-[10px] font-mono font-bold text-slate-500 uppercase block">Smart Protection</span>
+                            <span className="text-sm font-bold text-emerald-700 mt-1 block">Active Smart BMS</span>
+                          </div>
+                        </div>
+
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal pt-1">
+                          {activeLithium.description}
+                        </p>
+                      </div>
+
+                      {/* Technical Specs Snapshot */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 rounded-2xl p-4.5 border border-slate-200/80">
+                        {activeLithium.specs.map((sp, idx) => (
+                          <div key={idx} className="flex justify-between items-center text-xs p-1.5 border-b border-slate-200/50 last:border-0">
+                            <span className="text-slate-500 font-medium">{sp.label}:</span>
+                            <span className="font-bold text-slate-900 font-mono text-right">{sp.value}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Features */}
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
+                          Advanced Cell Features
+                        </h4>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+                          {activeLithium.features.map((ft, idx) => (
+                            <li key={idx} className="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-slate-100">
+                              <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                              <span>{ft}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Sliding Action Box & Quote Button */}
+                    <div className="lg:col-span-4 bg-gradient-to-br from-orange-50/70 to-amber-50/50 rounded-2xl p-6 border border-orange-200/80 flex flex-col justify-between space-y-6">
+                      <div className="space-y-3">
+                        <span className="text-[10px] font-mono font-bold text-orange-800 uppercase tracking-widest block">
+                          Instant Model Switcher
+                        </span>
+
+                        <div className="bg-white rounded-xl p-4 border border-orange-200/60 shadow-xs space-y-1">
+                          <span className="text-[10px] font-mono text-slate-400 uppercase block">
+                            Up Next in Lineup
+                          </span>
+                          <div className="font-bold text-slate-900 text-sm">
+                            {nextLithiumModel.title}
+                          </div>
+                          <div className="text-xs text-orange-600 font-semibold">
+                            {nextLithiumModel.mileageKm} &middot; {nextLithiumModel.powerKw}
+                          </div>
+                        </div>
+
+                        {/* Prominent Sliding Right Button */}
+                        <button
+                          type="button"
+                          onClick={nextLithium}
+                          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-orange-600/30 cursor-pointer flex items-center justify-center gap-2 group active:scale-98"
+                        >
+                          <span>Slide to Next Model</span>
+                          <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                        </button>
+                      </div>
+
+                      <div className="pt-4 border-t border-orange-200/60 space-y-3">
+                        <div className="flex items-center justify-between text-xs font-mono">
+                          <span className="text-slate-500">Official Factory Warranty:</span>
+                          <span className="font-bold text-orange-600">3 Years Long Warranty</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleOpenQuote(
+                              activeLithium.title,
+                              `${activeLithium.powerKw} · ${activeLithium.mileageKm}`,
+                              activeLithium.warranty,
+                              "Lithium/LFP Battery"
+                            )
+                          }
+                          className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
+                        >
+                          <span>Quote Price for {activeLithium.voltage} {activeLithium.capacity}</span>
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </section>
@@ -627,225 +885,219 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
               </div>
             </div>
 
-            {/* 3 Categories of Chargers Requested by User */}
+            {/* German Technology Chargers Interactive Model Switcher & Slider */}
+            <div className="space-y-6 pt-2">
+              {/* Category Filter and Model Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                {/* Category & Model Selectors */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider mr-1">
+                    Filter Type:
+                  </span>
+                  {(
+                    [
+                      { id: "all", label: "All Chargers" },
+                      { id: "lead-acid", label: "Lead-Acid (3A)" },
+                      { id: "lithium", label: "Lithium Fast (6A)" },
+                      { id: "lfp", label: "LFP Precision (69V)" },
+                    ] as const
+                  ).map((cat) => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => {
+                        setChargerFilter(cat.id);
+                        setChargerIdx(0);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        chargerFilter === cat.id
+                          ? "bg-cyan-700 text-white shadow-md shadow-cyan-700/30"
+                          : "bg-white hover:bg-slate-100 text-slate-700 border border-slate-200"
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
 
-            {/* 1. Lead Acid Chargers (48V 3Ah, 60V 3Ah, 72V 3Ah) */}
-            <div className="space-y-4 pt-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-                  Lead-Acid Battery Chargers (48V 3Ah | 60V 3Ah | 72V 3Ah)
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {currentChargers.filter((c) => c.type === "lead-acid").map((charger) => (
-                  <div
-                    key={charger.id}
-                    className="bg-white rounded-2xl border border-slate-200 hover:border-amber-500/40 p-5 flex flex-col justify-between space-y-4 hover:shadow-lg transition-all"
+                {/* Sliding Switcher Controls */}
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <span className="text-xs font-mono font-bold text-slate-500">
+                    Model {safeChargerIdx + 1} of {safeChargerList.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={prevCharger}
+                    className="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 transition-all cursor-pointer shadow-xs active:scale-95"
+                    title="Previous Charger Model"
+                    aria-label="Previous Charger Model"
                   >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold uppercase bg-amber-50 text-amber-700 px-2 py-0.5 rounded border border-amber-200">
-                          {charger.voltage} &middot; {charger.amperage}
-                        </span>
-                        <span className="text-[10px] font-mono font-bold text-slate-500">
-                          {charger.modelCode}
-                        </span>
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextCharger}
+                    className="px-3.5 py-2 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md shadow-cyan-700/25 cursor-pointer active:scale-95 group"
+                    title="Slide to Next Charger"
+                    aria-label="Next Charger Model"
+                  >
+                    <span>Next Charger</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Model Pills for Current Filter */}
+              <div className="flex flex-wrap items-center gap-2 px-1">
+                {safeChargerList.map((chg, idx) => {
+                  const isSelected = safeChargerIdx === idx;
+                  return (
+                    <button
+                      key={chg.id}
+                      type="button"
+                      onClick={() => setChargerIdx(idx)}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200"
+                      }`}
+                    >
+                      {chg.voltage} {chg.amperage || chg.cutoffVoltage}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Charger Showcase Card */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeCharger.id}
+                  initial={{ opacity: 0, x: 25 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -25 }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-white rounded-2xl border-2 border-cyan-500/30 p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Left Column: Charger Details & Specs */}
+                    <div className="lg:col-span-8 space-y-6">
+                      <div className="space-y-3">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-xs font-mono font-bold uppercase tracking-wider bg-cyan-100 text-cyan-950 px-3 py-1 rounded-lg border border-cyan-300">
+                            {activeCharger.voltage} &middot; {activeCharger.amperage || activeCharger.cutoffVoltage}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-slate-800 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
+                            {activeCharger.modelCode}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-cyan-800 bg-cyan-50 px-3 py-1 rounded-lg border border-cyan-200">
+                            {activeCharger.warranty}
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
+                          {activeCharger.typeLabel} ({activeCharger.voltage} {activeCharger.amperage || activeCharger.cutoffVoltage})
+                        </h3>
+
+                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                          {activeCharger.description}
+                        </p>
                       </div>
 
-                      <h4 className="text-base font-bold text-slate-900 leading-snug">
-                        {charger.typeLabel} ({charger.voltage} {charger.amperage})
-                      </h4>
-
-                      <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                        {charger.description}
-                      </p>
-
-                      <div className="bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-1 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Compatibility:</span>
-                          <span className="font-bold text-slate-900 text-right">{charger.compatibility}</span>
+                      {/* Technical Specs Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 rounded-2xl p-4.5 border border-slate-200/80 text-xs">
+                        <div className="flex justify-between items-center p-1.5 border-b border-slate-200/50">
+                          <span className="text-slate-500 font-medium">Target Compatibility:</span>
+                          <span className="font-bold text-slate-900 text-right">{activeCharger.compatibility}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Warranty:</span>
-                          <span className="font-bold text-amber-700">{charger.warranty}</span>
+                        <div className="flex justify-between items-center p-1.5 border-b border-slate-200/50">
+                          <span className="text-slate-500 font-medium">Cutoff System:</span>
+                          <span className="font-bold text-cyan-800 font-mono">
+                            {activeCharger.cutoffVoltage || "Automatic Float CCCV"}
+                          </span>
                         </div>
+                        <div className="flex justify-between items-center p-1.5 border-b border-slate-200/50">
+                          <span className="text-slate-500 font-medium">Semiconductor Core:</span>
+                          <span className="font-bold text-slate-900">German Microchip MOSFET</span>
+                        </div>
+                        <div className="flex justify-between items-center p-1.5 border-b border-slate-200/50">
+                          <span className="text-slate-500 font-medium">Telemetry:</span>
+                          <span className="font-bold text-emerald-700">6-LED Real-time Stages</span>
+                        </div>
+                      </div>
+
+                      {/* Features Highlights */}
+                      <div className="space-y-2">
+                        <h4 className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider">
+                          Protection & Charging Features
+                        </h4>
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+                          {activeCharger.features.map((ft, idx) => (
+                            <li key={idx} className="flex items-start gap-2 bg-white p-2.5 rounded-xl border border-slate-100">
+                              <CheckCircle2 size={14} className="text-cyan-700 shrink-0 mt-0.5" />
+                              <span>{ft}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
 
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono font-bold text-amber-700">
-                        1 Year Warranty
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleOpenQuote(
-                            charger.typeLabel,
-                            `${charger.voltage} ${charger.amperage}`,
-                            charger.warranty,
-                            "Lead-Acid Charger"
-                          )
-                        }
-                        className="px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center gap-1"
-                      >
-                        <span>Quote Price</span>
-                        <ChevronRight size={13} />
-                      </button>
+                    {/* Right Column: Sliding Action Box & Quote Button */}
+                    <div className="lg:col-span-4 bg-gradient-to-br from-cyan-50/70 to-blue-50/50 rounded-2xl p-6 border border-cyan-200/80 flex flex-col justify-between space-y-6">
+                      <div className="space-y-3">
+                        <span className="text-[10px] font-mono font-bold text-cyan-800 uppercase tracking-widest block">
+                          Instant Charger Switcher
+                        </span>
+
+                        <div className="bg-white rounded-xl p-4 border border-cyan-200/60 shadow-xs space-y-1">
+                          <span className="text-[10px] font-mono text-slate-400 uppercase block">
+                            Up Next in Lineup
+                          </span>
+                          <div className="font-bold text-slate-900 text-sm">
+                            {nextChargerModel.typeLabel}
+                          </div>
+                          <div className="text-xs text-cyan-700 font-mono font-semibold">
+                            {nextChargerModel.voltage} {nextChargerModel.amperage || nextChargerModel.cutoffVoltage}
+                          </div>
+                        </div>
+
+                        {/* Prominent Sliding Right Button */}
+                        <button
+                          type="button"
+                          onClick={nextCharger}
+                          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-cyan-700 to-blue-700 hover:from-cyan-600 hover:to-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-700/30 cursor-pointer flex items-center justify-center gap-2 group active:scale-98"
+                        >
+                          <span>Slide to Next Charger</span>
+                          <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                        </button>
+                      </div>
+
+                      <div className="pt-4 border-t border-cyan-200/60 space-y-3">
+                        <div className="flex items-center justify-between text-xs font-mono">
+                          <span className="text-slate-500">Official Factory Warranty:</span>
+                          <span className="font-bold text-cyan-800">1 Year Hassle-Free</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleOpenQuote(
+                              activeCharger.typeLabel,
+                              `${activeCharger.voltage} ${activeCharger.amperage || activeCharger.cutoffVoltage}`,
+                              activeCharger.warranty,
+                              "Charger Models"
+                            )
+                          }
+                          className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
+                        >
+                          <span>Quote Price for {activeCharger.voltage} Charger</span>
+                          <ChevronRight size={14} />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-
-            {/* 2. Lithium Batteries Charger (48V 6Ah, 60V 6Ah, 72V 6Ah) */}
-            <div className="space-y-4 pt-6">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-                  Lithium Batteries Fast Chargers (48V 6Ah | 60V 6Ah | 72V 6Ah Fast Charge)
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {currentChargers.filter((c) => c.type === "lithium").map((charger) => (
-                  <div
-                    key={charger.id}
-                    className="bg-white rounded-2xl border border-slate-200 hover:border-orange-500/40 p-5 flex flex-col justify-between space-y-4 hover:shadow-lg transition-all"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold uppercase bg-orange-50 text-orange-700 px-2 py-0.5 rounded border border-orange-200">
-                          {charger.voltage} &middot; {charger.amperage}
-                        </span>
-                        <span className="text-[10px] font-mono font-bold text-slate-500">
-                          {charger.modelCode}
-                        </span>
-                      </div>
-
-                      <h4 className="text-base font-bold text-slate-900 leading-snug">
-                        {charger.typeLabel} ({charger.voltage} {charger.amperage})
-                      </h4>
-
-                      <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                        {charger.description}
-                      </p>
-
-                      <div className="bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-1 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Fleet Fit:</span>
-                          <span className="font-bold text-slate-900 text-right">{charger.compatibility}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Warranty:</span>
-                          <span className="font-bold text-orange-600">{charger.warranty}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono font-bold text-orange-600">
-                        1 Year Warranty
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleOpenQuote(
-                            charger.typeLabel,
-                            `${charger.voltage} ${charger.amperage}`,
-                            charger.warranty,
-                            "Lithium Charger"
-                          )
-                        }
-                        className="px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center gap-1"
-                      >
-                        <span>Quote Price</span>
-                        <ChevronRight size={13} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 3. LFP Battery Chargers (69V Cutoff) */}
-            <div className="space-y-4 pt-6">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-600" />
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-                  LFP Battery Charger (69V Precision Cutoff &middot; 1 Year Hassle-Free Warranty)
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {currentChargers.filter((c) => c.type === "lfp").map((charger) => (
-                  <div
-                    key={charger.id}
-                    className="bg-gradient-to-br from-white to-cyan-50/30 rounded-2xl border border-cyan-200/80 hover:border-cyan-500 p-6 flex flex-col justify-between space-y-4 shadow-sm hover:shadow-xl transition-all"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold uppercase bg-cyan-100 text-cyan-800 px-2.5 py-1 rounded border border-cyan-300">
-                          {charger.cutoffVoltage}
-                        </span>
-                        <span className="text-[10px] font-mono font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded">
-                          LFP Dedicated CCCV
-                        </span>
-                      </div>
-
-                      <h4 className="text-lg font-black text-slate-900">
-                        {charger.typeLabel} — {charger.cutoffVoltage}
-                      </h4>
-
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        {charger.description}
-                      </p>
-
-                      <div className="bg-white rounded-xl p-3 border border-cyan-100 space-y-1.5 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Cutoff Threshold:</span>
-                          <span className="font-bold text-cyan-800 font-mono">69.0V Precision Zero-Overshoot</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Compatibility:</span>
-                          <span className="font-bold text-slate-900 font-mono">{charger.compatibility}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Warranty:</span>
-                          <span className="font-bold text-emerald-700">{charger.warranty}</span>
-                        </div>
-                      </div>
-
-                      <ul className="space-y-1 text-xs text-slate-700">
-                        {charger.features.slice(0, 3).map((ft, idx) => (
-                          <li key={idx} className="flex items-start gap-1.5">
-                            <CheckCircle2 size={13} className="text-cyan-700 shrink-0 mt-0.5" />
-                            <span>{ft}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="pt-4 border-t border-cyan-100 flex items-center justify-between gap-3">
-                      <span className="text-xs font-mono font-bold text-cyan-800">
-                        1 Year Hassle-Free Warranty
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleOpenQuote(
-                            charger.typeLabel,
-                            charger.cutoffVoltage || "69V Cutoff",
-                            charger.warranty,
-                            "LFP Charger"
-                          )
-                        }
-                        className="px-4 py-2.5 rounded-xl bg-cyan-700 hover:bg-cyan-600 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-cyan-700/20 cursor-pointer flex items-center gap-1.5"
-                      >
-                        <span>Quote Price</span>
-                        <ChevronRight size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
 
                 {/* Technical Why 69V Cutoff Matters Card */}
                 <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col justify-between space-y-4">
@@ -879,8 +1131,6 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
                     </button>
                   </div>
                 </div>
-              </div>
-            </div>
           </div>
         </section>
       )}

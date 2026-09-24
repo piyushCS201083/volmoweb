@@ -8,6 +8,7 @@ import authRoutes from "./auth";
 import leadsRoutes from "./leads";
 import configRoutes from "./config";
 import healthRoutes from "./health";
+import chatbotRoutes from "./chatbot";
 
 export const apiRouter = Router();
 
@@ -15,3 +16,4 @@ apiRouter.use("/auth", authRoutes);
 apiRouter.use("/leads", leadsRoutes);
 apiRouter.use("/config", configRoutes);
 apiRouter.use("/health", healthRoutes);
+apiRouter.use("/chatbot", chatbotRoutes);

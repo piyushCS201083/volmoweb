@@ -14,8 +14,13 @@ import {
   Award,
   Zap,
   Activity,
+  Sparkles,
 } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
+
+interface FAQProps {
+  onOpenAiChat?: (initialQuestion?: string) => void;
+}
 
 const getFAQIcon = (iconName: string) => {
   switch (iconName) {
@@ -36,7 +41,7 @@ const getFAQIcon = (iconName: string) => {
   }
 };
 
-export default function FAQ() {
+export default function FAQ({ onOpenAiChat }: FAQProps) {
   const { faqsData, siteSections } = useSiteConfig();
   const list = faqsData && faqsData.length > 0 ? faqsData : [];
   const [openId, setOpenId] = useState<number | null>(list.length > 0 ? list[0].id : null);
@@ -147,6 +152,16 @@ export default function FAQ() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto relative z-10 flex-shrink-0">
+            {onOpenAiChat && (
+              <button
+                type="button"
+                onClick={() => onOpenAiChat()}
+                className="py-3 px-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-2xl transition-all cursor-pointer active:scale-95 text-xs text-center uppercase tracking-wider shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2"
+              >
+                <Sparkles size={14} />
+                <span>Ask Volmo AI</span>
+              </button>
+            )}
             <a
               href="tel:9111333151"
               className="py-3 px-6 bg-slate-805 hover:bg-slate-905 text-white font-bold rounded-2xl transition-all cursor-pointer active:scale-95 text-xs text-center uppercase tracking-wider"

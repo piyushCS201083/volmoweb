@@ -12,12 +12,16 @@ import Accessories from "./components/Accessories";
 import BatteryAndCharger from "./components/BatteryAndCharger";
 import Features from "./components/Features";
 import Testimonials from "./components/Testimonials";
+import MediaBlogsPage from "./components/MediaBlogsPage";
 import FAQ from "./components/FAQ";
 import DealershipLocator from "./components/DealershipLocator";
 import Footer from "./components/Footer";
 import DealershipModal from "./components/DealershipModal";
 import PriceInquiryModal from "./components/PriceInquiryModal";
 import AdminPortal from "./components/AdminPortal";
+import QuickContactModal, { QuickContactData } from "./components/QuickContactModal";
+import BottomFloatingActions from "./components/BottomFloatingActions";
+import AiChatbotModal from "./components/AiChatbotModal";
 import { BatteryType } from "./types";
 import { ShieldAlert, CheckCircle } from "lucide-react";
 
@@ -25,6 +29,9 @@ export default function App() {
   // Modal toggles
   const [isDealerOpen, setIsDealerOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
+  const [aiChatInitialQuestion, setAiChatInitialQuestion] = useState<string | undefined>(undefined);
   const [adminInitialTab, setAdminInitialTab] = useState<
     "accessories" | "battery-charger" | undefined
   >(undefined);
@@ -98,7 +105,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Optional secret keyboard shortcut: Ctrl+Shift+A or Alt+Shift+A to toggle admin
+  // Optional secret access: Ctrl+Shift+A, Alt+Shift+A, or URL param ?admin=true / #admin
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey || e.altKey) && e.shiftKey && e.key.toLowerCase() === "a") {
@@ -106,6 +113,12 @@ export default function App() {
         setIsAdminOpen((prev) => !prev);
       }
     };
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("admin") === "true" || window.location.hash === "#admin") {
+      setIsAdminOpen(true);
+    }
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
@@ -114,7 +127,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans antialiased relative">
       {/* Dynamic Pop-up Status Toast notification (custom built in pure Tailwind) */}
       {notification && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-white border border-slate-200 rounded-2xl p-4 shadow-xl flex items-start gap-3.5 animate-bounce text-left">
+        <div className="fixed bottom-24 right-6 z-50 max-w-sm w-full bg-white border border-slate-200 rounded-2xl p-4 shadow-xl flex items-start gap-3.5 animate-bounce text-left">
           <div className="p-2 bg-emerald-500/10 text-emerald-600 rounded-xl flex-shrink-0">
             <CheckCircle size={20} />
           </div>
@@ -130,7 +143,6 @@ export default function App() {
         activePage={activePage}
         onPageChange={handlePageChange}
         onDealershipClick={() => setIsDealerOpen(true)}
-        onAdminClick={() => setIsAdminOpen(true)}
       />
 
       {/* Pages Container with Transition Animation */}
@@ -268,10 +280,6 @@ export default function App() {
               }
               onApplyPartnership={() => setIsDealerOpen(true)}
               onNavigateToBatteryCharger={() => handlePageChange("battery-charger")}
-              onAdminEditClick={() => {
-                setAdminInitialTab("accessories");
-                setIsAdminOpen(true);
-              }}
             />
           )}
 
@@ -281,22 +289,26 @@ export default function App() {
                 triggerNotification(`Quote request for "${itemTitle}" registered! Our technical sales desk will contact you.`)
               }
               onApplyPartnership={() => setIsDealerOpen(true)}
-              onAdminEditClick={() => {
-                setAdminInitialTab("battery-charger");
-                setIsAdminOpen(true);
-              }}
             />
           )}
 
           {activePage === "technology" && (
             <>
               <Features />
-              <FAQ />
+              <FAQ
+                onOpenAiChat={(question) => {
+                  setAiChatInitialQuestion(question);
+                  setIsAiChatOpen(true);
+                }}
+              />
             </>
           )}
 
-          {activePage === "reviews" && (
-            <Testimonials />
+          {(activePage === "media-blogs" || activePage === "reviews") && (
+            <MediaBlogsPage
+              onOpenDealershipModal={() => setIsDealerOpen(true)}
+              onOpenQuickContact={() => setIsContactOpen(true)}
+            />
           )}
 
           {activePage === "locator" && (
@@ -347,6 +359,47 @@ export default function App() {
           setAdminInitialTab(undefined);
         }}
         initialTab={adminInitialTab}
+      />
+
+      {/* Bottom Right Floating Action Dock (Ask Volmo AI & Quick Contact) */}
+      <BottomFloatingActions
+        onOpenAiChat={() => {
+          setAiChatInitialQuestion(undefined);
+          setIsAiChatOpen(true);
+        }}
+        onOpenQuickContact={() => setIsContactOpen(true)}
+        isAiChatOpen={isAiChatOpen}
+        isQuickContactOpen={isContactOpen}
+      />
+
+      {/* Volmo AI Technical Assistant & FAQ Chatbot Modal */}
+      <AiChatbotModal
+        isOpen={isAiChatOpen}
+        onClose={() => {
+          setIsAiChatOpen(false);
+          setAiChatInitialQuestion(undefined);
+        }}
+        initialQuestion={aiChatInitialQuestion}
+        onNavigateToDealership={() => {
+          setIsAiChatOpen(false);
+          setIsDealerOpen(true);
+        }}
+        onOpenQuickContact={() => {
+          setIsAiChatOpen(false);
+          setIsContactOpen(true);
+        }}
+      />
+
+      {/* Quick Inquiry Form Modal */}
+      <QuickContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+        onNavigateToLocateUs={() => handlePageChange("locator")}
+        onSubmitSuccess={(data: QuickContactData) =>
+          triggerNotification(
+            `Thank you, ${data.name}! Inquiry received. Navigating you to our Locate Us page...`
+          )
+        }
       />
     </div>
   );

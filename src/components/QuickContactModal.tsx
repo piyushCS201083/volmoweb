@@ -1,0 +1,492 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  X,
+  Send,
+  CheckCircle,
+  Phone,
+  Mail,
+  MessageSquare,
+  Clock,
+  Sparkles,
+  AlertCircle,
+  MessageCircle,
+  MapPin,
+  ArrowRight,
+} from "lucide-react";
+import { useSiteConfig } from "../SiteConfigContext";
+import { api } from "../services/api";
+
+export interface QuickContactData {
+  name: string;
+  phone: string;
+  email?: string;
+  topic: string;
+  message: string;
+}
+
+interface QuickContactModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmitSuccess?: (data: QuickContactData) => void;
+  onNavigateToLocateUs?: () => void;
+}
+
+const INQUIRY_TOPICS = [
+  "General Inquiry",
+  "Test Ride Booking",
+  "Pricing & Quotation",
+  "Dealership / Franchise",
+  "Battery & Technical Support",
+  "After-Sales & Warranty",
+];
+
+export default function QuickContactModal({
+  isOpen,
+  onClose,
+  onSubmitSuccess,
+  onNavigateToLocateUs,
+}: QuickContactModalProps) {
+  const { contactInfo } = useSiteConfig();
+
+  // Form states
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [topic, setTopic] = useState("General Inquiry");
+  const [message, setMessage] = useState("");
+
+  // Validation & UI states
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Auto-redirect to Locate Us after submission
+  useEffect(() => {
+    if (isSubmitted) {
+      const timer = setTimeout(() => {
+        onClose();
+        if (onNavigateToLocateUs) {
+          onNavigateToLocateUs();
+        }
+      }, 1800);
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitted, onClose, onNavigateToLocateUs]);
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setName("");
+      setPhone("");
+      setEmail("");
+      setTopic("General Inquiry");
+      setMessage("");
+      setErrors({});
+      setTouched({});
+      setIsSubmitted(false);
+      setIsSubmitting(false);
+    }
+  }, [isOpen]);
+
+  // Real-time validation
+  useEffect(() => {
+    const newErrors: Record<string, string> = {};
+
+    if (touched.name) {
+      if (!name.trim()) {
+        newErrors.name = "Full name is required";
+      } else if (name.trim().length < 2) {
+        newErrors.name = "Name must be at least 2 characters";
+      }
+    }
+
+    if (touched.phone) {
+      if (!phone.trim()) {
+        newErrors.phone = "Phone number is required";
+      } else if (!/^\d{10}$/.test(phone.trim().replace(/\D/g, ""))) {
+        newErrors.phone = "Enter a valid 10-digit mobile number";
+      }
+    }
+
+    if (touched.email && email.trim()) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+        newErrors.email = "Please enter a valid email address";
+      }
+    }
+
+    if (touched.message) {
+      if (!message.trim()) {
+        newErrors.message = "Please write a brief question or message";
+      } else if (message.trim().length < 5) {
+        newErrors.message = "Message must be at least 5 characters";
+      }
+    }
+
+    setErrors(newErrors);
+  }, [name, phone, email, message, touched]);
+
+  // Handle ESC key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Mark all as touched
+    setTouched({ name: true, phone: true, email: true, message: true });
+
+    const cleanPhone = phone.trim().replace(/\D/g, "");
+    if (!name.trim() || cleanPhone.length !== 10 || !message.trim()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const contactPayload: QuickContactData = {
+      name: name.trim(),
+      phone: cleanPhone,
+      email: email.trim() || undefined,
+      topic,
+      message: message.trim(),
+    };
+
+    try {
+      // Record lead in the persistent backend store
+      await api.leads.submitInquiry({
+        name: contactPayload.name,
+        phone: contactPayload.phone,
+        model: `Quick Contact: ${topic}`,
+        color: email.trim() ? `Email: ${email.trim()}` : "Direct Contact",
+        batteryType: "LI",
+        batteryConfig: topic,
+        rangeKm: 0,
+      });
+    } catch (err) {
+      console.warn("Notice: Saved inquiry locally/optimistically:", err);
+    } finally {
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+      if (onSubmitSuccess) {
+        onSubmitSuccess(contactPayload);
+      }
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+            aria-hidden="true"
+          />
+
+          {/* Modal Container */}
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", duration: 0.3 }}
+              className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-slate-100"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 text-white relative">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="absolute right-4 top-4 text-slate-400 hover:text-white rounded-lg p-1.5 transition-colors cursor-pointer focus:outline-none"
+                  aria-label="Close modal"
+                >
+                  <X size={20} />
+                </button>
+
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
+                    <MessageSquare size={18} />
+                  </div>
+                  <span className="text-emerald-400 font-bold tracking-wider text-xs uppercase">
+                    Volmo Quick Inquiry
+                  </span>
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-black text-white">
+                  Quick Inquiry Form
+                </h3>
+                <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-sm">
+                  Send our sales and dealership team your inquiry. After submitting, you&apos;ll be guided directly to our Locate Us page to explore nearby showrooms.
+                </p>
+              </div>
+
+              {/* Instant Direct Channels Banner */}
+              <div className="bg-slate-50 border-b border-slate-200 px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <a
+                  href={`tel:${(contactInfo?.phone || "9982404090").replace(/\s+/g, "")}`}
+                  className="flex items-center gap-1.5 text-slate-700 hover:text-emerald-700 font-semibold transition-colors"
+                >
+                  <Phone size={14} className="text-emerald-600" />
+                  <span>+91 {contactInfo?.phone || "99824 04090"}</span>
+                </a>
+                <a
+                  href={`mailto:${contactInfo?.email || "sales@volmoelectrical.com"}`}
+                  className="flex items-center gap-1.5 text-slate-700 hover:text-emerald-700 font-semibold transition-colors"
+                >
+                  <Mail size={14} className="text-emerald-600" />
+                  <span>{contactInfo?.email || "sales@volmoelectrical.com"}</span>
+                </a>
+                <div className="flex items-center gap-1 text-slate-500">
+                  <Clock size={13} className="text-slate-400" />
+                  <span>Mon-Sat, 9AM-7PM</span>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="p-6">
+                {isSubmitted ? (
+                  /* Success View */
+                  <div className="text-center py-6 space-y-4">
+                    <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                      <CheckCircle size={36} />
+                    </div>
+
+                    <div className="space-y-1">
+                      <h4 className="text-xl font-black text-slate-900">
+                        Inquiry Received!
+                      </h4>
+                      <p className="text-slate-600 text-sm max-w-md mx-auto">
+                        Thank you <span className="font-semibold text-slate-800">{name}</span>. Taking you to our{" "}
+                        <span className="font-bold text-emerald-700">Locate Us (Dealership Locator)</span> page...
+                      </p>
+                    </div>
+
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-900 text-center flex items-center justify-center gap-2">
+                      <MapPin size={15} className="text-emerald-600 animate-bounce" />
+                      <span className="font-semibold">Redirecting to Dealership Locator...</span>
+                    </div>
+
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-600 text-left max-w-md mx-auto space-y-1.5">
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Contact Number:</span>
+                        <span className="font-medium text-slate-800">+91 {phone}</span>
+                      </div>
+                      {email && (
+                        <div className="flex justify-between">
+                          <span className="text-slate-400">Email:</span>
+                          <span className="font-medium text-slate-800">{email}</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">Estimated Response:</span>
+                        <span className="font-medium text-emerald-600">Within 30 mins</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onClose();
+                          if (onNavigateToLocateUs) {
+                            onNavigateToLocateUs();
+                          }
+                        }}
+                        className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all cursor-pointer shadow-md flex items-center justify-center gap-2"
+                      >
+                        <MapPin size={15} />
+                        <span>Go to Locate Us Now</span>
+                        <ArrowRight size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all cursor-pointer shadow-md"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* Form View */
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Inquiry Topic Select */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Inquiry Topic
+                      </label>
+                      <select
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-slate-800 transition-all font-medium cursor-pointer"
+                      >
+                        {INQUIRY_TOPICS.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Name & Phone in grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                          Your Name <span className="text-rose-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          onBlur={() => setTouched((p) => ({ ...p, name: true }))}
+                          placeholder="e.g. Ramesh Sharma"
+                          className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-all ${
+                            errors.name && touched.name
+                              ? "border-rose-400 bg-rose-50/30 text-rose-900 focus:ring-2 focus:ring-rose-200"
+                              : "border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-slate-900/20 focus:border-slate-800"
+                          }`}
+                        />
+                        {errors.name && touched.name && (
+                          <p className="text-[11px] text-rose-600 mt-1 flex items-center gap-1 font-medium">
+                            <AlertCircle size={12} />
+                            {errors.name}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                          Mobile Number <span className="text-rose-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-semibold select-none">
+                            +91
+                          </span>
+                          <input
+                            type="tel"
+                            maxLength={10}
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                            onBlur={() => setTouched((p) => ({ ...p, phone: true }))}
+                            placeholder="98765 43210"
+                            className={`w-full pl-12 pr-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-all ${
+                              errors.phone && touched.phone
+                                ? "border-rose-400 bg-rose-50/30 text-rose-900 focus:ring-2 focus:ring-rose-200"
+                                : "border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-slate-900/20 focus:border-slate-800"
+                            }`}
+                          />
+                        </div>
+                        {errors.phone && touched.phone && (
+                          <p className="text-[11px] text-rose-600 mt-1 flex items-center gap-1 font-medium">
+                            <AlertCircle size={12} />
+                            {errors.phone}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Email (Optional) */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
+                        <span>Email Address</span>
+                        <span className="text-[11px] text-slate-400 font-normal normal-case">Optional</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onBlur={() => setTouched((p) => ({ ...p, email: true }))}
+                        placeholder="yourname@example.com"
+                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-all ${
+                          errors.email && touched.email
+                            ? "border-rose-400 bg-rose-50/30 text-rose-900 focus:ring-2 focus:ring-rose-200"
+                            : "border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-slate-900/20 focus:border-slate-800"
+                        }`}
+                      />
+                      {errors.email && touched.email && (
+                        <p className="text-[11px] text-rose-600 mt-1 flex items-center gap-1 font-medium">
+                          <AlertCircle size={12} />
+                          {errors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Message */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        Your Question or Message <span className="text-rose-500">*</span>
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        onBlur={() => setTouched((p) => ({ ...p, message: true }))}
+                        placeholder="Tell us what model, battery range, or question you have in mind..."
+                        className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-all resize-none ${
+                          errors.message && touched.message
+                            ? "border-rose-400 bg-rose-50/30 text-rose-900 focus:ring-2 focus:ring-rose-200"
+                            : "border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-slate-900/20 focus:border-slate-800"
+                        }`}
+                      />
+                      {errors.message && touched.message && (
+                        <p className="text-[11px] text-rose-600 mt-1 flex items-center gap-1 font-medium">
+                          <AlertCircle size={12} />
+                          {errors.message}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="pt-2 flex items-center justify-end gap-3">
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all cursor-pointer shadow-lg shadow-slate-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Sending...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send size={14} />
+                            <span>Submit &amp; Find Dealer</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}

@@ -222,3 +222,84 @@ export interface BatteryChargerPageConfig {
   consultationSubtitle: string;
   consultationButtonText: string;
 }
+
+export interface CareerOpening {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  experience: string;
+  summary: string;
+  keySkills: string[];
+  responsibilities: string[];
+  badge?: string;
+}
+
+export interface CareerApplication {
+  id: string;
+  jobId: string;
+  jobTitle: string;
+  name: string;
+  phone: string;
+  email: string;
+  city: string;
+  state: string;
+  experienceYears: string;
+  currentRole?: string;
+  linkedinUrl?: string;
+  coverNote: string;
+  status: "applied" | "reviewing" | "contacted" | "rejected";
+  createdAt: string;
+}
+
+export interface MediaArticle {
+  id: string;
+  category: "News" | "Press Release" | "Tech Blog" | "Event";
+  title: string;
+  summary: string;
+  content: string;
+  date: string;
+  author: string;
+  readTime: string;
+  image: string;
+  tag: string;
+}
+
+export interface CompanyPhoto {
+  id: string;
+  title: string;
+  caption: string;
+  category: "Manufacturing" | "Showroom" | "Delivery" | "Testing";
+  imageUrl: string;
+  date: string;
+}
+
+export interface CompanyVideo {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  thumbnailUrl: string;
+  videoUrl?: string;
+  category: "Engineering" | "Road Test" | "Walkaround";
+}
+
+export interface MediaBlogsPageConfig {
+  heroBadge: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  calculatorBadge: string;
+  calculatorTitle: string;
+  calculatorSubtitle: string;
+  volmoCostPerKm: number;
+  defaultDailyKm: number;
+  defaultPetrolPrice: number;
+  defaultPetrolMileage: number;
+  defaultElecRate: number;
+  annualMaintenanceSaved: number;
+  careersBadge: string;
+  careersTitle: string;
+  careersSubtitle: string;
+}
+

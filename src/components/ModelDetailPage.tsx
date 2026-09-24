@@ -187,7 +187,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
   }, [batteryType, leadAcidCount, lithiumRange]);
 
   const priceCalculated = useMemo(() => {
-    const baseVal = parseInt(model.basePriceEstimate.replace(/[^\d]/g, ""), 10);
+    const baseVal = parseInt((model.basePriceEstimate || "45000").replace(/[^\d]/g, ""), 10) || 45000;
     return `₹${(baseVal + currentParams.priceModifier).toLocaleString("en-IN")}`;
   }, [model.basePriceEstimate, currentParams.priceModifier]);
 
