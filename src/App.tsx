@@ -22,6 +22,7 @@ import AdminPortal from "./components/AdminPortal";
 import QuickContactModal, { QuickContactData } from "./components/QuickContactModal";
 import BottomFloatingActions from "./components/BottomFloatingActions";
 import AiChatbotModal from "./components/AiChatbotModal";
+import WhatsAppChatModal from "./components/WhatsAppChatModal";
 import { BatteryType } from "./types";
 import { ShieldAlert, CheckCircle } from "lucide-react";
 
@@ -36,10 +37,29 @@ export default function App() {
     "accessories" | "battery-charger" | undefined
   >(undefined);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
+  const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
+  const [whatsAppInitialMessage, setWhatsAppInitialMessage] = useState<string | undefined>(undefined);
+
+  const handleOpenWhatsAppModal = (customMsg?: string) => {
+    setWhatsAppInitialMessage(customMsg);
+    setIsWhatsAppOpen(true);
+  };
 
   // Active page sub-routing state
   const [activePage, setActivePage] = useState<string>("home");
   const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
+
+  // Quick Contact Modal state & prefill
+  const [quickContactInitialTopic, setQuickContactInitialTopic] = useState<string>("Pricing & Quotation");
+  const [quickContactInitialMessage, setQuickContactInitialMessage] = useState<string>("");
+
+  const handleOpenQuickInquiryForQuote = (itemName: string) => {
+    setQuickContactInitialTopic("Pricing & Quotation");
+    setQuickContactInitialMessage(
+      `Hello, I would like to request an official price quote for: ${itemName}. Please provide pricing, warranty details, and availability.`
+    );
+    setIsContactOpen(true);
+  };
 
   const handlePageChange = (pageId: string) => {
     setActivePage(pageId);
@@ -285,9 +305,7 @@ export default function App() {
 
           {activePage === "battery-charger" && (
             <BatteryAndCharger 
-              onEnquireClick={(itemTitle) =>
-                triggerNotification(`Quote request for "${itemTitle}" registered! Our technical sales desk will contact you.`)
-              }
+              onEnquireClick={handleOpenQuickInquiryForQuote}
               onApplyPartnership={() => setIsDealerOpen(true)}
             />
           )}
@@ -323,6 +341,7 @@ export default function App() {
         onAdminClick={() => setIsAdminOpen(true)}
         onModelSelect={handleSelectModelFromFooter}
         onPageChange={handlePageChange}
+        onWhatsAppClick={handleOpenWhatsAppModal}
       />
 
       {/* Partner Dealership invitation application modal */}
@@ -393,13 +412,29 @@ export default function App() {
       {/* Quick Inquiry Form Modal */}
       <QuickContactModal
         isOpen={isContactOpen}
-        onClose={() => setIsContactOpen(false)}
+        onClose={() => {
+          setIsContactOpen(false);
+          setQuickContactInitialTopic("General Inquiry");
+          setQuickContactInitialMessage("");
+        }}
+        initialTopic={quickContactInitialTopic}
+        initialMessage={quickContactInitialMessage}
         onNavigateToLocateUs={() => handlePageChange("locator")}
         onSubmitSuccess={(data: QuickContactData) =>
           triggerNotification(
-            `Thank you, ${data.name}! Inquiry received. Navigating you to our Locate Us page...`
+            `Thank you, ${data.name}! Inquiry received. Our sales desk will contact you at +91 ${data.phone}.`
           )
         }
+      />
+
+      {/* Official Volmo WhatsApp Direct Connect Modal */}
+      <WhatsAppChatModal
+        isOpen={isWhatsAppOpen}
+        onClose={() => {
+          setIsWhatsAppOpen(false);
+          setWhatsAppInitialMessage(undefined);
+        }}
+        initialMessage={whatsAppInitialMessage}
       />
     </div>
   );

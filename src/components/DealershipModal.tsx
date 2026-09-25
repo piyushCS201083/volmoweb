@@ -5,9 +5,10 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Send, CheckCircle, Store, IndianRupee, ShieldCheck } from "lucide-react";
+import { X, Send, CheckCircle, Store, IndianRupee, ShieldCheck, ExternalLink } from "lucide-react";
 import { DealershipApp } from "../types";
 import { api } from "../services/api";
+import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 interface DealershipModalProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export default function DealershipModal({ isOpen, onClose, onSubmitSuccess }: De
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [customWhatsAppMessage, setCustomWhatsAppMessage] = useState("");
 
   // Real-time validation
   useEffect(() => {
@@ -140,6 +142,17 @@ export default function DealershipModal({ isOpen, onClose, onSubmitSuccess }: De
       createdAt: new Date().toISOString(),
     };
 
+    const formattedMsg = `Hello Volmo Electric, I submitted an EV Dealership / Franchise application on your website:
+👤 Name: ${app.name}
+📞 Phone: +91 ${app.phone}
+✉️ Email: ${app.email}
+📍 Location: ${app.city}, ${app.state}
+💼 Past Business: ${app.pastBusiness}
+💰 Investment Range: ${app.investmentRange}
+${app.message ? `💬 Note: ${app.message}\n` : ""}
+Please share partnership brochure and next onboarding steps.`;
+    setCustomWhatsAppMessage(formattedMsg);
+
     // Save to localstorage for instant offline access
     const existingApps = JSON.parse(localStorage.getItem("volmo_dealers") || "[]");
     localStorage.setItem("volmo_dealers", JSON.stringify([app, ...existingApps]));
@@ -151,22 +164,12 @@ export default function DealershipModal({ isOpen, onClose, onSubmitSuccess }: De
 
     onSubmitSuccess(app);
     setIsSubmitted(true);
+  };
 
-    // Reset Form
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setName("");
-      setEmail("");
-      setPhone("");
-      setCity("");
-      setState("");
-      setExperience("");
-      setPastBusiness("");
-      setInvestmentRange("");
-      setMessage("");
-      setTouched({});
-      onClose();
-    }, 2000);
+  const handleDirectWhatsApp = () => {
+    const cleanPhone = phone.replace(/\D/g, "").slice(0, 10);
+    const directMsg = `Hello Volmo Electric, I am interested in opening a Volmo EV Dealership:${name.trim() ? `\n👤 Name: ${name.trim()}` : ""}${cleanPhone ? `\n📞 Phone: +91 ${cleanPhone}` : ""}${city.trim() ? `\n📍 City: ${city.trim()}` : ""}${state.trim() ? `, ${state.trim()}` : ""}${investmentRange ? `\n💰 Budget: ${investmentRange}` : ""}\n\nPlease share franchise details.`;
+    openWhatsApp(directMsg);
   };
 
   return (
@@ -202,15 +205,69 @@ export default function DealershipModal({ isOpen, onClose, onSubmitSuccess }: De
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center py-12 text-center"
+                className="flex flex-col items-center justify-center py-8 text-center space-y-4"
               >
-                <div className="h-16 w-16 bg-slate-100 text-slate-700 rounded-full flex items-center justify-center mb-6">
+                <div className="h-16 w-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shadow-inner">
                   <CheckCircle size={40} className="stroke-[2.5]" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-900 mb-2">Application Received!</h3>
-                <p className="text-slate-600 max-w-md text-sm font-normal">
-                  Thank you for your interest in Volmo. Our Business Development team will review your application and reach out to you within 48 hours.
-                </p>
+                <div>
+                  <h3 className="text-2xl font-black text-slate-900 mb-1">Application Received!</h3>
+                  <p className="text-slate-600 max-w-md text-xs sm:text-sm font-normal mx-auto">
+                    Thank you for your interest in Volmo, <span className="font-semibold text-slate-800">{name}</span>. Our Business Development team will review your application for <span className="font-bold text-slate-900">{city}</span>.
+                  </p>
+                </div>
+
+                {/* Customizable WhatsApp Section */}
+                <div className="w-full bg-[#25D366]/10 border border-[#25D366]/30 rounded-2xl p-4 text-left space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-lg bg-[#25D366] text-white flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-black text-slate-900 uppercase tracking-wide">
+                        Send Application via WhatsApp
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold bg-[#25D366] text-white px-2 py-0.5 rounded-full">
+                      {VOLMO_WHATSAPP_DISPLAY}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-650">
+                    Want faster review? Customize and forward this application summary directly to our WhatsApp franchise desk:
+                  </p>
+
+                  <textarea
+                    rows={4}
+                    value={customWhatsAppMessage}
+                    onChange={(e) => setCustomWhatsAppMessage(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-800 font-sans focus:outline-none focus:ring-2 focus:ring-[#25D366] leading-relaxed"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => openWhatsApp(customWhatsAppMessage)}
+                    className="w-full bg-[#25D366] hover:bg-[#20ba59] active:scale-[0.98] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-4 rounded-xl shadow-md shadow-[#25D366]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                    </svg>
+                    <span>Send on WhatsApp ({VOLMO_WHATSAPP_DISPLAY})</span>
+                    <ExternalLink size={13} />
+                  </button>
+                </div>
+
+                <div className="pt-2 w-full flex justify-center">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="w-full sm:w-auto px-8 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-all cursor-pointer shadow-md"
+                  >
+                    Done &amp; Close
+                  </button>
+                </div>
               </motion.div>
             ) : (
               <div>
@@ -430,13 +487,27 @@ export default function DealershipModal({ isOpen, onClose, onSubmitSuccess }: De
                       <ShieldCheck size={14} className="text-emerald-600 flex-shrink-0" />
                       Your information is secure and managed by Volmo Business Development.
                     </p>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-2 bg-slate-805 hover:bg-slate-905 text-white font-bold px-6 py-3.5 rounded-xl shadow-md active:scale-[0.98] transition-all cursor-pointer text-xs uppercase tracking-widest"
-                    >
-                      <span>Submit Application</span>
-                      <Send size={13} />
-                    </button>
+                    <div className="flex items-center gap-2.5">
+                      <button
+                        type="button"
+                        onClick={handleDirectWhatsApp}
+                        className="flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba59] text-white font-bold px-4 py-3.5 rounded-xl shadow-md active:scale-[0.98] transition-all cursor-pointer text-xs uppercase tracking-wider"
+                        title={`Chat on WhatsApp with ${VOLMO_WHATSAPP_DISPLAY}`}
+                      >
+                        <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                        </svg>
+                        <span>WhatsApp</span>
+                      </button>
+
+                      <button
+                        type="submit"
+                        className="flex items-center gap-2 bg-slate-805 hover:bg-slate-905 text-white font-bold px-6 py-3.5 rounded-xl shadow-md active:scale-[0.98] transition-all cursor-pointer text-xs uppercase tracking-widest"
+                      >
+                        <span>Submit Application</span>
+                        <Send size={13} />
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>

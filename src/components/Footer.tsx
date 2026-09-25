@@ -7,15 +7,30 @@ import React from "react";
 import Logo from "./Logo";
 import { Mail, Phone, MapPin, ExternalLink, ShieldCheck, Lock, Share2 } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
+import { getWhatsAppUrl, VOLMO_WHATSAPP_DISPLAY } from "../utils/whatsapp";
 
 interface FooterProps {
   onDealershipClick: () => void;
   onAdminClick?: () => void;
   onModelSelect: (id: string) => void;
   onPageChange?: (pageId: string) => void;
+  onWhatsAppClick?: (initialMessage?: string) => void;
 }
 
 const SOCIAL_CHANNELS = [
+  {
+    name: "WhatsApp",
+    label: `Chat with Volmo on WhatsApp (${VOLMO_WHATSAPP_DISPLAY})`,
+    handle: VOLMO_WHATSAPP_DISPLAY,
+    url: getWhatsAppUrl("Hello Volmo Electric, I would like to inquire about your electric scooters and request pricing details."),
+    badgeColor: "bg-[#25D366]/10 text-[#25D366] border-[#25D366]/30 hover:bg-[#25D366] hover:text-white",
+    hoverBorder: "hover:border-[#25D366]/60 hover:text-[#25D366] hover:bg-[#25D366]/5",
+    icon: (
+      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+      </svg>
+    ),
+  },
   {
     name: "LinkedIn",
     label: "Follow Volmo on LinkedIn",
@@ -85,7 +100,13 @@ const SOCIAL_CHANNELS = [
   },
 ];
 
-export default function Footer({ onDealershipClick, onAdminClick, onModelSelect, onPageChange }: FooterProps) {
+export default function Footer({
+  onDealershipClick,
+  onAdminClick,
+  onModelSelect,
+  onPageChange,
+  onWhatsAppClick,
+}: FooterProps) {
   const { contactInfo, modelsData, brandingConfig, siteSections } = useSiteConfig();
 
   return (
@@ -121,6 +142,12 @@ export default function Footer({ onDealershipClick, onAdminClick, onModelSelect,
                   href={ch.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    if (ch.name === "WhatsApp" && onWhatsAppClick) {
+                      e.preventDefault();
+                      onWhatsAppClick();
+                    }
+                  }}
                   aria-label={ch.label}
                   title={ch.label}
                   className={`w-9 h-9 rounded-xl border border-slate-200 bg-white text-slate-600 flex items-center justify-center transition-all duration-200 hover:shadow-md hover:scale-105 active:scale-95 ${ch.hoverBorder}`}
@@ -303,11 +330,19 @@ export default function Footer({ onDealershipClick, onAdminClick, onModelSelect,
                 href={ch.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  if (ch.name === "WhatsApp" && onWhatsAppClick) {
+                    e.preventDefault();
+                    onWhatsAppClick();
+                  }
+                }}
                 aria-label={ch.label}
                 title={ch.label}
-                className="group flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-white border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-950 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-xs font-semibold cursor-pointer"
+                className={`group flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-white border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-950 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 text-xs font-semibold cursor-pointer ${
+                  ch.name === "WhatsApp" ? "hover:border-[#25D366]/50 hover:text-[#25D366]" : ""
+                }`}
               >
-                <div className="text-slate-500 group-hover:text-inherit transition-colors">
+                <div className={`${ch.name === "WhatsApp" ? "text-[#25D366]" : "text-slate-500"} group-hover:text-inherit transition-colors`}>
                   {ch.icon}
                 </div>
                 <span>{ch.name}</span>

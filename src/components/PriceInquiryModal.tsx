@@ -5,10 +5,11 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, ClipboardCheck, Sparkles, AlertCircle } from "lucide-react";
+import { X, ClipboardCheck, Sparkles, AlertCircle, ExternalLink } from "lucide-react";
 import { PriceInquiry, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
 import { api } from "../services/api";
+import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 interface PriceInquiryModalProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export default function PriceInquiryModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [customWhatsAppMessage, setCustomWhatsAppMessage] = useState("");
 
   // Sync with props when they change (or modal opens)
   useEffect(() => {
@@ -50,6 +52,7 @@ export default function PriceInquiryModal({
       setBatteryType(initialBatteryType);
       setBatteryRange(initialBatteryRange);
       setIsSubmitted(false);
+      setCustomWhatsAppMessage("");
     }
   }, [isOpen, initialModelId, initialColorName, initialBatteryType, initialBatteryRange]);
 
@@ -153,6 +156,16 @@ export default function PriceInquiryModal({
       createdAt: new Date().toISOString(),
     };
 
+    const formattedMsg = `Hello Volmo Electric, I requested a price quote for your electric scooter:
+🛵 Model: VOLMO ${selectedModel.name}
+🎨 Color: ${color}
+⚡ Battery: ${batteryType === "LA" ? "Lead-Acid" : "Lithium-ion"} (${batteryRange} km range)
+👤 Name: ${name.trim()}
+📞 Phone: +91 ${phone.trim()}
+
+Please send the ex-showroom price and brochure.`;
+    setCustomWhatsAppMessage(formattedMsg);
+
     // Save to local storage for instant offline access
     const currentInquiries = JSON.parse(localStorage.getItem("volmo_inquiries") || "[]");
     localStorage.setItem("volmo_inquiries", JSON.stringify([inquiry, ...currentInquiries]));
@@ -164,14 +177,15 @@ export default function PriceInquiryModal({
 
     onSubmitSuccess(inquiry);
     setIsSubmitted(true);
+  };
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setName("");
-      setPhone("");
-      setTouched({});
-      onClose();
-    }, 2000);
+  const handleDirectWhatsApp = () => {
+    const cleanPhone = phone.replace(/\D/g, "").slice(0, 10);
+    const directMsg = `Hello Volmo Electric, I would like to inquire about:
+🛵 Model: VOLMO ${selectedModel.name}
+🎨 Color: ${color}
+⚡ Battery: ${batteryType === "LA" ? "Lead-Acid" : "Lithium-ion"} (${batteryRange} km range)${name.trim() ? `\n👤 Name: ${name.trim()}` : ""}${cleanPhone ? `\n📞 Phone: +91 ${cleanPhone}` : ""}\n\nPlease share price quote.`;
+    openWhatsApp(directMsg);
   };
 
   const isVistaOrGlider = modelId === "vista" || modelId === "glider";
@@ -199,7 +213,7 @@ export default function PriceInquiryModal({
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-full"
+              className="absolute top-5 right-5 text-slate-400 hover:text-white transition-colors p-2 hover:bg-slate-800 rounded-full cursor-pointer"
             >
               <X size={20} />
             </button>
@@ -208,15 +222,69 @@ export default function PriceInquiryModal({
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center py-10 text-center"
+                className="flex flex-col items-center justify-center py-6 text-center space-y-4"
               >
-                <div className="h-16 w-16 bg-slate-800 text-slate-300 rounded-full flex items-center justify-center mb-6">
-                  <ClipboardCheck size={40} className="stroke-[2.5]" />
+                <div className="h-16 w-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center shadow-inner">
+                  <ClipboardCheck size={38} className="stroke-[2.5]" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2 text-white">Inquiry Sent!</h3>
-                <p className="text-slate-400 text-sm max-w-sm">
-                  We've received your request for **{selectedModel.name}**. A Volmo executive will contact you shortly on **+91 {phone}** with custom pricing and brochure details.
-                </p>
+                <div>
+                  <h3 className="text-2xl font-black mb-1 text-white">Inquiry Sent Successfully!</h3>
+                  <p className="text-slate-400 text-xs sm:text-sm max-w-sm mx-auto">
+                    We&apos;ve registered your request for <span className="text-white font-bold">{selectedModel.name}</span>. Our sales desk will contact you at <span className="text-emerald-400 font-bold">+91 {phone}</span>.
+                  </p>
+                </div>
+
+                {/* Customizable WhatsApp Section */}
+                <div className="w-full bg-[#25D366]/15 border border-[#25D366]/30 rounded-2xl p-4 text-left space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-lg bg-[#25D366] text-white flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-black text-white uppercase tracking-wide">
+                        Send to WhatsApp (+91 9009156696)
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold bg-[#25D366] text-white px-2 py-0.5 rounded-full">
+                      {VOLMO_WHATSAPP_DISPLAY}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-300">
+                    Want immediate response? Customize the quote request below and send directly to our WhatsApp:
+                  </p>
+
+                  <textarea
+                    rows={4}
+                    value={customWhatsAppMessage}
+                    onChange={(e) => setCustomWhatsAppMessage(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-750 rounded-xl p-3 text-xs text-white font-sans focus:outline-none focus:ring-2 focus:ring-[#25D366] leading-relaxed"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => openWhatsApp(customWhatsAppMessage)}
+                    className="w-full bg-[#25D366] hover:bg-[#20ba59] active:scale-[0.98] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-4 rounded-xl shadow-md shadow-[#25D366]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                    </svg>
+                    <span>Send Message on WhatsApp</span>
+                    <ExternalLink size={13} />
+                  </button>
+                </div>
+
+                <div className="pt-2 w-full">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-all cursor-pointer"
+                  >
+                    Done &amp; Close
+                  </button>
+                </div>
               </motion.div>
             ) : (
               <div>
@@ -410,12 +478,26 @@ export default function PriceInquiryModal({
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="w-full bg-slate-700 hover:bg-slate-650 text-white font-bold py-3.5 rounded-xl mt-6 cursor-pointer active:scale-[0.98] transition-all text-sm tracking-wide shadow-md"
-                  >
-                    Enquire Custom Price
-                  </button>
+                  <div className="flex flex-col sm:flex-row items-center gap-3 mt-6">
+                    <button
+                      type="button"
+                      onClick={handleDirectWhatsApp}
+                      className="w-full sm:w-auto flex-1 bg-[#25D366] hover:bg-[#20ba59] active:scale-[0.98] text-white font-bold py-3.5 px-4 rounded-xl transition-all text-xs uppercase tracking-wider shadow-md shadow-[#25D366]/20 cursor-pointer flex items-center justify-center gap-2"
+                      title={`Send inquiry directly on WhatsApp to ${VOLMO_WHATSAPP_DISPLAY}`}
+                    >
+                      <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                      </svg>
+                      <span>Send on WhatsApp</span>
+                    </button>
+
+                    <button
+                      type="submit"
+                      className="w-full sm:w-auto flex-1 bg-slate-700 hover:bg-slate-650 text-white font-bold py-3.5 px-4 rounded-xl cursor-pointer active:scale-[0.98] transition-all text-xs uppercase tracking-wider shadow-md"
+                    >
+                      Enquire Custom Price
+                    </button>
+                  </div>
                 </form>
               </div>
             )}

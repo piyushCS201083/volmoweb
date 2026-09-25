@@ -1087,10 +1087,10 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
                               "Charger Models"
                             )
                           }
-                          className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
+                          className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-slate-950 via-cyan-950 to-slate-900 hover:from-cyan-900 hover:to-slate-900 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md shadow-cyan-950/20 hover:shadow-cyan-900/30 cursor-pointer flex items-center justify-center gap-2 border border-cyan-500/40 hover:border-cyan-400 active:scale-[0.98] group"
                         >
                           <span>Quote Price for {activeCharger.voltage} Charger</span>
-                          <ChevronRight size={14} />
+                          <ChevronRight size={15} className="text-cyan-400 group-hover:translate-x-1 transition-transform" />
                         </button>
                       </div>
                     </div>
