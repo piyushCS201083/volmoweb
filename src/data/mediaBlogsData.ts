@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { CareerOpening } from "../types";
+import { CareerOpening, MediaBlogsPageConfig } from "../types";
 
 export interface MediaArticle {
   id: string;
@@ -277,3 +277,24 @@ export const CAREER_OPENINGS: CareerOpening[] = [
     ],
   },
 ];
+
+export const DEFAULT_MEDIA_BLOGS_PAGE_CONFIG: MediaBlogsPageConfig = {
+  heroBadge: "Volmo Clean Tech, Media & Economic Impact",
+  heroTitle: "Media, Blogs & EV Savings Calculator",
+  heroSubtitle:
+    "Discover why switching to Volmo electric scooters cuts your daily commute to less than 10 paise per km, explore company media, news, rider experiences, and career openings.",
+  calculatorBadge: "Economics of EV Mobility",
+  calculatorTitle: "Ride for Less Than 10 Paise per KM",
+  calculatorSubtitle:
+    "See exactly how much money you save every month and the total cash saved after 5 years of riding Volmo instead of a petrol scooter.",
+  volmoCostPerKm: 0.085,
+  defaultDailyKm: 30,
+  defaultPetrolPrice: 105,
+  defaultPetrolMileage: 40,
+  defaultElecRate: 7.0,
+  annualMaintenanceSaved: 4200,
+  careersBadge: "Career Openings at Volmo",
+  careersTitle: "Shape the Future of Green Urban Transit",
+  careersSubtitle:
+    "Join our fast-growing engineering, manufacturing, battery technology, and sales leadership teams headquartered in Rajasthan.",
+};

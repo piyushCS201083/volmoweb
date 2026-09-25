@@ -13,7 +13,12 @@ import {
   LithiumLfpBatteryModel,
   ChargerModelItem,
   AccessoriesPageConfig,
-  BatteryChargerPageConfig
+  BatteryChargerPageConfig,
+  MediaArticle,
+  CompanyPhoto,
+  CompanyVideo,
+  CareerOpening,
+  MediaBlogsPageConfig,
 } from "./types";
 import {
   MODELS_DATA,
@@ -39,6 +44,13 @@ import {
   BrandingConfig,
   SiteSectionsConfig,
 } from "./data";
+import {
+  MEDIA_ARTICLES,
+  COMPANY_PHOTOS,
+  COMPANY_VIDEOS,
+  CAREER_OPENINGS,
+  DEFAULT_MEDIA_BLOGS_PAGE_CONFIG,
+} from "./data/mediaBlogsData";
 
 export interface CustomPulseData {
   id: string;
@@ -79,6 +91,11 @@ interface SiteConfigContextType {
   chargersData: ChargerModelItem[];
   accessoriesPageConfig: AccessoriesPageConfig;
   batteryChargerPageConfig: BatteryChargerPageConfig;
+  mediaArticlesData: MediaArticle[];
+  companyPhotosData: CompanyPhoto[];
+  companyVideosData: CompanyVideo[];
+  careerOpeningsData: CareerOpening[];
+  mediaBlogsPageConfig: MediaBlogsPageConfig;
 
   // Actions
   updateModelSpec: (id: string, updatedSpec: Partial<ModelSpec>) => void;
@@ -105,6 +122,31 @@ interface SiteConfigContextType {
   updateSiteSections: (updated: Partial<SiteSectionsConfig>) => void;
   updateAccessoriesPageConfig: (updated: Partial<AccessoriesPageConfig>) => void;
   updateBatteryChargerPageConfig: (updated: Partial<BatteryChargerPageConfig>) => void;
+  updateMediaBlogsPageConfig: (updated: Partial<MediaBlogsPageConfig>) => void;
+
+  // Media Articles Actions
+  updateMediaArticles: (items: MediaArticle[]) => void;
+  updateSingleMediaArticle: (id: string, item: Partial<MediaArticle>) => void;
+  addMediaArticle: (item: MediaArticle) => void;
+  deleteMediaArticle: (id: string) => void;
+
+  // Company Photos Actions
+  updateCompanyPhotos: (items: CompanyPhoto[]) => void;
+  updateSingleCompanyPhoto: (id: string, item: Partial<CompanyPhoto>) => void;
+  addCompanyPhoto: (item: CompanyPhoto) => void;
+  deleteCompanyPhoto: (id: string) => void;
+
+  // Company Videos Actions
+  updateCompanyVideos: (items: CompanyVideo[]) => void;
+  updateSingleCompanyVideo: (id: string, item: Partial<CompanyVideo>) => void;
+  addCompanyVideo: (item: CompanyVideo) => void;
+  deleteCompanyVideo: (id: string) => void;
+
+  // Career Openings Actions
+  updateCareerOpenings: (items: CareerOpening[]) => void;
+  updateSingleCareerOpening: (id: string, item: Partial<CareerOpening>) => void;
+  addCareerOpening: (item: CareerOpening) => void;
+  deleteCareerOpening: (id: string) => void;
 
   // Accessories Actions
   updateAccessoriesData: (items: AccessoryItem[]) => void;
@@ -152,6 +194,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const [chargersData, setChargersData] = useState<ChargerModelItem[]>(CHARGER_MODELS);
   const [accessoriesPageConfig, setAccessoriesPageConfig] = useState<AccessoriesPageConfig>(DEFAULT_ACCESSORIES_PAGE_CONFIG);
   const [batteryChargerPageConfig, setBatteryChargerPageConfig] = useState<BatteryChargerPageConfig>(DEFAULT_BATTERY_CHARGER_PAGE_CONFIG);
+  const [mediaArticlesData, setMediaArticlesData] = useState<MediaArticle[]>(MEDIA_ARTICLES);
+  const [companyPhotosData, setCompanyPhotosData] = useState<CompanyPhoto[]>(COMPANY_PHOTOS);
+  const [companyVideosData, setCompanyVideosData] = useState<CompanyVideo[]>(COMPANY_VIDEOS);
+  const [careerOpeningsData, setCareerOpeningsData] = useState<CareerOpening[]>(CAREER_OPENINGS);
+  const [mediaBlogsPageConfig, setMediaBlogsPageConfig] = useState<MediaBlogsPageConfig>(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load from local storage or static defaults
@@ -173,6 +220,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       const storedChargers = localStorage.getItem("volmo_custom_chargers");
       const storedAccPage = localStorage.getItem("volmo_custom_accessories_page");
       const storedBatPage = localStorage.getItem("volmo_custom_batterycharger_page");
+      const storedArticles = localStorage.getItem("volmo_media_articles");
+      const storedPhotos = localStorage.getItem("volmo_company_photos");
+      const storedVideos = localStorage.getItem("volmo_company_videos");
+      const storedCareers = localStorage.getItem("volmo_career_openings");
+      const storedMediaPage = localStorage.getItem("volmo_mediablogs_page");
 
       if (storedModels) {
         const parsed: ModelSpec[] = JSON.parse(storedModels);
@@ -246,6 +298,21 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
 
       if (storedBatPage) setBatteryChargerPageConfig({ ...DEFAULT_BATTERY_CHARGER_PAGE_CONFIG, ...JSON.parse(storedBatPage) });
       else setBatteryChargerPageConfig(DEFAULT_BATTERY_CHARGER_PAGE_CONFIG);
+
+      if (storedArticles) setMediaArticlesData(JSON.parse(storedArticles));
+      else setMediaArticlesData(MEDIA_ARTICLES);
+
+      if (storedPhotos) setCompanyPhotosData(JSON.parse(storedPhotos));
+      else setCompanyPhotosData(COMPANY_PHOTOS);
+
+      if (storedVideos) setCompanyVideosData(JSON.parse(storedVideos));
+      else setCompanyVideosData(COMPANY_VIDEOS);
+
+      if (storedCareers) setCareerOpeningsData(JSON.parse(storedCareers));
+      else setCareerOpeningsData(CAREER_OPENINGS);
+
+      if (storedMediaPage) setMediaBlogsPageConfig({ ...DEFAULT_MEDIA_BLOGS_PAGE_CONFIG, ...JSON.parse(storedMediaPage) });
+      else setMediaBlogsPageConfig(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
     } catch (e) {
       console.error("Failed to load custom site configuration, using defaults", e);
       setModelsData(MODELS_DATA);
@@ -264,6 +331,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       setChargersData(CHARGER_MODELS);
       setAccessoriesPageConfig(DEFAULT_ACCESSORIES_PAGE_CONFIG);
       setBatteryChargerPageConfig(DEFAULT_BATTERY_CHARGER_PAGE_CONFIG);
+      setMediaArticlesData(MEDIA_ARTICLES);
+      setCompanyPhotosData(COMPANY_PHOTOS);
+      setCompanyVideosData(COMPANY_VIDEOS);
+      setCareerOpeningsData(CAREER_OPENINGS);
+      setMediaBlogsPageConfig(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
     }
     setIsLoaded(true);
 
@@ -688,6 +760,134 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     });
   };
 
+  const updateMediaBlogsPageConfig = (updated: Partial<MediaBlogsPageConfig>) => {
+    setMediaBlogsPageConfig((prev) => {
+      const next = { ...prev, ...updated };
+      localStorage.setItem("volmo_mediablogs_page", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // Media Articles Actions
+  const updateMediaArticles = (items: MediaArticle[]) => {
+    setMediaArticlesData(items);
+    localStorage.setItem("volmo_media_articles", JSON.stringify(items));
+  };
+
+  const updateSingleMediaArticle = (id: string, updated: Partial<MediaArticle>) => {
+    setMediaArticlesData((prev) => {
+      const next = prev.map((art) => (art.id === id ? { ...art, ...updated } : art));
+      localStorage.setItem("volmo_media_articles", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const addMediaArticle = (item: MediaArticle) => {
+    setMediaArticlesData((prev) => {
+      const next = [item, ...prev];
+      localStorage.setItem("volmo_media_articles", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const deleteMediaArticle = (id: string) => {
+    setMediaArticlesData((prev) => {
+      const next = prev.filter((art) => art.id !== id);
+      localStorage.setItem("volmo_media_articles", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // Company Photos Actions
+  const updateCompanyPhotos = (items: CompanyPhoto[]) => {
+    setCompanyPhotosData(items);
+    localStorage.setItem("volmo_company_photos", JSON.stringify(items));
+  };
+
+  const updateSingleCompanyPhoto = (id: string, updated: Partial<CompanyPhoto>) => {
+    setCompanyPhotosData((prev) => {
+      const next = prev.map((ph) => (ph.id === id ? { ...ph, ...updated } : ph));
+      localStorage.setItem("volmo_company_photos", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const addCompanyPhoto = (item: CompanyPhoto) => {
+    setCompanyPhotosData((prev) => {
+      const next = [item, ...prev];
+      localStorage.setItem("volmo_company_photos", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const deleteCompanyPhoto = (id: string) => {
+    setCompanyPhotosData((prev) => {
+      const next = prev.filter((ph) => ph.id !== id);
+      localStorage.setItem("volmo_company_photos", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // Company Videos Actions
+  const updateCompanyVideos = (items: CompanyVideo[]) => {
+    setCompanyVideosData(items);
+    localStorage.setItem("volmo_company_videos", JSON.stringify(items));
+  };
+
+  const updateSingleCompanyVideo = (id: string, updated: Partial<CompanyVideo>) => {
+    setCompanyVideosData((prev) => {
+      const next = prev.map((vid) => (vid.id === id ? { ...vid, ...updated } : vid));
+      localStorage.setItem("volmo_company_videos", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const addCompanyVideo = (item: CompanyVideo) => {
+    setCompanyVideosData((prev) => {
+      const next = [item, ...prev];
+      localStorage.setItem("volmo_company_videos", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const deleteCompanyVideo = (id: string) => {
+    setCompanyVideosData((prev) => {
+      const next = prev.filter((vid) => vid.id !== id);
+      localStorage.setItem("volmo_company_videos", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  // Career Openings Actions
+  const updateCareerOpenings = (items: CareerOpening[]) => {
+    setCareerOpeningsData(items);
+    localStorage.setItem("volmo_career_openings", JSON.stringify(items));
+  };
+
+  const updateSingleCareerOpening = (id: string, updated: Partial<CareerOpening>) => {
+    setCareerOpeningsData((prev) => {
+      const next = prev.map((job) => (job.id === id ? { ...job, ...updated } : job));
+      localStorage.setItem("volmo_career_openings", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const addCareerOpening = (item: CareerOpening) => {
+    setCareerOpeningsData((prev) => {
+      const next = [item, ...prev];
+      localStorage.setItem("volmo_career_openings", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const deleteCareerOpening = (id: string) => {
+    setCareerOpeningsData((prev) => {
+      const next = prev.filter((job) => job.id !== id);
+      localStorage.setItem("volmo_career_openings", JSON.stringify(next));
+      return next;
+    });
+  };
+
   const resetAllToDefault = () => {
     localStorage.removeItem("volmo_custom_models");
     localStorage.removeItem("volmo_custom_pulse");
@@ -705,6 +905,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     localStorage.removeItem("volmo_custom_chargers");
     localStorage.removeItem("volmo_custom_accessories_page");
     localStorage.removeItem("volmo_custom_batterycharger_page");
+    localStorage.removeItem("volmo_media_articles");
+    localStorage.removeItem("volmo_company_photos");
+    localStorage.removeItem("volmo_company_videos");
+    localStorage.removeItem("volmo_career_openings");
+    localStorage.removeItem("volmo_mediablogs_page");
 
     setModelsData(MODELS_DATA);
     setPulseData(PULSE_DATA);
@@ -722,6 +927,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     setChargersData(CHARGER_MODELS);
     setAccessoriesPageConfig(DEFAULT_ACCESSORIES_PAGE_CONFIG);
     setBatteryChargerPageConfig(DEFAULT_BATTERY_CHARGER_PAGE_CONFIG);
+    setMediaArticlesData(MEDIA_ARTICLES);
+    setCompanyPhotosData(COMPANY_PHOTOS);
+    setCompanyVideosData(COMPANY_VIDEOS);
+    setCareerOpeningsData(CAREER_OPENINGS);
+    setMediaBlogsPageConfig(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
 
     api.config.resetConfig().catch((err) => {
       console.warn("[Volmo] Failed to reset backend configuration:", err.message);
@@ -751,6 +961,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         chargersData,
         accessoriesPageConfig,
         batteryChargerPageConfig,
+        mediaArticlesData,
+        companyPhotosData,
+        companyVideosData,
+        careerOpeningsData,
+        mediaBlogsPageConfig,
 
         updateModelSpec,
         addModelSpec,
@@ -776,6 +991,27 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         updateSiteSections,
         updateAccessoriesPageConfig,
         updateBatteryChargerPageConfig,
+        updateMediaBlogsPageConfig,
+
+        updateMediaArticles,
+        updateSingleMediaArticle,
+        addMediaArticle,
+        deleteMediaArticle,
+
+        updateCompanyPhotos,
+        updateSingleCompanyPhoto,
+        addCompanyPhoto,
+        deleteCompanyPhoto,
+
+        updateCompanyVideos,
+        updateSingleCompanyVideo,
+        addCompanyVideo,
+        deleteCompanyVideo,
+
+        updateCareerOpenings,
+        updateSingleCareerOpening,
+        addCareerOpening,
+        deleteCareerOpening,
 
         updateAccessoriesData,
         updateSingleAccessory,

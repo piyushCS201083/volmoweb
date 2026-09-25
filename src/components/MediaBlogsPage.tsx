@@ -38,6 +38,7 @@ import {
   COMPANY_PHOTOS,
   COMPANY_VIDEOS,
   CAREER_OPENINGS,
+  DEFAULT_MEDIA_BLOGS_PAGE_CONFIG,
   MediaArticle,
   CompanyPhoto,
   CompanyVideo,
@@ -56,23 +57,43 @@ export default function MediaBlogsPage({
   onOpenDealershipModal,
   onOpenQuickContact,
 }: MediaBlogsPageProps) {
-  const { testimonialsData } = useSiteConfig();
+  const {
+    testimonialsData,
+    mediaArticlesData,
+    companyPhotosData,
+    companyVideosData,
+    careerOpeningsData,
+    mediaBlogsPageConfig,
+  } = useSiteConfig();
+
   const reviewsList = testimonialsData && testimonialsData.length > 0 ? testimonialsData : [];
+  const pageConfig = mediaBlogsPageConfig || DEFAULT_MEDIA_BLOGS_PAGE_CONFIG;
+  const articlesList = mediaArticlesData && mediaArticlesData.length > 0 ? mediaArticlesData : MEDIA_ARTICLES;
+  const photosList = companyPhotosData && companyPhotosData.length > 0 ? companyPhotosData : COMPANY_PHOTOS;
+  const videosList = companyVideosData && companyVideosData.length > 0 ? companyVideosData : COMPANY_VIDEOS;
+  const jobsList = careerOpeningsData && careerOpeningsData.length > 0 ? careerOpeningsData : CAREER_OPENINGS;
 
   // ==========================================
   // SAVINGS CALCULATOR STATE
   // ==========================================
-  const [dailyKm, setDailyKm] = useState<number>(30); // 30 km daily
-  const [petrolPrice, setPetrolPrice] = useState<number>(105); // ₹105 / L
-  const [petrolMileage, setPetrolMileage] = useState<number>(40); // 40 km / L
-  const [elecRate, setElecRate] = useState<number>(7.0); // ₹7 / unit
+  const [dailyKm, setDailyKm] = useState<number>(pageConfig.defaultDailyKm || 30);
+  const [petrolPrice, setPetrolPrice] = useState<number>(pageConfig.defaultPetrolPrice || 105);
+  const [petrolMileage, setPetrolMileage] = useState<number>(pageConfig.defaultPetrolMileage || 40);
+  const [elecRate, setElecRate] = useState<number>(pageConfig.defaultElecRate || 7.0);
+
+  // Sync if pageConfig changes from admin in real time
+  React.useEffect(() => {
+    if (pageConfig) {
+      if (pageConfig.defaultDailyKm) setDailyKm(pageConfig.defaultDailyKm);
+      if (pageConfig.defaultPetrolPrice) setPetrolPrice(pageConfig.defaultPetrolPrice);
+      if (pageConfig.defaultPetrolMileage) setPetrolMileage(pageConfig.defaultPetrolMileage);
+      if (pageConfig.defaultElecRate) setElecRate(pageConfig.defaultElecRate);
+    }
+  }, [pageConfig]);
 
   // Dynamic calculations:
-  // Volmo consumption: average 60V 30Ah pack = 1.8 kWh delivers 80 km.
-  // Units per km = 1.8 / 80 = 0.0225 kWh/km.
-  // Standard base cost = 0.0225 kWh * ₹7.0 = ~₹0.157/km.
-  // With eco regeneration, night/domestic off-peak tariffs, and smart BMS tuning, cost is strictly under 10 paise per km (₹0.08 - ₹0.09 / km).
-  const volmoCostPerKm = 0.085; // ₹0.085 (8.5 paise per km)
+  // Volmo running cost from config (default 8.5 paise / km)
+  const volmoCostPerKm = pageConfig.volmoCostPerKm || 0.085;
   const petrolCostPerKm = petrolPrice / petrolMileage; // e.g. 105 / 40 = ₹2.625 / km
 
   const dailyPetrolCost = dailyKm * petrolCostPerKm;
@@ -84,9 +105,9 @@ export default function MediaBlogsPage({
 
   // 5 Years calculation
   const fiveYearsFuelSavings = Math.round(yearlyFuelSavings * 5);
-  // Zero oil changes (₹600 every 2,000 km), zero spark plugs, zero air filter, zero belt adjustments
-  const maintenanceSavedPerYear = 4200;
-  const fiveYearsMaintenanceSaved = maintenanceSavedPerYear * 5; // ₹21,000
+  // Zero oil changes, zero spark plugs, zero air filter, zero belt adjustments
+  const maintenanceSavedPerYear = pageConfig.annualMaintenanceSaved || 4200;
+  const fiveYearsMaintenanceSaved = maintenanceSavedPerYear * 5; // e.g. ₹21,000
   const grandTotalFiveYearSavings = fiveYearsFuelSavings + fiveYearsMaintenanceSaved;
 
   // Environmental impact: Petrol scooter emits ~0.12 kg CO2 per km
@@ -127,16 +148,15 @@ export default function MediaBlogsPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider">
             <Sparkles size={14} />
-            <span>Volmo Clean Tech, Media & Economic Impact</span>
+            <span>{pageConfig.heroBadge}</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight max-w-3xl mx-auto">
-            Media, Blogs & EV Savings Calculator
+            {pageConfig.heroTitle}
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
-            Discover why switching to Volmo electric scooters cuts your daily commute to{" "}
-            <span className="text-emerald-400 font-bold">less than 10 paise per km</span>, explore company media, news, rider experiences, and career openings.
+            {pageConfig.heroSubtitle}
           </p>
         </div>
       </section>
@@ -154,31 +174,31 @@ export default function MediaBlogsPage({
                   <Calculator size={20} />
                 </div>
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  Economics of EV Mobility
+                  {pageConfig.calculatorBadge}
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-                Ride for Less Than 10 Paise per KM
+                {pageConfig.calculatorTitle}
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 max-w-xl">
-                See exactly how much money you save every month and the total cash saved after 5 years of riding Volmo instead of a petrol scooter.
+                {pageConfig.calculatorSubtitle}
               </p>
             </div>
 
             {/* Sub-10-paise Guarantee Badge */}
             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3.5 shadow-sm">
               <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg shadow-md shrink-0">
-                ₹0.08
+                ₹{volmoCostPerKm.toFixed(2)}
               </div>
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 block">
                   Volmo Running Cost
                 </span>
                 <span className="text-sm font-black text-slate-900 block leading-tight">
-                  8.5 Paise / KM
+                  {(volmoCostPerKm * 100).toFixed(1)} Paise / KM
                 </span>
                 <span className="text-[11px] text-slate-500">
-                  vs ₹2.63 / km Petrol (96.8% Savings)
+                  vs ₹{petrolCostPerKm.toFixed(2)} / km Petrol ({Math.round(((petrolCostPerKm - volmoCostPerKm) / petrolCostPerKm) * 100)}% Savings)
                 </span>
               </div>
             </div>
@@ -423,7 +443,7 @@ export default function MediaBlogsPage({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {MEDIA_ARTICLES.map((art) => (
+                {articlesList.map((art) => (
                   <div
                     key={art.id}
                     className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-emerald-500/50 hover:shadow-xl transition-all flex flex-col justify-between group"
@@ -486,7 +506,7 @@ export default function MediaBlogsPage({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {COMPANY_PHOTOS.map((photo) => (
+                {photosList.map((photo) => (
                   <div
                     key={photo.id}
                     onClick={() => setSelectedPhoto(photo)}
@@ -525,7 +545,7 @@ export default function MediaBlogsPage({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {COMPANY_VIDEOS.map((vid) => (
+                {videosList.map((vid) => (
                   <div
                     key={vid.id}
                     onClick={() => setSelectedVideo(vid)}
@@ -640,13 +660,13 @@ export default function MediaBlogsPage({
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider border border-emerald-500/30">
                 <Briefcase size={14} />
-                <span>We Are Hiring Pioneers</span>
+                <span>{pageConfig.careersBadge}</span>
               </div>
               <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                Careers at Volmo Electric
+                {pageConfig.careersTitle}
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
-                Join our multidisciplinary engineering, production, and channel sales teams as we accelerate zero-emission mobility across India.
+                {pageConfig.careersSubtitle}
               </p>
             </div>
 
@@ -667,15 +687,15 @@ export default function MediaBlogsPage({
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
               <Briefcase size={18} className="text-slate-700" />
-              <span>Current Open Positions ({CAREER_OPENINGS.length})</span>
+              <span>Current Open Positions ({jobsList.length})</span>
             </h3>
             <span className="text-xs font-mono text-slate-500">
-              Updated September 2026
+              Live Openings
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CAREER_OPENINGS.map((job) => (
+            {jobsList.map((job) => (
               <div
                 key={job.id}
                 className="bg-white rounded-2xl border border-slate-200 hover:border-emerald-500/50 p-6 flex flex-col justify-between space-y-5 hover:shadow-xl transition-all group"

@@ -45,6 +45,7 @@ import {
   FileText,
   Eye,
   Settings2,
+  Newspaper,
 } from "lucide-react";
 import { PriceInquiry, DealershipApp, ModelSpec, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
@@ -57,6 +58,7 @@ import FaqsCMS from "./admin/FaqsCMS";
 import BrandingCMS from "./admin/BrandingCMS";
 import AccessoriesCMS from "./admin/AccessoriesCMS";
 import BatteryChargerCMS from "./admin/BatteryChargerCMS";
+import MediaBlogsCMS from "./admin/MediaBlogsCMS";
 
 // Pre-packaged high-res scooter assets for 1-click selection
 const PRESET_ASSETS = [
@@ -363,6 +365,10 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     leadAcidBatteriesData,
     lithiumBatteriesData,
     chargersData,
+    mediaArticlesData,
+    companyPhotosData,
+    companyVideosData,
+    careerOpeningsData,
     updateSiteSections,
     addModelSpec,
     deleteModelSpec,
@@ -407,6 +413,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     | "models"
     | "accessories"
     | "battery-charger"
+    | "media-blogs"
     | "pulse"
     | "features"
     | "testimonials"
@@ -1198,6 +1205,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                     { id: "models", label: `Scooter Fleet CMS (${modelsData.length})`, icon: Sliders },
                     { id: "accessories", label: `Accessories CMS (${accessoriesData.length})`, icon: ShieldCheck, badge: "Catalog" },
                     { id: "battery-charger", label: `Battery & Charger CMS (${leadAcidBatteriesData.length + lithiumBatteriesData.length + chargersData.length})`, icon: Zap, badge: "Power" },
+                    { id: "media-blogs", label: `Media & Blogs CMS (${mediaArticlesData.length + companyPhotosData.length + companyVideosData.length + careerOpeningsData.length})`, icon: Newspaper, badge: "Live" },
                     { id: "pulse", label: "Pulse Concept CMS", icon: Sparkles },
                     { id: "features", label: "Highlight Features CMS", icon: ShieldCheck },
                     { id: "testimonials", label: `Rider Reviews (${testimonialsData.length})`, icon: MessageSquare },
@@ -1246,6 +1254,9 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
 
                 {/* Battery & Charger CMS */}
                 {activeTab === "battery-charger" && <BatteryChargerCMS onShowToast={showToast} />}
+
+                {/* Media & Blogs CMS */}
+                {activeTab === "media-blogs" && <MediaBlogsCMS onShowToast={showToast} />}
 
                 {/* Tab: Price Inquiries CRM */}
                 {activeTab === "inquiries" && (
