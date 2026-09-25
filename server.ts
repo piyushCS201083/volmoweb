@@ -14,12 +14,15 @@ const __dirname = path.dirname(__filename);
 
 // Ensure TypeScript resolution works when run with either `node server.ts` or `tsx server.ts`
 const hasTsx = Boolean(
-  (process as any).execArgv?.some((arg: string) => arg.includes("tsx")) ||
-    process.env.__BOOTSTRAPPED_WITH_TSX__
+  process.argv[1]?.includes("tsx") ||
+    (process as any).execArgv?.some((arg: string) => arg.includes("tsx")) ||
+    process.env.__BOOTSTRAPPED_WITH_TSX__ ||
+    process.env.TSX_LOADED
 );
 
 if (!hasTsx && !process.env.TSX_LOADED) {
   process.env.__BOOTSTRAPPED_WITH_TSX__ = "true";
+  process.env.TSX_LOADED = "true";
   const child = spawn(
     process.execPath,
     ["--import", "tsx", __filename, ...process.argv.slice(2)],

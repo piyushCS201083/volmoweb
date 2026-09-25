@@ -5,13 +5,31 @@
 
 import { GoogleGenAI } from "@google/genai";
 
+let aiClient: GoogleGenAI | null = null;
+
+export function getAI(): GoogleGenAI {
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY || "",
+      httpOptions: {
+        headers: {
+          "User-Agent": "aistudio-build",
+        },
+      },
+    });
+  }
+  return aiClient;
+}
+
 // Initialize the shared GoogleGenAI client with the required User-Agent header for telemetry
-export const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      "User-Agent": "aistudio-build",
-    },
+export const ai = new Proxy({} as GoogleGenAI, {
+  get(_target, prop) {
+    const instance = getAI();
+    const value = (instance as any)[prop];
+    if (typeof value === "function") {
+      return value.bind(instance);
+    }
+    return value;
   },
 });
 
