@@ -157,8 +157,6 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
                   <span className="text-emerald-400 font-bold">100% Electric</span>
                   <span className="text-slate-600">•</span>
                   <span>No RTO Registration</span>
-                  <span className="text-slate-600">•</span>
-                  <span>ARAI Approved</span>
                 </div>
               </div>
             </div>
