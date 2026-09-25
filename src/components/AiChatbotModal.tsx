@@ -63,7 +63,7 @@ export default function AiChatbotModal({
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_WELCOME]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<"gemini-3.5-flash" | "gemini-3.1-flash-lite">("gemini-3.5-flash");
+  const [selectedModel, setSelectedModel] = useState<"gemini-3.1-flash-lite" | "gemini-3.8-flash">("gemini-3.1-flash-lite");
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -264,17 +264,6 @@ export default function AiChatbotModal({
                   <div className="inline-flex rounded-lg p-0.5 bg-slate-200/70 border border-slate-300">
                     <button
                       type="button"
-                      onClick={() => setSelectedModel("gemini-3.5-flash")}
-                      className={`px-2 py-0.5 rounded-md font-semibold text-[11px] transition-all cursor-pointer ${
-                        selectedModel === "gemini-3.5-flash"
-                          ? "bg-white text-slate-900 shadow-xs"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      Gemini 3.5 Flash
-                    </button>
-                    <button
-                      type="button"
                       onClick={() => setSelectedModel("gemini-3.1-flash-lite")}
                       className={`px-2 py-0.5 rounded-md font-semibold text-[11px] transition-all cursor-pointer ${
                         selectedModel === "gemini-3.1-flash-lite"
@@ -283,6 +272,17 @@ export default function AiChatbotModal({
                       }`}
                     >
                       3.1 Flash Lite (Fast)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedModel("gemini-3.8-flash")}
+                      className={`px-2 py-0.5 rounded-md font-semibold text-[11px] transition-all cursor-pointer ${
+                        selectedModel === "gemini-3.8-flash"
+                          ? "bg-white text-slate-900 shadow-xs"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                    >
+                      Gemini 3.8 Flash
                     </button>
                   </div>
                 </div>

@@ -15,7 +15,7 @@ interface ChatMessage {
 
 router.post("/chat", async (req: Request, res: Response) => {
   try {
-    const { messages, model = "gemini-3.5-flash" } = req.body;
+    const { messages, model = "gemini-3.1-flash-lite" } = req.body;
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({
@@ -23,10 +23,10 @@ router.post("/chat", async (req: Request, res: Response) => {
       });
     }
 
-    // Supported models per guideline:
-    // gemini-3.5-flash for general tasks, gemini-3.1-flash-lite for fast tasks, gemini-3.8-flash
-    const allowedModels = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3.8-flash"];
-    const selectedModel = allowedModels.includes(model) ? model : "gemini-3.5-flash";
+    // Supported models in modern @google/genai:
+    // gemini-3.1-flash-lite for fast responses, gemini-3.8-flash for complex queries
+    const allowedModels = ["gemini-3.1-flash-lite", "gemini-3.8-flash"];
+    const selectedModel = allowedModels.includes(model) ? model : "gemini-3.1-flash-lite";
 
     // Format message history for @google/genai
     const contents = messages.map((msg: ChatMessage) => ({

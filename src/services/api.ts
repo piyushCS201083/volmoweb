@@ -5,13 +5,9 @@
 
 import { PriceInquiry, DealershipApp } from "../types";
 
-// Deployed server URL on Render
-export const RENDER_BACKEND_URL = "https://volmoweb-1.onrender.com";
-
-// Base API URL supports standalone frontend deployment via VITE_API_URL or defaults to the deployed Render server
+// Base API URL supports standalone frontend deployment via VITE_API_URL or defaults to same-origin backend
 export const API_BASE_URL = (
-  ((import.meta as any).env?.VITE_API_URL as string) ||
-  RENDER_BACKEND_URL
+  ((import.meta as any).env?.VITE_API_URL as string) || ""
 ).replace(/\/$/, "");
 
 class ApiError extends Error {
@@ -252,7 +248,7 @@ export const api = {
   chatbot: {
     async sendChat(
       messages: Array<{ role: "user" | "model" | "assistant"; content: string }>,
-      model: "gemini-3.5-flash" | "gemini-3.1-flash-lite" | "gemini-3.8-flash" = "gemini-3.5-flash"
+      model: "gemini-3.1-flash-lite" | "gemini-3.8-flash" = "gemini-3.1-flash-lite"
     ): Promise<{ success: boolean; model: string; reply: string }> {
       return request<{ success: boolean; model: string; reply: string }>("/api/chatbot/chat", {
         method: "POST",
