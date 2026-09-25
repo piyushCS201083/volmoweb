@@ -10,15 +10,16 @@ This is the dedicated backend server for **Volmo Electric**. It separates critic
    - `POST /api/auth/reset-password`: Server-side password reset and token issuance.
    - `POST /api/auth/change-password`: Admin password update stored securely.
 
-2. **Lead Management (`/api/leads`)**:
+2. **Lead Management & Email Notifications (`/api/leads`)**:
    - `GET /api/leads/inquiries`: Fetch all customer scooter price inquiries with search & status filter.
-   - `POST /api/leads/inquiries`: Customer submits a customized scooter lead.
+   - `POST /api/leads/inquiries`: Customer submits a customized scooter lead. Dispatches instant email notification to `piyushshivhare083@gmail.com`.
    - `PATCH /api/leads/inquiries/:id`: Update inquiry status (`new`, `contacted`, `completed`).
    - `DELETE /api/leads/inquiries/:id`: Remove inquiry.
    - `GET /api/leads/dealers`: Fetch all partner dealership applications.
-   - `POST /api/leads/dealers`: Customer submits dealership application.
+   - `POST /api/leads/dealers`: Customer submits dealership application. Dispatches instant email notification to `piyushshivhare083@gmail.com`.
    - `PATCH /api/leads/dealers/:id`: Update dealership application status.
    - `DELETE /api/leads/dealers/:id`: Remove dealership application.
+   - `GET /api/leads/email-logs`: Review real-time delivery logs for lead notifications.
 
 3. **CMS & Site Configuration (`/api/config`)**:
    - `GET /api/config`: Real-time retrieval of all fleet models, accessories, battery & charger specs, hero banners, testimonials, FAQs, and showrooms.

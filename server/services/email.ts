@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import nodemailer from "nodemailer";
 import { EMAIL_CONFIG } from "../config";
 import { storage } from "../storage";
 import { PriceInquiry, DealershipApp } from "../../src/types";
@@ -43,17 +42,23 @@ function getCompanyFromEmail(): string {
  * Creates nodemailer transporter if SMTP credentials are provided,
  * otherwise returns null for safe simulation mode.
  */
-function createTransporter() {
+async function createTransporter() {
   if (EMAIL_CONFIG.SMTP_HOST && EMAIL_CONFIG.SMTP_USER && EMAIL_CONFIG.SMTP_PASS) {
-    return nodemailer.createTransport({
-      host: EMAIL_CONFIG.SMTP_HOST,
-      port: EMAIL_CONFIG.SMTP_PORT,
-      secure: EMAIL_CONFIG.SMTP_SECURE,
-      auth: {
-        user: EMAIL_CONFIG.SMTP_USER,
-        pass: EMAIL_CONFIG.SMTP_PASS,
-      },
-    });
+    try {
+      const nodemailer = await import("nodemailer");
+      return (nodemailer.default || nodemailer).createTransport({
+        host: EMAIL_CONFIG.SMTP_HOST,
+        port: EMAIL_CONFIG.SMTP_PORT,
+        secure: EMAIL_CONFIG.SMTP_SECURE,
+        auth: {
+          user: EMAIL_CONFIG.SMTP_USER,
+          pass: EMAIL_CONFIG.SMTP_PASS,
+        },
+      });
+    } catch (err: any) {
+      console.warn("[Email Service] nodemailer package not available, falling back to simulated mail logger:", err.message);
+      return null;
+    }
   }
   return null;
 }
@@ -203,7 +208,7 @@ export async function sendInquiryNotificationEmail(inquiry: PriceInquiry): Promi
     previewHtml: htmlContent,
   };
 
-  const transporter = createTransporter();
+  const transporter = await createTransporter();
   if (transporter) {
     try {
       await transporter.sendMail({
@@ -376,7 +381,7 @@ export async function sendDealershipNotificationEmail(dealer: DealershipApp): Pr
     previewHtml: htmlContent,
   };
 
-  const transporter = createTransporter();
+  const transporter = await createTransporter();
   if (transporter) {
     try {
       await transporter.sendMail({
