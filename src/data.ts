@@ -333,6 +333,15 @@ export interface ShowroomItem {
 
 export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
   {
+    id: "mp-flagship",
+    name: "Volmo Company Operated Showroom",
+    city: "Gwalior",
+    state: "Madhya Pradesh",
+    address: "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
+    phone: "7880008401",
+    status: "Active",
+  },
+  {
     id: "mp-1",
     name: "Volmo Gwalior Smart EV Fleet Flagship",
     city: "Gwalior",

@@ -14,7 +14,7 @@ import Features from "./components/Features";
 import Testimonials from "./components/Testimonials";
 import MediaBlogsPage from "./components/MediaBlogsPage";
 import FAQ from "./components/FAQ";
-import DealershipLocator from "./components/DealershipLocator";
+import LocateUs from "./components/LocateUs";
 import Footer from "./components/Footer";
 import DealershipModal from "./components/DealershipModal";
 import PriceInquiryModal from "./components/PriceInquiryModal";
@@ -312,7 +312,7 @@ export default function App() {
           )}
 
           {activePage === "locator" && (
-            <DealershipLocator />
+            <LocateUs onDealershipClick={() => setIsDealerOpen(true)} />
           )}
         </motion.main>
       </AnimatePresence>

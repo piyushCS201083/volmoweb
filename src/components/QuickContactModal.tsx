@@ -165,15 +165,17 @@ export default function QuickContactModal({
     };
 
     try {
-      // Record lead in the persistent backend store
+      // Record lead in the persistent backend store and dispatch email notification
       await api.leads.submitInquiry({
         name: contactPayload.name,
         phone: contactPayload.phone,
+        email: contactPayload.email,
         model: `Quick Contact: ${topic}`,
         color: email.trim() ? `Email: ${email.trim()}` : "Direct Contact",
         batteryType: "LI",
         batteryConfig: topic,
         rangeKm: 0,
+        message: contactPayload.message,
       });
     } catch (err) {
       console.warn("Notice: Saved inquiry locally/optimistically:", err);

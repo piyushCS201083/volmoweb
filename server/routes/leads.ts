@@ -6,6 +6,11 @@
 import { Router, Request, Response } from "express";
 import { storage } from "../storage";
 import { PriceInquiry, DealershipApp } from "../../src/types";
+import {
+  sendInquiryNotificationEmail,
+  sendDealershipNotificationEmail,
+  getEmailLogs,
+} from "../services/email";
 
 const router = Router();
 
@@ -42,9 +47,9 @@ router.get("/inquiries", (req: Request, res: Response) => {
 });
 
 // POST /api/leads/inquiries
-router.post("/inquiries", (req: Request, res: Response) => {
+router.post("/inquiries", async (req: Request, res: Response) => {
   try {
-    const { name, phone, model, color, batteryType, batteryConfig, rangeKm } = req.body;
+    const { name, phone, email, model, color, batteryType, batteryConfig, rangeKm, message } = req.body;
 
     if (!name || !phone || !model) {
       return res.status(400).json({ error: "Name, phone, and model are required" });
@@ -54,21 +59,28 @@ router.post("/inquiries", (req: Request, res: Response) => {
       id: "I-" + Math.floor(10000 + Math.random() * 90000),
       name: String(name).trim(),
       phone: String(phone).trim(),
+      email: email ? String(email).trim() : undefined,
       model: String(model).trim(),
       color: String(color || "Standard"),
       batteryType: batteryType === "LI" ? "LI" : "LA",
       batteryConfig: String(batteryConfig || "Default Configuration"),
       rangeKm: Number(rangeKm) || 60,
+      message: message ? String(message).trim() : undefined,
       status: "new",
       createdAt: new Date().toISOString(),
     };
 
     const saved = storage.addInquiry(newInquiry);
-    console.log(`[Backend API] New scooter price inquiry saved: ${saved.id} - ${saved.name}`);
+    console.log(`[Backend API] New scooter price/quick inquiry saved: ${saved.id} - ${saved.name}`);
+
+    // Asynchronously dispatch email notification to recipient (piyushshivhare083@gmail.com)
+    sendInquiryNotificationEmail(saved).catch((err) => {
+      console.error("[Backend API] Failed sending inquiry notification email:", err);
+    });
 
     return res.status(201).json({
       success: true,
-      message: "Price inquiry saved successfully to backend database",
+      message: "Price inquiry saved successfully and notification dispatched",
       data: saved,
     });
   } catch (error: any) {
@@ -146,7 +158,7 @@ router.get("/dealers", (req: Request, res: Response) => {
 });
 
 // POST /api/leads/dealers
-router.post("/dealers", (req: Request, res: Response) => {
+router.post("/dealers", async (req: Request, res: Response) => {
   try {
     const { name, email, phone, city, state, experience, pastBusiness, investmentRange, message } = req.body;
 
@@ -172,9 +184,14 @@ router.post("/dealers", (req: Request, res: Response) => {
     const saved = storage.addDealer(newDealer);
     console.log(`[Backend API] New dealership application saved: ${saved.id} - ${saved.name} (${saved.city})`);
 
+    // Asynchronously dispatch email notification to recipient (piyushshivhare083@gmail.com)
+    sendDealershipNotificationEmail(saved).catch((err) => {
+      console.error("[Backend API] Failed sending dealership notification email:", err);
+    });
+
     return res.status(201).json({
       success: true,
-      message: "Dealership application registered successfully in backend database",
+      message: "Dealership application registered successfully and notification dispatched",
       data: saved,
     });
   } catch (error: any) {
@@ -214,6 +231,16 @@ router.delete("/dealers/:id", (req: Request, res: Response) => {
     return res.json({ success: true, message: `Dealership application ${id} deleted successfully` });
   } catch (error: any) {
     return res.status(500).json({ error: error.message || "Failed to delete dealership application" });
+  }
+});
+
+// GET /api/leads/email-logs
+router.get("/email-logs", (_req: Request, res: Response) => {
+  try {
+    const logs = getEmailLogs();
+    return res.json({ success: true, count: logs.length, data: logs });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message || "Failed to fetch email logs" });
   }
 });
 

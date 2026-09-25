@@ -1325,17 +1325,38 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                                   <PhoneCall size={12} />
                                   +91 {iq.phone}
                                 </a>
+                                {iq.email && (
+                                  <a
+                                    href={`mailto:${iq.email}`}
+                                    className="flex items-center gap-1.5 text-cyan-400 hover:underline font-mono"
+                                  >
+                                    <Mail size={12} />
+                                    {iq.email}
+                                  </a>
+                                )}
                                 <span className="flex items-center gap-1">
                                   Model: <strong className="text-white uppercase">{iq.model}</strong>
                                 </span>
-                                <span className="flex items-center gap-1">
-                                  Color: <strong className="text-white">{iq.color}</strong>
+                                {iq.color && iq.color !== "Standard" && !iq.color.startsWith("Email:") && (
+                                  <span className="flex items-center gap-1">
+                                    Color: <strong className="text-white">{iq.color}</strong>
+                                  </span>
+                                )}
+                                <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-mono">
+                                  ✉️ Emailed to piyushshivhare083@gmail.com
                                 </span>
                               </div>
 
                               <div className="text-xs bg-slate-900/80 p-2 rounded-xl text-slate-300 font-mono">
                                 ⚡ Range: <strong className="text-orange-400">{iq.rangeKm} KM</strong> &bull; {iq.batteryConfig}
                               </div>
+
+                              {iq.message && (
+                                <div className="text-xs bg-slate-900/50 border border-slate-800 p-2.5 rounded-xl text-slate-300 font-sans">
+                                  <strong className="text-slate-400 block text-[10px] uppercase font-mono mb-0.5">Message / Query:</strong>
+                                  {iq.message}
+                                </div>
+                              )}
                             </div>
 
                             <div className="flex items-center gap-3 justify-end">
@@ -1435,6 +1456,9 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                                   <span className="flex items-center gap-1">
                                     <MapPin size={12} className="text-slate-500" />
                                     {dl.city}, {dl.state}
+                                  </span>
+                                  <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-mono">
+                                    ✉️ Emailed to piyushshivhare083@gmail.com
                                   </span>
                                 </div>
                               </div>

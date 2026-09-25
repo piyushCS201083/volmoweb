@@ -15,6 +15,11 @@ import {
   Zap,
   Activity,
   Sparkles,
+  Mail,
+  Copy,
+  Check,
+  X,
+  ExternalLink,
 } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
 
@@ -42,9 +47,23 @@ const getFAQIcon = (iconName: string) => {
 };
 
 export default function FAQ({ onOpenAiChat }: FAQProps) {
-  const { faqsData, siteSections } = useSiteConfig();
+  const { faqsData, siteSections, contactInfo } = useSiteConfig();
   const list = faqsData && faqsData.length > 0 ? faqsData : [];
   const [openId, setOpenId] = useState<number | null>(list.length > 0 ? list[0].id : null);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const companyEmail = contactInfo?.email || "sales@volmoelectrical.com";
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(companyEmail);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch {
+      // Fallback
+    }
+  };
 
   const toggleItem = (id: number) => {
     setOpenId(openId === id ? null : id);
@@ -169,15 +188,131 @@ export default function FAQ({ onOpenAiChat }: FAQProps) {
               Call support
             </a>
             <a
-              href="mailto:piyushshivhare003@gmail.com"
-              className="py-3 px-6 bg-slate-50 border border-slate-200 hover:border-slate-350 text-slate-700 hover:text-slate-900 font-semibold rounded-2xl transition-all cursor-pointer active:scale-95 text-xs text-center uppercase tracking-wider shadow-sm"
+              href={`mailto:${companyEmail}`}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsEmailModalOpen(true);
+              }}
+              className="py-3 px-6 bg-slate-50 border border-slate-200 hover:border-slate-350 text-slate-700 hover:text-slate-900 font-semibold rounded-2xl transition-all cursor-pointer active:scale-95 text-xs text-center uppercase tracking-wider shadow-sm flex items-center justify-center gap-1.5"
             >
-              Email technical team
+              <Mail size={14} className="text-slate-500" />
+              <span>Email technical team</span>
             </a>
           </div>
         </div>
 
       </div>
+
+      {/* Company Email Popup Modal */}
+      <AnimatePresence>
+        {isEmailModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsEmailModalOpen(false)}
+              className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"
+            />
+
+            {/* Modal Dialog Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-200 p-6 sm:p-7 overflow-hidden z-10 text-left"
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsEmailModalOpen(false)}
+                className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                aria-label="Close dialog"
+              >
+                <X size={18} />
+              </button>
+
+              {/* Header with Icon */}
+              <div className="flex items-center gap-3.5 mb-5">
+                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-600 shadow-xs">
+                  <Mail size={22} />
+                </div>
+                <div>
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-orange-600">
+                    Direct Contact
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900 leading-tight">
+                    Company Email ID
+                  </h3>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-600 mb-5 leading-relaxed font-normal">
+                Reach out directly to the Volmo Electric technical team and corporate headquarters for technical inquiries, schematics, and dealership support.
+              </p>
+
+              {/* Email Address Display Box */}
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 mb-5 group hover:border-slate-300 transition-colors">
+                <div className="min-w-0">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-semibold">
+                    Official Email
+                  </span>
+                  <a
+                    href={`mailto:${companyEmail}`}
+                    className="text-sm sm:text-base font-mono font-bold text-slate-900 hover:text-orange-600 transition-colors truncate block"
+                    title={companyEmail}
+                  >
+                    {companyEmail}
+                  </a>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className={`p-2.5 rounded-xl border transition-all cursor-pointer flex-shrink-0 flex items-center gap-1.5 text-xs font-semibold ${
+                    copiedEmail
+                      ? "bg-emerald-50 border-emerald-300 text-emerald-700"
+                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900 shadow-2xs"
+                  }`}
+                  aria-label="Copy email address"
+                >
+                  {copiedEmail ? (
+                    <>
+                      <Check size={14} className="text-emerald-600" />
+                      <span className="hidden sm:inline">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={14} />
+                      <span className="hidden sm:inline">Copy</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Actions Footer */}
+              <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+                <a
+                  href={`mailto:${companyEmail}`}
+                  className="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs text-center uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <span>Open Email Client</span>
+                  <ExternalLink size={13} />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsEmailModalOpen(false)}
+                  className="py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl text-xs text-center uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

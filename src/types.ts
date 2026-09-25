@@ -82,11 +82,13 @@ export interface PriceInquiry {
   id: string;
   name: string;
   phone: string;
+  email?: string;
   model: string;
   color: string;
   batteryType: BatteryType;
   batteryConfig: string;
   rangeKm: number;
+  message?: string;
   status: "new" | "contacted" | "completed";
   createdAt: string;
 }

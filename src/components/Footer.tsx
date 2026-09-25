@@ -194,6 +194,14 @@ export default function Footer({ onDealershipClick, onAdminClick, onModelSelect,
                 <span>Media &amp; Blogs (Savings Calculator &amp; Careers) &rarr;</span>
               </button>
             </li>
+            <li>
+              <button
+                onClick={() => onPageChange?.("locator")}
+                className="text-xs text-blue-700 font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+              >
+                <span>Contact Us &amp; Dealership Locations &rarr;</span>
+              </button>
+            </li>
             <li className="pt-1">
               <button
                 onClick={onDealershipClick}
@@ -243,6 +251,16 @@ export default function Footer({ onDealershipClick, onAdminClick, onModelSelect,
                 <span className="text-xs text-slate-500 block font-medium">Manufacturing Plant</span>
                 <p className="text-xs text-slate-600 font-semibold leading-relaxed">
                   {contactInfo.factoryAddress}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5">
+              <MapPin className="text-slate-600 flex-shrink-0 mt-1" size={16} />
+              <div>
+                <span className="text-xs text-slate-500 block font-medium">Company Operated Showroom</span>
+                <p className="text-xs text-slate-600 font-semibold leading-relaxed">
+                  In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)
                 </p>
               </div>
             </div>
