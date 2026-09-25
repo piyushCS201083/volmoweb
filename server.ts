@@ -42,7 +42,9 @@ if (!hasTsx && !process.env.TSX_LOADED) {
 async function startServer() {
   const { createExpressApp } = await import("./server/app");
   const { SERVER_CONFIG } = await import("./server/config");
+  const http = await import("node:http");
   const app = createExpressApp();
+  const server = http.createServer(app);
   const isProduction = process.env.NODE_ENV === "production";
   const isStandaloneBackend = process.env.STANDALONE_BACKEND === "true";
 
@@ -51,7 +53,10 @@ async function startServer() {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       root: __dirname,
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: process.env.DISABLE_HMR === "true" ? false : { server },
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);
@@ -93,7 +98,7 @@ async function startServer() {
     console.log("[Standalone Mode] Running as dedicated backend API server");
   }
 
-  const server = app.listen(SERVER_CONFIG.PORT, SERVER_CONFIG.HOST, () => {
+  server.listen(SERVER_CONFIG.PORT, SERVER_CONFIG.HOST, () => {
     console.log(
       `[Volmo Server] Running on http://${SERVER_CONFIG.HOST}:${SERVER_CONFIG.PORT} in ${SERVER_CONFIG.NODE_ENV} mode`
     );

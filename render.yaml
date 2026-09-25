@@ -2,9 +2,32 @@
 # https://render.com/docs/blueprint-spec
 
 services:
-  # 1. Full-Stack / Backend Node Web Service
+  # 1. Standalone Backend API Service (Root Directory: server)
   - type: web
-    name: volmo-backend
+    name: volmo-backend-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: NOTIFICATION_EMAIL
+        value: piyushshivhare083@gmail.com
+      - key: COMPANY_MAIL_FROM
+        value: sales@volmoelectrical.com
+
+  # 2. Unified Full-Stack Node Web Service (Root Directory: .)
+  - type: web
+    name: volmo-fullstack
     runtime: node
     plan: free
     region: oregon
@@ -25,7 +48,7 @@ services:
       - key: COMPANY_MAIL_FROM
         value: sales@volmoelectrical.com
 
-  # 2. Static Site Frontend (Vite SPA) - Zero cost, CDN hosted on Render
+  # 3. Static Site Frontend (Vite SPA) - Zero cost, CDN hosted on Render
   - type: static
     name: volmo-frontend
     plan: free
