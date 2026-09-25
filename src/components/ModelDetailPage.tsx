@@ -171,7 +171,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
         charging: "7-8 hours",
         warranty: "1 Year Standard Battery Warranty",
         description: model.customLeadAcidDescription || `Custom configured Lead-Acid setup holding a solid bank of ${leadAcidCount} SLA batteries (generating ${leadAcidCount * 12}V in series arrangement). Cheap to replace, highly durable, and heavily stable over Indian temperature spikes.`,
-        priceModifier: 0,
+        priceModifier: leadAcidCount === 4 ? -4000 : leadAcidCount === 6 ? 5000 : 0,
         batteryWeight: `${leadAcidCount * 7}kg`
       };
     } else {

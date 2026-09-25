@@ -7,9 +7,54 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useSiteConfig } from "../SiteConfigContext";
 import { BatteryType, ModelSpec } from "../types";
-import { Zap, HelpCircle, CheckCircle, Shield, AlertTriangle, Eye, Flame, ArrowRight, Sparkles } from "lucide-react";
+import { Zap, HelpCircle, CheckCircle, Shield, AlertTriangle, Eye, Flame, ArrowRight, Sparkles, RefreshCw, Sliders } from "lucide-react";
 import { getModelActivePhoto } from "../data";
 import ModelDetailPage from "./ModelDetailPage";
+
+export const getBatteryPriceModifier = (
+  batteryType: BatteryType,
+  leadAcidCount: number,
+  lithiumRange: number
+): number => {
+  if (batteryType === "LA") {
+    if (leadAcidCount === 4) return -4000;
+    if (leadAcidCount === 6) return 5000;
+    return 0; // 5 batteries is base (60V array)
+  } else {
+    switch (lithiumRange) {
+      case 60:
+        return 12000;
+      case 80:
+        return 18000;
+      case 100:
+        return 25000;
+      case 120:
+        return 32000;
+      case 145:
+        return 40000;
+      case 180:
+        return 49000;
+      default:
+        return 18000;
+    }
+  }
+};
+
+export const getModelConfiguredPrice = (
+  model: ModelSpec,
+  config: { batteryType: BatteryType; leadAcidCount: number; lithiumRange: number }
+) => {
+  const baseVal = parseInt((model.basePriceEstimate || "45000").replace(/[^\d]/g, ""), 10) || 45000;
+  const modifier = getBatteryPriceModifier(config.batteryType, config.leadAcidCount, config.lithiumRange);
+  const totalPrice = baseVal + modifier;
+  return {
+    basePrice: baseVal,
+    modifier,
+    totalPrice,
+    formatted: `₹${totalPrice.toLocaleString("en-IN")}`,
+    hasModifier: modifier !== 0,
+  };
+};
 
 interface ModelsProps {
   onEnquireClick: (
@@ -30,6 +75,9 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
   const [localSelectedModelId, setLocalSelectedModelId] = useState<string | null>(null);
 
   const [pulseSubscribed, setPulseSubscribed] = useState<boolean>(false);
+
+  // Synchronize battery configuration across all models on the page
+  const [syncBatteryAcrossModels, setSyncBatteryAcrossModels] = useState<boolean>(true);
 
   const activeModelId = onSelectModelId ? selectedModelId : localSelectedModelId;
   const setActiveModelId = (id: string | null) => {
@@ -68,15 +116,15 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
     },
     classic: {
       selectedColor: "Royal Blue",
-      batteryType: "LI",
+      batteryType: "LA",
       leadAcidCount: 5,
-      lithiumRange: 100,
+      lithiumRange: 80,
     },
     phantom: {
       selectedColor: "Cream Beige",
-      batteryType: "LI",
+      batteryType: "LA",
       leadAcidCount: 5,
-      lithiumRange: 120, // Phantom accommodates large Lithium ranges
+      lithiumRange: 80,
     },
   });
 
@@ -93,35 +141,101 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
 
   // Battery Type toggle (Lead Acid vs Lit Ion)
   const handleBatteryTypeToggle = (modelId: string, type: BatteryType) => {
-    setSelections((prev) => ({
-      ...prev,
-      [modelId]: {
-        ...prev[modelId],
-        batteryType: type,
-      },
-    }));
+    if (syncBatteryAcrossModels) {
+      setSelections((prev) => {
+        const next = { ...prev };
+        Object.keys(next).forEach((key) => {
+          const isChoked = (key === "vista" || key === "glider") && next[key].lithiumRange > 100;
+          next[key] = {
+            ...next[key],
+            batteryType: type,
+            lithiumRange: isChoked ? 100 : next[key].lithiumRange,
+          };
+        });
+        return next;
+      });
+    } else {
+      setSelections((prev) => ({
+        ...prev,
+        [modelId]: {
+          ...prev[modelId],
+          batteryType: type,
+        },
+      }));
+    }
   };
 
   // Lead Acid Battery Count select (4, 5, 6 batteries)
   const handleLeadAcidCountChange = (modelId: string, count: number) => {
-    setSelections((prev) => ({
-      ...prev,
-      [modelId]: {
-        ...prev[modelId],
-        leadAcidCount: count,
-      },
-    }));
+    if (syncBatteryAcrossModels) {
+      setSelections((prev) => {
+        const next = { ...prev };
+        Object.keys(next).forEach((key) => {
+          next[key] = {
+            ...next[key],
+            batteryType: "LA",
+            leadAcidCount: count,
+          };
+        });
+        return next;
+      });
+    } else {
+      setSelections((prev) => ({
+        ...prev,
+        [modelId]: {
+          ...prev[modelId],
+          batteryType: "LA",
+          leadAcidCount: count,
+        },
+      }));
+    }
   };
 
   // Lithium Range select (60, 80, 100, 120, 145, 180)
   const handleLithiumRangeChange = (modelId: string, rangeKm: number) => {
-    setSelections((prev) => ({
-      ...prev,
-      [modelId]: {
-        ...prev[modelId],
-        lithiumRange: rangeKm,
-      },
-    }));
+    if (syncBatteryAcrossModels) {
+      setSelections((prev) => {
+        const next = { ...prev };
+        Object.keys(next).forEach((key) => {
+          // Vista and Glider compartments cannot accommodate >100km packs
+          const isChoked = (key === "vista" || key === "glider") && rangeKm > 100;
+          next[key] = {
+            ...next[key],
+            batteryType: "LI",
+            lithiumRange: isChoked ? 100 : rangeKm,
+          };
+        });
+        return next;
+      });
+    } else {
+      setSelections((prev) => ({
+        ...prev,
+        [modelId]: {
+          ...prev[modelId],
+          batteryType: "LI",
+          lithiumRange: rangeKm,
+        },
+      }));
+    }
+  };
+
+  // Explicitly apply one model's battery setup across all fleet models
+  const handleApplyToAllModels = (sourceModelId: string) => {
+    const src = selections[sourceModelId];
+    if (!src) return;
+    setSelections((prev) => {
+      const next = { ...prev };
+      Object.keys(next).forEach((key) => {
+        const isChoked = (key === "vista" || key === "glider") && src.lithiumRange > 100;
+        next[key] = {
+          ...next[key],
+          batteryType: src.batteryType,
+          leadAcidCount: src.leadAcidCount,
+          lithiumRange: isChoked ? 100 : src.lithiumRange,
+        };
+      });
+      return next;
+    });
   };
 
   // Calculate current range for displaying
@@ -166,7 +280,7 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Title */}
-        <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-5">
           <span className="text-xs font-mono uppercase bg-slate-200/60 text-slate-700 border border-slate-300 px-3.5 py-1.5 rounded-full font-bold">
             {siteSections?.fleetBadge || "India's Leading RTO-Free Fleet"}
           </span>
@@ -176,6 +290,144 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
           <p className="text-slate-600 text-sm font-normal font-sans max-w-lg mx-auto">
             {siteSections?.fleetSubtitle || "Zero registration. Zero license requirements. Zero road tax. Base models start from Vista, up to our flagship Phantom Top Model. Customize exactly to your required budget and range."}
           </p>
+
+          {/* Real-time Fleet Battery & Price Sync Toolbar */}
+          <div className="bg-white/90 backdrop-blur-sm border border-slate-200/90 shadow-md rounded-2xl p-4 sm:p-5 text-left space-y-3.5 mt-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                  <Zap size={16} />
+                </div>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">
+                    Fleet Battery &amp; Real-time Price Customizer
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Change battery type or range here or on any card below to dynamically update prices across all models
+                  </p>
+                </div>
+              </div>
+
+              {/* Sync Toggle */}
+              <button
+                type="button"
+                onClick={() => setSyncBatteryAcrossModels((prev) => !prev)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer select-none self-start sm:self-auto ${
+                  syncBatteryAcrossModels
+                    ? "bg-emerald-50 border-emerald-300 text-emerald-800 shadow-xs"
+                    : "bg-slate-100 border-slate-250 text-slate-600 hover:bg-slate-200"
+                }`}
+                title="When enabled, changing battery type or pack updates the price across all models together for instant comparison"
+              >
+                <RefreshCw size={13} className={syncBatteryAcrossModels ? "text-emerald-600 animate-spin-slow" : "text-slate-400"} />
+                <span>Sync All Models:</span>
+                <span className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-mono ${syncBatteryAcrossModels ? "bg-emerald-600 text-white font-black" : "bg-slate-300 text-slate-700"}`}>
+                  {syncBatteryAcrossModels ? "ON" : "OFF"}
+                </span>
+              </button>
+            </div>
+
+            {/* Quick Fleet Selectors */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              {/* Battery Type switch */}
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider shrink-0">
+                  Battery:
+                </span>
+                <div className="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSyncBatteryAcrossModels(true);
+                      handleBatteryTypeToggle("vista", "LA");
+                    }}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
+                      selections.vista?.batteryType === "LA"
+                        ? "bg-slate-900 text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Lead Acid (LA)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSyncBatteryAcrossModels(true);
+                      handleBatteryTypeToggle("vista", "LI");
+                    }}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
+                      selections.vista?.batteryType === "LI"
+                        ? "bg-slate-900 text-white shadow-xs"
+                        : "text-slate-600 hover:text-slate-900"
+                    }`}
+                  >
+                    Lithium Ion (LI)
+                  </button>
+                </div>
+              </div>
+
+              {/* Range quick options */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider shrink-0">
+                  Range:
+                </span>
+                {selections.vista?.batteryType === "LA" ? (
+                  <div className="flex gap-1.5 flex-wrap">
+                    {[
+                      { count: 4, label: "48 KM (4 Bat)", delta: "-₹4k" },
+                      { count: 5, label: "60 KM (5 Bat)", delta: "Base" },
+                      { count: 6, label: "72 KM (6 Bat)", delta: "+₹5k" },
+                    ].map((item) => (
+                      <button
+                        key={item.count}
+                        type="button"
+                        onClick={() => {
+                          setSyncBatteryAcrossModels(true);
+                          handleLeadAcidCountChange("vista", item.count);
+                        }}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all border cursor-pointer ${
+                          selections.vista?.leadAcidCount === item.count
+                            ? "bg-slate-900 border-slate-900 text-white shadow-xs"
+                            : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        <span className="text-[10px] ml-1 opacity-75 font-mono">({item.delta})</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex gap-1.5 flex-wrap">
+                    {[
+                      { range: 60, delta: "+₹12k" },
+                      { range: 80, delta: "+₹18k" },
+                      { range: 100, delta: "+₹25k" },
+                      { range: 120, delta: "+₹32k" },
+                      { range: 145, delta: "+₹40k" },
+                      { range: 180, delta: "+₹49k" },
+                    ].map((item) => (
+                      <button
+                        key={item.range}
+                        type="button"
+                        onClick={() => {
+                          setSyncBatteryAcrossModels(true);
+                          handleLithiumRangeChange("vista", item.range);
+                        }}
+                        className={`px-2 py-1 rounded-lg text-xs font-bold transition-all border cursor-pointer ${
+                          selections.vista?.lithiumRange === item.range
+                            ? "bg-slate-900 border-slate-900 text-white shadow-xs"
+                            : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>{item.range} KM</span>
+                        <span className="text-[10px] ml-1 opacity-75 font-mono">({item.delta})</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Fleet cards layout */}
@@ -188,6 +440,7 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
               lithiumRange: 80,
             };
             const currentParams = getCurrentParams(model);
+            const priceInfo = getModelConfiguredPrice(model, config);
             const activePhoto = getModelActivePhoto(model, config.selectedColor);
             const selectedColorObj = model.colors.find((c) => c.name === config.selectedColor) || model.colors[0];
 
@@ -268,11 +521,23 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
                     </div>
                     <div className="text-right">
                       <span className="text-slate-400 text-[10px] uppercase font-mono tracking-widest block font-bold">
-                        Base Est. Starts
+                        {priceInfo.hasModifier ? "Configured Price" : "Base Est. Starts"}
                       </span>
-                      <span className="text-xl sm:text-2xl font-black text-slate-805 font-sans text-slate-800">
-                        {model.basePriceEstimate} *
+                      <span className="text-xl sm:text-2xl font-black text-slate-805 font-sans text-slate-800 transition-colors">
+                        {priceInfo.formatted} *
                       </span>
+                      {priceInfo.hasModifier ? (
+                        <span className="text-[10px] font-mono block text-slate-400">
+                          <span className="line-through mr-1">{model.basePriceEstimate}</span>
+                          <span className={priceInfo.modifier > 0 ? "text-emerald-600 font-bold" : "text-amber-600 font-bold"}>
+                            {priceInfo.modifier > 0 ? `(+₹${priceInfo.modifier.toLocaleString("en-IN")})` : `(-₹${Math.abs(priceInfo.modifier).toLocaleString("en-IN")})`}
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-slate-400 font-mono block">
+                          Base 60V SLA Pack
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -358,22 +623,26 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
                       <div className="space-y-3">
                         <div className="grid grid-cols-3 gap-2.5">
                           {[
-                             { count: 4, range: 48, label: "4 Batteries" },
-                             { count: 5, range: 60, label: "5 Batteries" },
-                             { count: 6, range: 72, label: "6 Batteries" },
+                             { count: 4, range: 48, label: "4 Batteries", delta: "-₹4,000" },
+                             { count: 5, range: 60, label: "5 Batteries", delta: "Base Price" },
+                             { count: 6, range: 72, label: "6 Batteries", delta: "+₹5,000" },
                           ].map((item) => (
                             <button
                               key={item.count}
+                              type="button"
                               onClick={() => handleLeadAcidCountChange(model.id, item.count)}
                               className={`p-2.5 rounded-xl border transition-all text-center cursor-pointer ${
                                 config.leadAcidCount === item.count
-                                  ? "border-slate-800 bg-slate-100 text-slate-800 scale-[1.02]"
+                                  ? "border-slate-800 bg-slate-100 text-slate-800 scale-[1.02] shadow-xs"
                                   : "border-slate-200 bg-white hover:bg-slate-50 text-slate-600"
                               }`}
                             >
                               <div className="font-sans font-black text-sm">{item.range} KM</div>
                               <div className="text-[10px] opacity-70 mt-0.5 leading-none">
                                 {item.label}
+                              </div>
+                              <div className={`text-[9px] font-mono mt-1 font-bold ${item.count === 4 ? "text-amber-600" : item.count === 6 ? "text-emerald-600" : "text-slate-400"}`}>
+                                {item.delta}
                               </div>
                             </button>
                           ))}
@@ -383,20 +652,28 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
                        /* Lithium Ion Range layout with Vista/Glider size constraints! */
                       <div className="space-y-3">
                         <div className="grid grid-cols-3 gap-2.5">
-                          {[60, 80, 100, 120, 145, 180].map((rangeVal) => {
+                          {[
+                            { rangeVal: 60, delta: "+₹12,000" },
+                            { rangeVal: 80, delta: "+₹18,000" },
+                            { rangeVal: 100, delta: "+₹25,000" },
+                            { rangeVal: 120, delta: "+₹32,000" },
+                            { rangeVal: 145, delta: "+₹40,000" },
+                            { rangeVal: 180, delta: "+₹49,000" },
+                          ].map(({ rangeVal, delta }) => {
                             // Size limit constraint check
                             const isChoking = isVistaOrGlider && [120, 145, 180].includes(rangeVal);
 
                             return (
                               <button
                                 key={rangeVal}
+                                type="button"
                                 disabled={isChoking}
                                 onClick={() => handleLithiumRangeChange(model.id, rangeVal)}
                                 className={`p-2.5 rounded-xl border transition-all text-center relative ${
                                   isChoking
                                     ? "border-slate-200 bg-slate-100 text-slate-300 cursor-not-allowed opacity-40"
                                     : config.lithiumRange === rangeVal
-                                    ? "border-slate-700 bg-slate-100/50 text-slate-800 scale-[1.02] cursor-pointer"
+                                    ? "border-slate-700 bg-slate-100/50 text-slate-800 scale-[1.02] cursor-pointer shadow-xs"
                                     : "border-slate-200 bg-white hover:bg-slate-50 text-slate-600 cursor-pointer"
                                 }`}
                               >
@@ -404,6 +681,11 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
                                 <div className="text-[10px] opacity-70 mt-0.5 leading-none">
                                   Single Pack
                                 </div>
+                                {!isChoking && (
+                                  <div className="text-[9px] font-mono mt-1 font-bold text-emerald-600">
+                                    {delta}
+                                  </div>
+                                )}
                               </button>
                             );
                           })}
@@ -447,6 +729,23 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
                         </span>
                         <strong className="text-slate-800 text-xs font-bold">Sine Wave 60V</strong>
                       </div>
+                    </div>
+
+                    {/* Sync status & Apply to all indicator */}
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-200/80">
+                      <span className="flex items-center gap-1.5 font-medium text-[11px] text-slate-600">
+                        <RefreshCw size={11} className={syncBatteryAcrossModels ? "text-emerald-600 animate-spin-slow" : "text-slate-400"} />
+                        <span>{syncBatteryAcrossModels ? "Battery & price synced across fleet" : "Configured individually"}</span>
+                      </span>
+                      {!syncBatteryAcrossModels && (
+                        <button
+                          type="button"
+                          onClick={() => handleApplyToAllModels(model.id)}
+                          className="text-[10px] font-bold text-slate-800 hover:text-emerald-600 transition-colors cursor-pointer underline"
+                        >
+                          Apply to all models &rarr;
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
