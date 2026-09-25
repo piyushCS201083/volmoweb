@@ -89,25 +89,28 @@ You can deploy the Front-End and Back-End to two completely different hosting pr
 
 ### B. Deploying the Frontend Separately on Vercel (Vite SPA)
 
-> ⚠️ **CRITICAL: Root Directory Setting**
-> Do **NOT** select `src` as the Root Directory in Vercel!
-> The Root Directory **must be `./` (the repository root)** because `package.json`, `index.html`, and `vite.config.ts` are located at the root of the project. If you select `src`, Vercel will not find `index.html` or dependencies and will show **"This page does not exist (404 NOT_FOUND)"**.
+> ⚠️ **CRITICAL: Vercel Settings Configuration**
+> 1. **Root Directory**: Leave blank or set to `./` (the repository root). Do **NOT** set it to `src`.
+> 2. **Build & Development Settings**:
+>    - **Framework Preset**: Select **Vite** (Vercel automatically sets Build Command to `vite build` and Output Directory to `dist`).
+>    - **Overrides (Toggles)**: **Turn OFF (disable)** all "Override" switches for *Build Command*, *Output Directory*, and *Install Command*. Leaving them to default allows Vercel's native Vite preset to automatically locate `dist`.
 
 1. In Vercel, import your repository: `piyushCS201083/volmoweb`
-2. In the **Configure Project** screen:
-   - **Framework Preset**: `Vite` (automatically detected thanks to `vercel.json`)
-   - **Root Directory**: `./` (leave as default root, **NOT** `src`)
-   - **Build Command**: `npm run build` (or leave default `vite build`)
-   - **Output Directory**: `dist` (default)
+2. In the **Configure Project** (or **Settings > General > Build & Development Settings**) screen:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `./` (default root)
+   - **Build Command**: Toggle OFF (uses default `vite build`)
+   - **Output Directory**: Toggle OFF (uses default `dist`)
+   - **Install Command**: Toggle OFF (uses default `npm install`)
    - **Environment Variables**:
      - `VITE_API_URL`: `https://volmoweb-1.onrender.com` (Your deployed Render backend URL)
 
 3. **Vercel Routing (`vercel.json`)**:
-   A `vercel.json` file is included in the project repository. It automatically:
+   A `vercel.json` file is configured in the repository root. It automatically:
    - Directs all page navigation and refreshes to `index.html` (preventing 404s on reload).
-   - Reverse-proxies `/api/*` requests directly to `https://volmoweb-1.onrender.com/api/*` as an added safeguard.
+   - Reverse-proxies `/api/*` requests directly to `https://volmoweb-1.onrender.com/api/$1` as an added safeguard.
 
-4. Click **Deploy**. Your frontend will build and go live with zero 404 errors!
+4. Click **Deploy** (or **Redeploy**). Your frontend will build and go live smoothly!
 
 ---
 
