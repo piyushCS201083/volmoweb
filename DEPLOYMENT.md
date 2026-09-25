@@ -92,23 +92,23 @@ You can deploy the Front-End and Back-End to two completely different hosting pr
 > ⚠️ **CRITICAL: Vercel Settings Configuration**
 > 1. **Root Directory**: Leave blank or set to `./` (the repository root). Do **NOT** set it to `src`.
 > 2. **Build & Development Settings**:
->    - **Framework Preset**: Select **Vite** (Vercel automatically sets Build Command to `vite build` and Output Directory to `dist`).
->    - **Overrides (Toggles)**: **Turn OFF (disable)** all "Override" switches for *Build Command*, *Output Directory*, and *Install Command*. Leaving them to default allows Vercel's native Vite preset to automatically locate `dist`.
+>    - **Framework Preset**: Select **Vite**
+>    - **Build Command**: `npm run build` (or leave default, controlled by `vercel.json`)
+>    - **Output Directory**: `dist`
+>    - **Install Command**: `npm install` (controlled by `vercel.json`)
 
 1. In Vercel, import your repository: `piyushCS201083/volmoweb`
 2. In the **Configure Project** (or **Settings > General > Build & Development Settings**) screen:
    - **Framework Preset**: `Vite`
    - **Root Directory**: `./` (default root)
-   - **Build Command**: Toggle OFF (uses default `vite build`)
-   - **Output Directory**: Toggle OFF (uses default `dist`)
-   - **Install Command**: Toggle OFF (uses default `npm install`)
    - **Environment Variables**:
      - `VITE_API_URL`: `https://volmoweb-1.onrender.com` (Your deployed Render backend URL)
 
-3. **Vercel Routing (`vercel.json`)**:
-   A `vercel.json` file is configured in the repository root. It automatically:
-   - Directs all page navigation and refreshes to `index.html` (preventing 404s on reload).
-   - Reverse-proxies `/api/*` requests directly to `https://volmoweb-1.onrender.com/api/$1` as an added safeguard.
+3. **Vercel Automation (`vercel.json` & `package.json`)**:
+   - `package.json` includes both `"build": "vite build"` and `"vercel-build": "vite build"`.
+   - `vercel.json` explicitly defines `"installCommand": "npm install"`, `"buildCommand": "npm run build"`, and `"outputDirectory": "dist"`.
+   - Automatically handles single-page app (SPA) URL rewrites to `/index.html`.
+   - Reverse-proxies `/api/*` requests directly to `https://volmoweb-1.onrender.com/api/$1`.
 
 4. Click **Deploy** (or **Redeploy**). Your frontend will build and go live smoothly!
 
