@@ -70,24 +70,63 @@ npm start
 
 You can deploy the Front-End and Back-End to two completely different hosting providers (e.g., Frontend on **Vercel / Netlify / Cloudflare Pages** and Backend on **Render / Railway / Cloud Run / VPS**).
 
-### A. Deploying the Backend Separately on Render (Web Service)
+### A. Deploying Frontend on Render (Recommended: Static Site)
 
-1. In Render, create a new **Web Service** connected to your repository (`piyushCS201083/volmoweb`).
-2. Configure settings:
+Render provides a dedicated **Static Site** service type that is 100% free, lightning fast on global CDN, and doesn't run `npm start` at all.
+
+1. In the Render Dashboard, click **New +** > **Static Site**.
+2. Connect your GitHub repository (`piyushCS201083/volmoweb`).
+3. Set the following exact configuration:
+   - **Name**: `volmo-frontend`
+   - **Branch**: `main`
+   - **Root Directory**: Leave blank or enter `./` (the root directory where `package.json` and `index.html` reside)
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
+4. In **Redirects / Rewrites** (or under Settings):
+   - Add rewrite rule:
+     - **Source**: `/*`
+     - **Destination**: `/index.html`
+     - **Action**: `Rewrite`
+5. In **Environment Variables**:
+   - `VITE_API_URL`: Your backend URL (e.g., `https://volmoweb-1.onrender.com` or leave empty if using unified service)
+6. Click **Create Static Site**.
+
+---
+
+### B. Deploying Full-Stack / Frontend as a Web Service on Render
+
+If you created a **Web Service** instead of a Static Site on Render:
+
+1. In Render, go to your **Web Service** > **Settings**:
+   - **Root Directory**: Leave blank or `./` (Do NOT set to `src`).
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+   - **Environment Variables**:
+     - `NODE_ENV`: `production`
+     - `PORT`: `10000` (or leave default, Render sets `PORT` automatically)
+2. Render runs `npm start`, which executes `node server.ts`. The server automatically serves the compiled `dist/` frontend Single Page App!
+
+---
+
+### C. Deploying the Standalone Backend on Render (Web Service)
+
+1. In Render, click **New +** > **Web Service**.
+2. Connect your repository.
+3. Configure settings:
    - **Root Directory**: `server`
    - **Environment**: `Node`
    - **Build Command**: `npm install`
-   - **Start Command**: `npm start` (or `npx tsx server.ts`)
+   - **Start Command**: `npm start`
    - **Environment Variables**:
-     - `NODE_VERSION`: `20` or `22` or `24`
-     - `CORS_ORIGIN`: `*` (or your frontend Vercel/Netlify URL)
+     - `NODE_VERSION`: `20`
+     - `CORS_ORIGIN`: `*` (or your frontend URL)
+     - `NOTIFICATION_EMAIL`: `piyushshivhare083@gmail.com`
      - `ADMIN_PASSWORD`: Your custom admin password
-3. Render will now start the server smoothly without any missing module errors!
+4. Render starts the backend API on port 10000.
 
-2. Once deployed, note your backend URL:
-   `https://volmoweb-1.onrender.com`
+---
 
-### B. Deploying the Frontend Separately on Vercel (Vite SPA)
+### D. Deploying the Frontend Separately on Vercel (Vite SPA)
 
 > ⚠️ **CRITICAL: Vercel Settings Configuration**
 > 1. **Root Directory**: Leave blank or set to `./` (the repository root). Do **NOT** set it to `src`.

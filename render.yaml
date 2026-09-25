@@ -1,0 +1,43 @@
+# Render Blueprint specification for Volmo Electric
+# https://render.com/docs/blueprint-spec
+
+services:
+  # 1. Full-Stack / Backend Node Web Service
+  - type: web
+    name: volmo-backend
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: .
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: NOTIFICATION_EMAIL
+        value: piyushshivhare083@gmail.com
+      - key: COMPANY_MAIL_FROM
+        value: sales@volmoelectrical.com
+
+  # 2. Static Site Frontend (Vite SPA) - Zero cost, CDN hosted on Render
+  - type: static
+    name: volmo-frontend
+    plan: free
+    region: oregon
+    rootDir: .
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
