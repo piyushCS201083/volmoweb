@@ -139,8 +139,14 @@ export default function App() {
       setIsAdminOpen(true);
     }
 
+    const handleOpenDealer = () => setIsDealerOpen(true);
+    window.addEventListener("open-dealership-modal", handleOpenDealer);
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("open-dealership-modal", handleOpenDealer);
+    };
   }, []);
 
   return (

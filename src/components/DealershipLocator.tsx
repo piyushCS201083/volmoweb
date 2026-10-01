@@ -614,17 +614,15 @@ export default function DealershipLocator() {
                           <span>+91 {showroom.phone}</span>
                         </a>
 
-                        <button
-                          onClick={() => {
-                            alert(
-                              `Opening directions for ${showroom.city} Branch showroom. Full routing map will download in your browser!`
-                            );
-                          }}
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${showroom.name} ${showroom.address}`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="text-slate-700 hover:underline font-bold text-[10px] uppercase tracking-wide flex items-center gap-1 cursor-pointer"
                         >
                           <span>Get Route</span>
                           <ArrowRight size={10} />
-                        </button>
+                        </a>
                       </div>
                     </motion.div>
                   ))}
@@ -675,22 +673,17 @@ export default function DealershipLocator() {
             </div>
 
             <div className="pt-2">
-              <a
-                href="#apply-dealership"
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Dispatch global event or trigger click on applied buttons
-                  const btn = document.querySelector('[aria-label="Apply Dealership"]') || document.querySelector('button[onClick*="setIsDealerOpen"]');
-                  if (btn) {
-                    (btn as HTMLButtonElement).click();
-                  } else {
-                    alert("Please scroll up and click the Apply Dealership button in the main menu!");
-                  }
+              <button
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent("open-dealership-modal"));
+                  const btn = document.querySelector('[aria-label="Apply Dealership"]') as HTMLButtonElement | null;
+                  if (btn) btn.click();
                 }}
                 className="w-full py-3 bg-slate-805 hover:bg-slate-905 text-white font-bold rounded-xl transition-all cursor-pointer text-xs uppercase tracking-wider block text-center shadow-md"
               >
                 Apply for Dealership
-              </a>
+              </button>
             </div>
           </div>
         </div>

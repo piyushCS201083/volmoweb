@@ -48,7 +48,7 @@ export default function TestimonialsCMS({ onShowToast }: TestimonialsCMSProps) {
 
   const handleSave = (itemToSave: TestimonialItem) => {
     if (!itemToSave.name.trim() || !itemToSave.text.trim()) {
-      alert("Please provide at least a rider name and review text.");
+      onShowToast("Please provide at least a rider name and review text.");
       return;
     }
 

@@ -228,10 +228,12 @@ function ImageCustomizerField({
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const handleFileUpload = (file: File) => {
+    setUploadError(null);
     if (!file.type.startsWith("image/")) {
-      alert("Please upload a valid image file (PNG, JPG, WebP).");
+      setUploadError("Please upload a valid image file (PNG, JPG, WebP).");
       return;
     }
     const reader = new FileReader();
@@ -260,6 +262,10 @@ function ImageCustomizerField({
           </button>
         )}
       </div>
+
+      {uploadError && (
+        <p className="text-xs text-red-400 font-medium">{uploadError}</p>
+      )}
 
       <div className="flex flex-col sm:flex-row gap-4 items-center">
         {/* Preview box */}
@@ -802,7 +808,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     if (!modelForm) return;
 
     if (!modelForm.name.trim()) {
-      alert("Model name cannot be empty.");
+      showToast("Model name cannot be empty.");
       return;
     }
 
@@ -830,7 +836,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     if (!modelForm || !newColorName.trim()) return;
     const exists = modelForm.colors.some((c) => c.name.toLowerCase() === newColorName.trim().toLowerCase());
     if (exists) {
-      alert("Color name already exists.");
+      showToast("Color name already exists.");
       return;
     }
     setModelForm({
@@ -843,7 +849,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
   const handleRemoveColorFromModel = (index: number) => {
     if (!modelForm) return;
     if (modelForm.colors.length <= 1) {
-      alert("A scooter model must have at least 1 color.");
+      showToast("A scooter model must have at least 1 color.");
       return;
     }
     setModelForm({
@@ -2987,7 +2993,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                                 <button
                                   onClick={() => {
                                     if (featuresForm.length <= 1) {
-                                      alert("At least one feature card is required.");
+                                      showToast("At least one feature card is required.");
                                       return;
                                     }
                                     const updated = featuresForm.filter((_, i) => i !== idx);

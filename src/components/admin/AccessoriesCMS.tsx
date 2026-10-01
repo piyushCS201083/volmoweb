@@ -110,7 +110,7 @@ export default function AccessoriesCMS({ onShowToast }: AccessoriesCMSProps) {
     if (!editingItem) return;
 
     if (!editingItem.title.trim()) {
-      alert("Title is required.");
+      onShowToast("Title is required.");
       return;
     }
 

@@ -128,7 +128,7 @@ export default function MediaBlogsCMS({ onShowToast }: MediaBlogsCMSProps) {
   const handleSaveArticle = () => {
     if (!editingArticle) return;
     if (!editingArticle.title.trim()) {
-      alert("Article title cannot be empty.");
+      onShowToast("Article title cannot be empty.");
       return;
     }
 
@@ -173,7 +173,7 @@ export default function MediaBlogsCMS({ onShowToast }: MediaBlogsCMSProps) {
   const handleSavePhoto = () => {
     if (!editingPhoto) return;
     if (!editingPhoto.title.trim()) {
-      alert("Photo title cannot be empty.");
+      onShowToast("Photo title cannot be empty.");
       return;
     }
 
@@ -208,7 +208,7 @@ export default function MediaBlogsCMS({ onShowToast }: MediaBlogsCMSProps) {
   const handleSaveVideo = () => {
     if (!editingVideo) return;
     if (!editingVideo.title.trim()) {
-      alert("Video title cannot be empty.");
+      onShowToast("Video title cannot be empty.");
       return;
     }
 
@@ -250,7 +250,7 @@ export default function MediaBlogsCMS({ onShowToast }: MediaBlogsCMSProps) {
   const handleSaveCareer = () => {
     if (!editingCareer) return;
     if (!editingCareer.title.trim()) {
-      alert("Job title cannot be empty.");
+      onShowToast("Job title cannot be empty.");
       return;
     }
 

@@ -25,12 +25,14 @@ export default function ImageUploader({
   presets = PRESET_MEDIA_ASSETS,
 }: ImageUploaderProps) {
   const [dragOver, setDragOver] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (file: File) => {
     if (!file) return;
+    setUploadError(null);
     if (!file.type.startsWith("image/")) {
-      alert("Please upload a valid image file (PNG, JPG, WebP, SVG).");
+      setUploadError("Please upload a valid image file (PNG, JPG, WebP, SVG).");
       return;
     }
     const reader = new FileReader();
@@ -60,6 +62,9 @@ export default function ImageUploader({
           <span className="text-[10px] text-slate-500 font-mono">{helperText}</span>
         )}
       </div>
+      {uploadError && (
+        <p className="text-xs text-red-400 font-medium">{uploadError}</p>
+      )}
 
       {/* Visual Preview + Drop Zone */}
       <div className="flex flex-col sm:flex-row gap-3.5 items-stretch sm:items-center">

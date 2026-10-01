@@ -34,7 +34,7 @@ export default function FaqsCMS({ onShowToast }: FaqsCMSProps) {
 
   const handleSave = (itemToSave: FAQItem) => {
     if (!itemToSave.question.trim() || !itemToSave.answer.trim()) {
-      alert("Please provide both a question and answer.");
+      onShowToast("Please provide both a question and answer.");
       return;
     }
 

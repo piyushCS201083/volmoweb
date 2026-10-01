@@ -44,7 +44,7 @@ export default function ShowroomsCMS({ onShowToast }: ShowroomsCMSProps) {
 
   const handleSave = (itemToSave: ShowroomItem) => {
     if (!itemToSave.name.trim() || !itemToSave.address.trim()) {
-      alert("Please provide at least a showroom name and address.");
+      onShowToast("Please provide at least a showroom name and address.");
       return;
     }
 
