@@ -9,6 +9,7 @@ import leadsRoutes from "./leads";
 import configRoutes from "./config";
 import healthRoutes from "./health";
 import chatbotRoutes from "./chatbot";
+import uploadRoutes from "./upload";
 
 export const apiRouter = Router();
 
@@ -17,3 +18,4 @@ apiRouter.use("/leads", leadsRoutes);
 apiRouter.use("/config", configRoutes);
 apiRouter.use("/health", healthRoutes);
 apiRouter.use("/chatbot", chatbotRoutes);
+apiRouter.use("/upload", uploadRoutes);

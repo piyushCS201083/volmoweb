@@ -46,6 +46,7 @@ import {
   Eye,
   Settings2,
   Newspaper,
+  CloudUpload,
 } from "lucide-react";
 import { PriceInquiry, DealershipApp, ModelSpec, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
@@ -59,6 +60,7 @@ import BrandingCMS from "./admin/BrandingCMS";
 import AccessoriesCMS from "./admin/AccessoriesCMS";
 import BatteryChargerCMS from "./admin/BatteryChargerCMS";
 import MediaBlogsCMS from "./admin/MediaBlogsCMS";
+import SaveDataModal from "./admin/SaveDataModal";
 
 // Pre-packaged high-res scooter assets for 1-click selection
 const PRESET_ASSETS = [
@@ -375,6 +377,9 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     companyPhotosData,
     companyVideosData,
     careerOpeningsData,
+    accessoriesPageConfig,
+    batteryChargerPageConfig,
+    mediaBlogsPageConfig,
     updateSiteSections,
     addModelSpec,
     deleteModelSpec,
@@ -384,6 +389,33 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     updateContactInfo,
     resetAllToDefault,
   } = useSiteConfig();
+
+  // Save Data & GitHub Source Code Sync Modal State
+  const [isSaveDataModalOpen, setIsSaveDataModalOpen] = useState(false);
+
+  const currentFullConfig = {
+    models: modelsData,
+    pulse: pulseData,
+    features: commonFeatures,
+    contact: contactInfo,
+    hero: heroConfig,
+    branding: brandingConfig,
+    testimonials: testimonialsData,
+    showrooms: showroomsData,
+    faqs: faqsData,
+    sections: siteSections,
+    accessories: accessoriesData,
+    leadAcidBatteries: leadAcidBatteriesData,
+    lithiumBatteries: lithiumBatteriesData,
+    chargers: chargersData,
+    accessoriesPage: accessoriesPageConfig,
+    batteryChargerPage: batteryChargerPageConfig,
+    mediaArticles: mediaArticlesData,
+    companyPhotos: companyPhotosData,
+    companyVideos: companyVideosData,
+    careerOpenings: careerOpeningsData,
+    mediaBlogsPage: mediaBlogsPageConfig,
+  };
 
   // Authentication State & Founder Security Question Gate
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -961,6 +993,14 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                     >
                       <FileSpreadsheet size={13} className="text-emerald-400" />
                       Export Data
+                    </button>
+                    <button
+                      onClick={() => setIsSaveDataModalOpen(true)}
+                      title="Save Data & Commit to GitHub Source Code & Backend Server"
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-500 hover:to-amber-400 border border-orange-400/60 text-xs font-bold font-mono text-white rounded-xl shadow-lg shadow-orange-950/40 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <CloudUpload size={13} className="text-white" />
+                      Save Data
                     </button>
                     <button
                       onClick={handleFactoryReset}
@@ -3144,6 +3184,14 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                 </div>
               </div>
             )}
+
+            {/* Save Data & GitHub Source Code Sync Modal */}
+            <SaveDataModal
+              isOpen={isSaveDataModalOpen}
+              onClose={() => setIsSaveDataModalOpen(false)}
+              fullConfig={currentFullConfig}
+              onSuccessToast={(msg) => showToast(msg)}
+            />
           </motion.div>
         </div>
       )}

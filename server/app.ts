@@ -5,6 +5,8 @@
 
 import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
+import path from "path";
+import fs from "fs";
 import { SERVER_CONFIG } from "./config";
 import { apiRouter } from "./routes/index";
 
@@ -24,6 +26,20 @@ export function createExpressApp(): Express {
   // Body parsers with high limit for Base64 scooter photo uploads in the CMS
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
+  // Static directory for CMS uploaded images
+  const dataUploadsDir = path.join(SERVER_CONFIG.DATA_DIR, "uploads");
+  if (!fs.existsSync(dataUploadsDir)) {
+    try {
+      fs.mkdirSync(dataUploadsDir, { recursive: true });
+    } catch (e) {}
+  }
+  app.use("/uploads", express.static(dataUploadsDir));
+
+  const publicUploadsDir = path.resolve(process.cwd(), "public", "uploads");
+  if (fs.existsSync(publicUploadsDir)) {
+    app.use("/uploads", express.static(publicUploadsDir));
+  }
 
   // Mount API endpoints
   app.use("/api", apiRouter);

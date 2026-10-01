@@ -4,8 +4,9 @@
  */
 
 import React, { useState, useRef } from "react";
-import { Upload, Image as ImageIcon } from "lucide-react";
+import { Upload, Image as ImageIcon, Loader2, CheckCircle2, Cloud } from "lucide-react";
 import { PRESET_MEDIA_ASSETS } from "../../data";
+import { api } from "../../services/api";
 
 interface ImageUploaderProps {
   label: string;
@@ -26,20 +27,42 @@ export default function ImageUploader({
 }: ImageUploaderProps) {
   const [dragOver, setDragOver] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isUploadingServer, setIsUploadingServer] = useState(false);
+  const [serverStatus, setServerStatus] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileUpload = (file: File) => {
     if (!file) return;
     setUploadError(null);
+    setServerStatus(null);
+
     if (!file.type.startsWith("image/")) {
       setUploadError("Please upload a valid image file (PNG, JPG, WebP, SVG).");
       return;
     }
+
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       const result = e.target?.result as string;
       if (result) {
+        // Immediate local preview so the user sees their image instantaneously
         onChange(result);
+
+        // Also upload to Backend Server on Render right away to persist on disk
+        setIsUploadingServer(true);
+        try {
+          const res = await api.upload.uploadImage(result, file.name);
+          if (res && res.url) {
+            onChange(res.url);
+            setServerStatus(`✓ Saved to Render Backend Server (${res.url})`);
+          }
+        } catch (err: any) {
+          // If backend is unreachable or offline, base64 is retained as fallback
+          console.warn("[ImageUploader] Direct server upload fallback:", err.message);
+          setServerStatus("Saved locally. Click 'Save Data' in header to commit to GitHub & Server.");
+        } finally {
+          setIsUploadingServer(false);
+        }
       }
     };
     reader.readAsDataURL(file);
@@ -64,6 +87,34 @@ export default function ImageUploader({
       </div>
       {uploadError && (
         <p className="text-xs text-red-400 font-medium">{uploadError}</p>
+      )}
+
+      {isUploadingServer && (
+        <div className="flex items-center gap-1.5 text-xs text-orange-400 font-mono bg-orange-950/20 px-3 py-1.5 rounded-lg border border-orange-500/30">
+          <Loader2 size={12} className="animate-spin" />
+          Uploading &amp; saving image to Render backend server...
+        </div>
+      )}
+
+      {serverStatus && !isUploadingServer && (
+        <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono bg-emerald-950/20 px-3 py-1.5 rounded-lg border border-emerald-500/30">
+          <CheckCircle2 size={12} />
+          {serverStatus}
+        </div>
+      )}
+
+      {!serverStatus && !isUploadingServer && value && value.startsWith("/uploads/") && (
+        <div className="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-mono">
+          <CheckCircle2 size={11} />
+          Stored in backend server assets ({value})
+        </div>
+      )}
+
+      {!serverStatus && !isUploadingServer && value && value.startsWith("data:image/") && (
+        <div className="flex items-center gap-1.5 text-[11px] text-amber-400/90 font-mono">
+          <Cloud size={11} />
+          Image draft ready. Click &apos;Save Data&apos; in header to commit permanently to GitHub &amp; Render.
+        </div>
       )}
 
       {/* Visual Preview + Drop Zone */}

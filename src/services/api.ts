@@ -267,6 +267,36 @@ export const api = {
     },
   },
 
+  // ==========================================
+  // IMAGE & ASSET UPLOAD
+  // ==========================================
+  upload: {
+    async uploadImage(
+      image: string,
+      filename?: string
+    ): Promise<{ success: boolean; url: string; filename: string; size?: number }> {
+      return request<{ success: boolean; url: string; filename: string; size?: number }>("/api/upload/image", {
+        method: "POST",
+        body: JSON.stringify({ image, filename }),
+      });
+    },
+
+    async uploadBatch(
+      images: Array<{ image: string; filename?: string; id?: string | number }>
+    ): Promise<{
+      success: boolean;
+      results: Array<{ success: boolean; originalId?: string | number; url?: string; filename?: string; error?: string }>;
+    }> {
+      return request<{
+        success: boolean;
+        results: Array<{ success: boolean; originalId?: string | number; url?: string; filename?: string; error?: string }>;
+      }>("/api/upload/batch", {
+        method: "POST",
+        body: JSON.stringify({ images }),
+      });
+    },
+  },
+
   getBaseUrl(): string {
     return API_BASE_URL;
   },

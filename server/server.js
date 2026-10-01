@@ -337,6 +337,102 @@ app.put("/api/config", (req, res) => {
   }
 });
 
+// Static directory for CMS uploaded images
+const uploadsDir = path.join(dataDir, "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  try {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  } catch (e) {}
+}
+app.use("/uploads", express.static(uploadsDir));
+
+// Image Upload Endpoint (handles single and batch base64 uploads)
+app.post("/api/upload/image", (req, res) => {
+  try {
+    const { image, filename: preferredFilename } = req.body || {};
+    if (!image || typeof image !== "string") {
+      return res.status(400).json({ error: "Missing image data" });
+    }
+
+    const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ error: "Invalid Base64 image format. Expected data:image/...;base64,..." });
+    }
+
+    const mimeType = matches[1];
+    const buffer = Buffer.from(matches[2], "base64");
+    let ext = "png";
+    if (mimeType.includes("jpeg") || mimeType.includes("jpg")) ext = "jpg";
+    else if (mimeType.includes("webp")) ext = "webp";
+    else if (mimeType.includes("svg")) ext = "svg";
+
+    const timestamp = Date.now();
+    const safeName = preferredFilename
+      ? preferredFilename.replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase()
+      : `volmo_cms_${timestamp}`;
+    const filename = safeName.endsWith(`.${ext}`) ? safeName : `${safeName}.${ext}`;
+
+    const filePath = path.join(uploadsDir, filename);
+    fs.writeFileSync(filePath, buffer);
+
+    console.log(`[Upload API] Saved image ${filename} (${buffer.length} bytes) to ${filePath}`);
+
+    return res.json({
+      success: true,
+      url: `/uploads/${filename}`,
+      filename,
+      size: buffer.length,
+    });
+  } catch (error) {
+    console.error("[Upload API] Error saving image:", error);
+    return res.status(500).json({ error: error.message || "Failed to save image" });
+  }
+});
+
+app.post("/api/upload/batch", (req, res) => {
+  try {
+    const { images } = req.body || {};
+    if (!Array.isArray(images)) {
+      return res.status(400).json({ error: "Expected 'images' array in body" });
+    }
+
+    const results = images.map((item, idx) => {
+      if (!item.image || typeof item.image !== "string") {
+        return { success: false, error: "Missing image data" };
+      }
+      const matches = item.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (!matches) return { success: false, error: "Invalid Base64" };
+
+      const mimeType = matches[1];
+      const buffer = Buffer.from(matches[2], "base64");
+      let ext = "png";
+      if (mimeType.includes("jpeg") || mimeType.includes("jpg")) ext = "jpg";
+      else if (mimeType.includes("webp")) ext = "webp";
+      else if (mimeType.includes("svg")) ext = "svg";
+
+      const timestamp = Date.now() + idx;
+      const safeName = item.filename
+        ? item.filename.replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase()
+        : `volmo_cms_${timestamp}`;
+      const filename = safeName.endsWith(`.${ext}`) ? safeName : `${safeName}.${ext}`;
+
+      const filePath = path.join(uploadsDir, filename);
+      fs.writeFileSync(filePath, buffer);
+
+      return {
+        success: true,
+        originalId: item.id || idx,
+        url: `/uploads/${filename}`,
+        filename,
+      };
+    });
+
+    return res.json({ success: true, results });
+  } catch (error) {
+    return res.status(500).json({ error: error.message || "Batch upload failed" });
+  }
+});
+
 // Start Server
 app.listen(PORT, HOST, () => {
   console.log(`[Volmo Backend API] Server listening on http://${HOST}:${PORT} in ${NODE_ENV} mode`);
