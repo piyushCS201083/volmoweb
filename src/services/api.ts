@@ -5,9 +5,19 @@
 
 import { PriceInquiry, DealershipApp } from "../types";
 
-// Base API URL supports standalone frontend deployment via VITE_API_URL or defaults to same-origin backend
+// Live Render backend URL
+export const RENDER_BACKEND_URL = "https://volmoweb-2.onrender.com";
+
+const rawEnvUrl = ((import.meta as any).env?.VITE_API_URL as string) || "";
+// If the environment contains the legacy volmoweb-1 URL, automatically upgrade to volmoweb-2
+const effectiveEnvUrl = rawEnvUrl.includes("volmoweb-1.onrender.com") ? RENDER_BACKEND_URL : rawEnvUrl;
+
+// Base API URL supports standalone frontend deployment via VITE_API_URL or defaults to live Render backend
 export const API_BASE_URL = (
-  ((import.meta as any).env?.VITE_API_URL as string) || ""
+  effectiveEnvUrl ||
+  (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname.includes("run.app"))
+    ? ""
+    : RENDER_BACKEND_URL)
 ).replace(/\/$/, "");
 
 class ApiError extends Error {

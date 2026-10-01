@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://volmoweb-1.onrender.com/api/$1"
+      "destination": "https://volmoweb-2.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",

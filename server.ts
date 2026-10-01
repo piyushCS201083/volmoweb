@@ -95,10 +95,36 @@ async function startServer() {
       });
       console.log("[Prod Server] Serving static build from dist/");
     } else {
-      console.warn("[Prod Server] 'dist' folder not found. Please run 'npm run build' first.");
+      console.warn("[Prod Server] 'dist' folder not found. Serving as standalone backend API.");
+      app.get("/", (_req, res) => {
+        res.json({
+          service: "Volmo Electric Backend API",
+          status: "online",
+          timestamp: new Date().toISOString(),
+          endpoints: {
+            health: "/api/health",
+            auth: "/api/auth",
+            leads: "/api/leads",
+            config: "/api/config",
+          },
+        });
+      });
     }
   } else {
     console.log("[Standalone Mode] Running as dedicated backend API server");
+    app.get("/", (_req, res) => {
+      res.json({
+        service: "Volmo Electric Backend API",
+        status: "online",
+        timestamp: new Date().toISOString(),
+        endpoints: {
+          health: "/api/health",
+          auth: "/api/auth",
+          leads: "/api/leads",
+          config: "/api/config",
+        },
+      });
+    });
   }
 
   server.listen(SERVER_CONFIG.PORT, SERVER_CONFIG.HOST, () => {

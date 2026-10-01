@@ -88,7 +88,7 @@ Render provides a dedicated **Static Site** service type that is 100% free, ligh
      - **Destination**: `/index.html`
      - **Action**: `Rewrite`
 5. In **Environment Variables**:
-   - `VITE_API_URL`: Your backend URL (e.g., `https://volmoweb-1.onrender.com` or leave empty if using unified service)
+   - `VITE_API_URL`: Your backend URL (e.g., `https://volmoweb-2.onrender.com` or leave empty if using unified service)
 6. Click **Create Static Site**.
 
 ---
@@ -141,13 +141,13 @@ If you created a **Web Service** instead of a Static Site on Render:
    - **Framework Preset**: `Vite`
    - **Root Directory**: `./` (default root)
    - **Environment Variables**:
-     - `VITE_API_URL`: `https://volmoweb-1.onrender.com` (Your deployed Render backend URL)
+     - `VITE_API_URL`: `https://volmoweb-2.onrender.com` (Your deployed Render backend URL)
 
 3. **Vercel Automation (`vercel.json` & `package.json`)**:
    - `package.json` includes both `"build": "vite build"` and `"vercel-build": "vite build"`.
    - `vercel.json` explicitly defines `"installCommand": "npm install"`, `"buildCommand": "npm run build"`, and `"outputDirectory": "dist"`.
    - Automatically handles single-page app (SPA) URL rewrites to `/index.html`.
-   - Reverse-proxies `/api/*` requests directly to `https://volmoweb-1.onrender.com/api/$1`.
+   - Reverse-proxies `/api/*` requests directly to `https://volmoweb-2.onrender.com/api/$1`.
 
 4. Click **Deploy** (or **Redeploy**). Your frontend will build and go live smoothly!
 
