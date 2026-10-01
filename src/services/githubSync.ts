@@ -433,6 +433,108 @@ export async function syncAllDataToGitHubAndBackend(
       filesCommitted.push(clientConfigPath);
     }
 
+    // Commit 3: Ensure root package.json has 'start' script for Render/production deployment
+    const rootPackageJson = JSON.stringify(
+      {
+        name: "volmo-electric",
+        private: true,
+        version: "0.0.0",
+        type: "module",
+        scripts: {
+          dev: "tsx server.ts",
+          build: "vite build",
+          "vercel-build": "vite build",
+          start: "node server.ts",
+          "start:backend": "node server/server.js",
+          backend: "node server/server.js",
+          preview: "vite preview",
+          clean: "rm -rf dist server.js",
+          lint: "tsc --noEmit",
+        },
+        dependencies: {
+          "@google/genai": "^2.4.0",
+          "@tailwindcss/vite": "^4.1.14",
+          "@vitejs/plugin-react": "^5.0.4",
+          autoprefixer: "^10.4.21",
+          cors: "^2.8.6",
+          dotenv: "^17.2.3",
+          esbuild: "^0.25.0",
+          express: "^4.21.2",
+          "lucide-react": "^0.546.0",
+          motion: "^12.23.24",
+          nodemailer: "^10.0.10",
+          react: "^19.0.1",
+          "react-dom": "^19.0.1",
+          tailwindcss: "^4.1.14",
+          tsx: "^4.21.0",
+          typescript: "~5.8.2",
+          vite: "^6.2.3",
+        },
+        devDependencies: {
+          "@types/cors": "^2.8.19",
+          "@types/express": "^4.17.21",
+          "@types/node": "^22.14.0",
+          "@types/nodemailer": "^8.0.2",
+        },
+      },
+      null,
+      2
+    );
+
+    const commitPkg = await commitFileToGitHub(
+      auth.token,
+      auth.repo,
+      "package.json",
+      utf8ToBase64(rootPackageJson),
+      "Fix: Ensure start script in package.json for Render deployment",
+      auth.branch
+    );
+    if (commitPkg.success) {
+      filesCommitted.push("package.json");
+    }
+
+    // Commit 4: Ensure server/package.json has 'start' script
+    const serverPackageJson = JSON.stringify(
+      {
+        name: "volmo-backend-api",
+        version: "1.0.0",
+        description: "Standalone backend server for Volmo Electric",
+        main: "server.js",
+        type: "module",
+        scripts: {
+          start: "node server.js",
+          dev: "node server.js",
+          build: "echo 'Ready'",
+        },
+        dependencies: {
+          cors: "^2.8.5",
+          dotenv: "^17.2.3",
+          express: "^4.21.2",
+          nodemailer: "^10.0.10",
+        },
+        devDependencies: {
+          "@types/cors": "^2.8.17",
+          "@types/express": "^4.17.21",
+          "@types/node": "^22.14.0",
+          "@types/nodemailer": "^8.0.2",
+        },
+      },
+      null,
+      2
+    );
+
+    const commitServerPkg = await commitFileToGitHub(
+      auth.token,
+      auth.repo,
+      "server/package.json",
+      utf8ToBase64(serverPackageJson),
+      "Fix: Ensure start script in server/package.json for Render",
+      auth.branch
+    );
+    if (commitServerPkg.success) {
+      filesCommitted.push("server/package.json");
+    }
+
     onProgress?.({
       step: "done",
       message: "Sync complete! GitHub source code updated & auto-deploy triggered.",
