@@ -502,7 +502,7 @@ Please share partnership brochure and next onboarding steps.`;
 
                       <button
                         type="submit"
-                        className="flex items-center gap-2 bg-slate-805 hover:bg-slate-905 text-white font-bold px-6 py-3.5 rounded-xl shadow-md active:scale-[0.98] transition-all cursor-pointer text-xs uppercase tracking-widest"
+                        className="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-orange-600/25 active:scale-[0.98] transition-all cursor-pointer text-xs uppercase tracking-widest"
                       >
                         <span>Submit Application</span>
                         <Send size={13} />
