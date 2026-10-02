@@ -539,6 +539,34 @@ export async function syncAllDataToGitHubAndBackend(
       filesCommitted.push("server/package.json");
     }
 
+    // Commit 5: Fallback wrapper server/server/server.js in case Render RootDir is 'server' and StartCommand is 'node server/server.js'
+    const nestedServerJs = `import "../server.js";\n`;
+    const commitNestedServer = await commitFileToGitHub(
+      auth.token,
+      auth.repo,
+      "server/server/server.js",
+      utf8ToBase64(nestedServerJs),
+      "Fix: Add fallback server/server/server.js for Render Root Directory",
+      auth.branch
+    );
+    if (commitNestedServer.success) {
+      filesCommitted.push("server/server/server.js");
+    }
+
+    // Commit 6: Cloudinary environment sanitizer
+    const cloudinaryEnvJs = `import dotenv from "dotenv";\ndotenv.config();\nconst fallbackUrl = "cloudinary://458683116565521:doPaTXHlqqd9OeIMCNxj-rnpxrI@oz1mkn2s";\nif (process.env.CLOUDINARY_URL) {\n  let val = process.env.CLOUDINARY_URL.trim();\n  if (val.startsWith("CLOUDINARY_URL=")) val = val.substring("CLOUDINARY_URL=".length).trim();\n  val = val.replace(/^[\\"\']|[\\"\']$/g, "");\n  if (!val.startsWith("cloudinary://") || val.includes("<your_api_key>")) process.env.CLOUDINARY_URL = fallbackUrl;\n  else process.env.CLOUDINARY_URL = val;\n} else {\n  process.env.CLOUDINARY_URL = fallbackUrl;\n}\n`;
+    const commitCloudinaryEnv = await commitFileToGitHub(
+      auth.token,
+      auth.repo,
+      "server/cloudinaryEnv.js",
+      utf8ToBase64(cloudinaryEnvJs),
+      "Fix: Add Cloudinary environment sanitizer",
+      auth.branch
+    );
+    if (commitCloudinaryEnv.success) {
+      filesCommitted.push("server/cloudinaryEnv.js");
+    }
+
     onProgress?.({
       step: "done",
       message: "Sync complete! GitHub source code updated & auto-deploy triggered.",

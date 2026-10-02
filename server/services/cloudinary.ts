@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import "../cloudinaryEnv.js";
 import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import { CLOUDINARY_CONFIG } from "../config";
 

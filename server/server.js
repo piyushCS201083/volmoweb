@@ -6,6 +6,7 @@
  * This runs directly with native Node.js (node server.js).
  */
 
+import "./cloudinaryEnv.js";
 import express from "express";
 import cors from "cors";
 import nodemailer from "nodemailer";
