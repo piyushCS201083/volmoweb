@@ -347,9 +347,13 @@ export async function syncAllDataToGitHubAndBackend(
         detail: `Uploading to backend server & committing to public/uploads/${img.suggestedName}`,
       });
 
-      // A) Save to backend server on Render
+      // A) Save to backend server on Render & Cloudinary Cloud Storage
+      let permanentUrl = `/uploads/${img.suggestedName}`;
       try {
-        await api.upload.uploadImage(img.dataUrl, img.suggestedName);
+        const uploadRes = await api.upload.uploadImage(img.dataUrl, img.suggestedName);
+        if (uploadRes && uploadRes.url) {
+          permanentUrl = uploadRes.url;
+        }
       } catch (err: any) {
         console.warn(`[Sync] Backend upload warning for ${img.suggestedName}:`, err.message);
       }
@@ -371,23 +375,23 @@ export async function syncAllDataToGitHubAndBackend(
         if (imgCommit.sha) lastCommitSha = imgCommit.sha;
       }
 
-      // C) Update clean URL in configuration
-      const permanentUrl = `/uploads/${img.suggestedName}`;
+      // C) Update clean URL in configuration (Cloudinary CDN URL or /uploads/ path)
       setDeepValue(cleanedConfig, img.keyPath, permanentUrl);
     }
 
     // Step 4: Save cleaned config to Backend server on Render
     onProgress?.({
       step: "backend",
-      message: "Saving configuration to Render Backend server...",
+      message: "Saving configuration to Render Backend & Cloud Database...",
       progressPercent: 75,
-      detail: `Updating live database at ${api.getBaseUrl() || "same-origin"}`,
+      detail: `Updating database at ${api.getBaseUrl() || "same-origin"} and Cloudinary (oz1mkn2s)...`,
     });
 
     try {
       await api.config.saveConfig(cleanedConfig);
+      await api.cloudinary.syncAllToCloud();
     } catch (err: any) {
-      console.warn("[Sync] Backend config save warning:", err.message);
+      console.warn("[Sync] Cloud sync notice:", err.message);
     }
 
     // Step 5: Commit config JSON directly to GitHub repository

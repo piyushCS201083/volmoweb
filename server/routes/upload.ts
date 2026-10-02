@@ -7,6 +7,7 @@ import { Router, Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 import { SERVER_CONFIG } from "../config";
+import { uploadImageToCloudinary, CLOUDINARY_FOLDERS } from "../services/cloudinary";
 
 const router = Router();
 
@@ -48,7 +49,7 @@ function parseBase64Image(dataString: string): { mimeType: string; extension: st
 }
 
 // POST /api/upload/image
-router.post("/image", (req: Request, res: Response) => {
+router.post("/image", async (req: Request, res: Response) => {
   try {
     const { image, filename: preferredFilename } = req.body;
     if (!image || typeof image !== "string") {
@@ -66,23 +67,41 @@ router.post("/image", (req: Request, res: Response) => {
       : `volmo_cms_${timestamp}`;
     const filename = safeName.endsWith(`.${parsed.extension}`) ? safeName : `${safeName}.${parsed.extension}`;
 
-    // Write to server data uploads
+    // Write to server data uploads as local fallback
     const destPathData = path.join(dataUploadsDir, filename);
     fs.writeFileSync(destPathData, parsed.buffer);
 
-    // Also write to public/uploads if accessible
     try {
       const destPathPublic = path.join(publicUploadsDir, filename);
       fs.writeFileSync(destPathPublic, parsed.buffer);
-    } catch (err) {
-      // Ignore if public is not directly writable
-    }
+    } catch (err) {}
 
-    console.log(`[Upload API] Saved image: ${filename} (${parsed.buffer.length} bytes)`);
+    // Upload directly to Cloudinary cloud storage
+    let cloudUrl = `/uploads/${filename}`;
+    let isCloud = false;
+    let cloudPublicId: string | undefined;
+
+    try {
+      const cloudRes = await uploadImageToCloudinary(image, {
+        folder: CLOUDINARY_FOLDERS.ASSETS,
+        publicId: safeName,
+      });
+
+      if (cloudRes.success && cloudRes.secureUrl) {
+        cloudUrl = cloudRes.secureUrl;
+        isCloud = true;
+        cloudPublicId = cloudRes.publicId;
+        console.log(`[Upload API] Successfully uploaded to Cloudinary: ${cloudUrl}`);
+      }
+    } catch (cloudErr: any) {
+      console.warn("[Upload API] Cloudinary upload warning, using local path:", cloudErr.message);
+    }
 
     return res.json({
       success: true,
-      url: `/uploads/${filename}`,
+      url: cloudUrl,
+      cloud: isCloud,
+      publicId: cloudPublicId,
       filename,
       size: parsed.buffer.length,
       mimeType: parsed.mimeType,

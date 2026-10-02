@@ -47,6 +47,7 @@ import {
   Settings2,
   Newspaper,
   CloudUpload,
+  Cloud,
 } from "lucide-react";
 import { PriceInquiry, DealershipApp, ModelSpec, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
@@ -61,6 +62,7 @@ import AccessoriesCMS from "./admin/AccessoriesCMS";
 import BatteryChargerCMS from "./admin/BatteryChargerCMS";
 import MediaBlogsCMS from "./admin/MediaBlogsCMS";
 import SaveDataModal from "./admin/SaveDataModal";
+import CloudDatabaseCMS from "./admin/CloudDatabaseCMS";
 
 // Pre-packaged high-res scooter assets for 1-click selection
 const PRESET_ASSETS = [
@@ -446,6 +448,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
 
   // Navigation Tabs
   type TabId =
+    | "cloud-db"
     | "photos"
     | "hero"
     | "models"
@@ -1246,6 +1249,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                 {/* Navigation Tabs Header */}
                 <div className="px-6 py-2.5 bg-slate-950 border-b border-slate-800 flex items-center gap-2 overflow-x-auto no-scrollbar">
                   {[
+                    { id: "cloud-db", label: "☁️ Cloud Database", icon: Cloud, badge: "oz1mkn2s" },
                     { id: "photos", label: "📸 All Photos & Media", icon: ImageIcon, badge: "Master" },
                     { id: "hero", label: "Hero & Cover Banner", icon: Layout },
                     { id: "models", label: `Scooter Fleet CMS (${modelsData.length})`, icon: Sliders },
@@ -1288,6 +1292,18 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                     );
                   })}
                 </div>
+
+                {/* Cloud Database & Cloudinary Asset Center */}
+                {activeTab === "cloud-db" && (
+                  <div className="flex-1 overflow-y-auto p-6">
+                    <CloudDatabaseCMS
+                      onShowToast={showToast}
+                      inquiries={inquiries}
+                      dealers={dealers}
+                      onRefreshLeads={loadLeads}
+                    />
+                  </div>
+                )}
 
                 {/* Master Tab: All Photos & Media CMS */}
                 {activeTab === "photos" && <PhotosCMS onShowToast={showToast} />}

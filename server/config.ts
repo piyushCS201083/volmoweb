@@ -34,3 +34,12 @@ export const EMAIL_CONFIG = {
   SMTP_USER: process.env.SMTP_USER || "",
   SMTP_PASS: process.env.SMTP_PASS || "",
 };
+
+export const CLOUDINARY_CONFIG = {
+  CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || "oz1mkn2s",
+  API_KEY: process.env.CLOUDINARY_API_KEY || "458683116565521",
+  API_SECRET: process.env.CLOUDINARY_API_SECRET || "doPaTXHlqqd9OeIMCNxj-rnpxrI",
+  CLOUDINARY_URL:
+    process.env.CLOUDINARY_URL ||
+    "cloudinary://458683116565521:doPaTXHlqqd9OeIMCNxj-rnpxrI@oz1mkn2s",
+};

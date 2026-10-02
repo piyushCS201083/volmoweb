@@ -25,6 +25,11 @@ import {
   DEFAULT_BATTERY_CHARGER_PAGE_CONFIG,
 } from "../src/data";
 import { PriceInquiry, DealershipApp } from "../src/types";
+import {
+  uploadRawDataToCloudinary,
+  fetchRawDataFromCloudinary,
+  CLOUDINARY_FOLDERS,
+} from "./services/cloudinary";
 
 // Ensure data directory exists
 if (!fs.existsSync(SERVER_CONFIG.DATA_DIR)) {
@@ -172,6 +177,10 @@ class StorageService {
     } catch (e) {
       console.error("[Storage] Failed to save config file:", e);
     }
+    // Async persistence to Cloudinary Cloud Database
+    uploadRawDataToCloudinary(data, "site-config", CLOUDINARY_FOLDERS.DATA).catch((err) =>
+      console.warn("[Storage] Cloudinary config sync warning:", err.message)
+    );
   }
 
   // Reset site config
@@ -205,6 +214,13 @@ class StorageService {
     } catch (e) {
       console.error("[Storage] Failed to save leads file:", e);
     }
+    // Async persistence to Cloudinary Cloud Database
+    uploadRawDataToCloudinary(data.inquiries, "inquiries", CLOUDINARY_FOLDERS.DATA).catch((err) =>
+      console.warn("[Storage] Cloudinary inquiries sync warning:", err.message)
+    );
+    uploadRawDataToCloudinary(data.dealers, "dealers", CLOUDINARY_FOLDERS.DATA).catch((err) =>
+      console.warn("[Storage] Cloudinary dealers sync warning:", err.message)
+    );
   }
 
   // Inquiry operations
@@ -212,6 +228,16 @@ class StorageService {
     const leads = this.getLeads();
     leads.inquiries.unshift(inquiry);
     this.saveLeads(leads);
+
+    // Save individual inquiry in Cloudinary leads archive for permanent storage
+    uploadRawDataToCloudinary(
+      inquiry,
+      `inquiry_${inquiry.id}`,
+      CLOUDINARY_FOLDERS.LEADS
+    ).catch((err) =>
+      console.warn(`[Storage] Cloudinary individual inquiry upload warning:`, err.message)
+    );
+
     return inquiry;
   }
 
@@ -240,6 +266,16 @@ class StorageService {
     const leads = this.getLeads();
     leads.dealers.unshift(dealer);
     this.saveLeads(leads);
+
+    // Save individual dealer application in Cloudinary leads archive for permanent storage
+    uploadRawDataToCloudinary(
+      dealer,
+      `dealer_${dealer.id}`,
+      CLOUDINARY_FOLDERS.LEADS
+    ).catch((err) =>
+      console.warn(`[Storage] Cloudinary individual dealer upload warning:`, err.message)
+    );
+
     return dealer;
   }
 
@@ -261,6 +297,50 @@ class StorageService {
       return true;
     }
     return false;
+  }
+
+  // Background restoration from Cloudinary Cloud Database
+  async syncFromCloudinary(): Promise<void> {
+    try {
+      console.log("[Storage] Checking Cloudinary Cloud Database for persisted records...");
+      const [cloudInquiries, cloudDealers, cloudConfig] = await Promise.all([
+        fetchRawDataFromCloudinary<PriceInquiry[]>("inquiries", CLOUDINARY_FOLDERS.DATA),
+        fetchRawDataFromCloudinary<DealershipApp[]>("dealers", CLOUDINARY_FOLDERS.DATA),
+        fetchRawDataFromCloudinary<any>("site-config", CLOUDINARY_FOLDERS.DATA),
+      ]);
+
+      if (cloudInquiries.success && Array.isArray(cloudInquiries.data) && cloudInquiries.data.length > 0) {
+        const current = this.getLeads();
+        const existingIds = new Set(current.inquiries.map((i) => i.id));
+        const newInquiries = cloudInquiries.data.filter((i) => !existingIds.has(i.id));
+        if (newInquiries.length > 0) {
+          current.inquiries = [...newInquiries, ...current.inquiries];
+          this.saveLeads(current);
+          console.log(`[Storage] Restored ${newInquiries.length} inquiries from Cloudinary cloud database`);
+        }
+      }
+
+      if (cloudDealers.success && Array.isArray(cloudDealers.data) && cloudDealers.data.length > 0) {
+        const current = this.getLeads();
+        const existingIds = new Set(current.dealers.map((d) => d.id));
+        const newDealers = cloudDealers.data.filter((d) => !existingIds.has(d.id));
+        if (newDealers.length > 0) {
+          current.dealers = [...newDealers, ...current.dealers];
+          this.saveLeads(current);
+          console.log(`[Storage] Restored ${newDealers.length} dealers from Cloudinary cloud database`);
+        }
+      }
+
+      if (cloudConfig.success && cloudConfig.data && typeof cloudConfig.data === "object") {
+        this.configCache = cloudConfig.data;
+        try {
+          fs.writeFileSync(CONFIG_FILE, JSON.stringify(cloudConfig.data, null, 2), "utf-8");
+          console.log("[Storage] Restored site configuration from Cloudinary cloud database");
+        } catch (e) {}
+      }
+    } catch (err: any) {
+      console.warn("[Storage] Cloudinary sync check non-fatal error:", err.message);
+    }
   }
 
   // Auth Operations

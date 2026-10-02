@@ -9,9 +9,15 @@ import path from "path";
 import fs from "fs";
 import { SERVER_CONFIG } from "./config";
 import { apiRouter } from "./routes/index";
+import { storage } from "./storage";
 
 export function createExpressApp(): Express {
   const app = express();
+
+  // Trigger background cloud sync from Cloudinary
+  storage.syncFromCloudinary().catch((e) =>
+    console.warn("[App] Cloudinary background sync notice:", e.message)
+  );
 
   // Cross-Origin Resource Sharing (CORS) - Allows frontend deployed separately to access this API
   app.use(

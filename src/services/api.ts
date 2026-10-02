@@ -297,6 +297,129 @@ export const api = {
     },
   },
 
+  // ==========================================
+  // CLOUDINARY CLOUD DATABASE & ASSET SERVICE
+  // ==========================================
+  cloudinary: {
+    async getStatus(): Promise<{
+      success: boolean;
+      cloudName: string;
+      hasApiKey: boolean;
+      error?: string;
+    }> {
+      return request<{
+        success: boolean;
+        cloudName: string;
+        hasApiKey: boolean;
+        error?: string;
+      }>("/api/cloudinary/status");
+    },
+
+    async uploadImage(
+      image: string,
+      folder?: string,
+      publicId?: string
+    ): Promise<{
+      success: boolean;
+      url: string;
+      secureUrl: string;
+      publicId: string;
+      format: string;
+      width: number;
+      height: number;
+      bytes: number;
+      error?: string;
+    }> {
+      return request<{
+        success: boolean;
+        url: string;
+        secureUrl: string;
+        publicId: string;
+        format: string;
+        width: number;
+        height: number;
+        bytes: number;
+        error?: string;
+      }>("/api/cloudinary/upload", {
+        method: "POST",
+        body: JSON.stringify({ image, folder, publicId }),
+      });
+    },
+
+    async syncAllToCloud(): Promise<{
+      success: boolean;
+      message: string;
+      cloudName: string;
+      configUrl?: string;
+      inquiriesUrl?: string;
+      dealersUrl?: string;
+      inquiriesCount?: number;
+      dealersCount?: number;
+      individualUploaded?: number;
+      error?: string;
+    }> {
+      return request<{
+        success: boolean;
+        message: string;
+        cloudName: string;
+        configUrl?: string;
+        inquiriesUrl?: string;
+        dealersUrl?: string;
+        inquiriesCount?: number;
+        dealersCount?: number;
+        individualUploaded?: number;
+        error?: string;
+      }>("/api/cloudinary/sync-all-to-cloud", {
+        method: "POST",
+      });
+    },
+
+    async syncLocalImages(): Promise<{
+      success: boolean;
+      count: number;
+      migrated: Array<{ localName: string; localPath: string; cloudUrl: string; publicId: string }>;
+    }> {
+      return request<{
+        success: boolean;
+        count: number;
+        migrated: Array<{ localName: string; localPath: string; cloudUrl: string; publicId: string }>;
+      }>("/api/cloudinary/sync-local-images", {
+        method: "POST",
+      });
+    },
+
+    async listImages(folder = "volmo_assets"): Promise<{
+      success: boolean;
+      images: Array<{
+        publicId: string;
+        url: string;
+        bytes: number;
+        format: string;
+        createdAt: string;
+      }>;
+    }> {
+      return request<{
+        success: boolean;
+        images: Array<{
+          publicId: string;
+          url: string;
+          bytes: number;
+          format: string;
+          createdAt: string;
+        }>;
+      }>(`/api/cloudinary/images?folder=${encodeURIComponent(folder)}`);
+    },
+
+    async getCloudDb(type: "all" | "inquiries" | "dealers" | "config" = "all"): Promise<{
+      success: boolean;
+      data: any;
+    }> {
+      return request<{ success: boolean; data: any }>(
+        `/api/cloudinary/cloud-db?type=${encodeURIComponent(type)}`
+      );
+    },
+  },
+
   getBaseUrl(): string {
     return API_BASE_URL;
   },

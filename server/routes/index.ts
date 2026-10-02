@@ -10,6 +10,7 @@ import configRoutes from "./config";
 import healthRoutes from "./health";
 import chatbotRoutes from "./chatbot";
 import uploadRoutes from "./upload";
+import cloudinaryRoutes from "./cloudinary";
 
 export const apiRouter = Router();
 
@@ -19,3 +20,4 @@ apiRouter.use("/config", configRoutes);
 apiRouter.use("/health", healthRoutes);
 apiRouter.use("/chatbot", chatbotRoutes);
 apiRouter.use("/upload", uploadRoutes);
+apiRouter.use("/cloudinary", cloudinaryRoutes);

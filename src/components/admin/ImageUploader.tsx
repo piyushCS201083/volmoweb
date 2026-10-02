@@ -29,7 +29,29 @@ export default function ImageUploader({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploadingServer, setIsUploadingServer] = useState(false);
   const [serverStatus, setServerStatus] = useState<string | null>(null);
+  const [showCloudPicker, setShowCloudPicker] = useState(false);
+  const [cloudList, setCloudList] = useState<Array<{ publicId: string; url: string }>>([]);
+  const [loadingCloud, setLoadingCloud] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const fetchCloudList = async () => {
+    if (cloudList.length > 0) {
+      setShowCloudPicker(!showCloudPicker);
+      return;
+    }
+    setLoadingCloud(true);
+    setShowCloudPicker(true);
+    try {
+      const res = await api.cloudinary.listImages("volmo_assets");
+      if (res && res.images) {
+        setCloudList(res.images);
+      }
+    } catch (e) {
+      console.warn("Could not fetch cloud images:", e);
+    } finally {
+      setLoadingCloud(false);
+    }
+  };
 
   const handleFileUpload = (file: File) => {
     if (!file) return;
@@ -100,6 +122,13 @@ export default function ImageUploader({
         <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono bg-emerald-950/20 px-3 py-1.5 rounded-lg border border-emerald-500/30">
           <CheckCircle2 size={12} />
           {serverStatus}
+        </div>
+      )}
+
+      {!serverStatus && !isUploadingServer && value && value.includes("cloudinary.com") && (
+        <div className="flex items-center gap-1.5 text-[11px] text-blue-400 font-mono">
+          <Cloud size={11} />
+          Hosted on Cloudinary Cloud CDN (oz1mkn2s)
         </div>
       )}
 
@@ -211,6 +240,61 @@ export default function ImageUploader({
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Cloudinary Cloud Picker Button */}
+      <div className="pt-2 flex items-center justify-between border-t border-slate-800/60">
+        <button
+          type="button"
+          onClick={fetchCloudList}
+          className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-blue-400 hover:text-blue-300 bg-blue-950/40 hover:bg-blue-900/40 px-3 py-1.5 rounded-xl border border-blue-800/40 transition-all cursor-pointer"
+        >
+          <Cloud size={12} />
+          {showCloudPicker ? "Hide Cloudinary Library" : "Pick from Cloudinary Cloud (oz1mkn2s)"}
+          {loadingCloud && <Loader2 size={11} className="animate-spin ml-1" />}
+        </button>
+      </div>
+
+      {/* Cloudinary Assets Grid */}
+      {showCloudPicker && (
+        <div className="bg-slate-950/90 border border-blue-900/40 rounded-xl p-3 space-y-2 mt-2">
+          <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Select an image hosted on Cloudinary:</span>
+            <span>{cloudList.length} assets</span>
+          </div>
+
+          {loadingCloud ? (
+            <div className="py-4 text-center text-xs text-slate-400 font-mono">
+              Loading Cloudinary assets...
+            </div>
+          ) : cloudList.length === 0 ? (
+            <p className="text-[10px] text-slate-500 font-mono text-center py-2">
+              No images found in Cloudinary folder &apos;volmo_assets&apos; yet. Upload above to add images!
+            </p>
+          ) : (
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-36 overflow-y-auto no-scrollbar pt-1">
+              {cloudList.map((asset) => (
+                <button
+                  key={asset.publicId}
+                  type="button"
+                  onClick={() => onChange(asset.url)}
+                  className={`relative aspect-video rounded-lg overflow-hidden border transition-all group ${
+                    value === asset.url
+                      ? "border-blue-500 ring-2 ring-blue-500/50"
+                      : "border-slate-800 hover:border-slate-600"
+                  }`}
+                  title={asset.publicId}
+                >
+                  <img
+                    src={asset.url}
+                    alt={asset.publicId}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

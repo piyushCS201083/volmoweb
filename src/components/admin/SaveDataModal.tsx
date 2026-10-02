@@ -21,6 +21,7 @@ import {
   EyeOff,
   Server,
   RefreshCw,
+  Cloud,
 } from "lucide-react";
 import {
   getStoredGitHubAuth,
@@ -198,27 +199,39 @@ export default function SaveDataModal({
         {/* Modal Content */}
         <div className="p-6 overflow-y-auto space-y-6 flex-1 text-slate-200 text-sm">
           {/* Target Status Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
-            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center gap-2.5">
-              <Github size={16} className="text-white flex-shrink-0" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 font-mono text-xs">
+            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center gap-2">
+              <Github size={15} className="text-white flex-shrink-0" />
               <div className="overflow-hidden">
-                <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
-                  GitHub Repository:
+                <span className="text-[9px] text-slate-400 uppercase tracking-wider block">
+                  GitHub Repo:
                 </span>
-                <span className="font-bold text-slate-200 truncate block">
+                <span className="font-bold text-slate-200 truncate block text-[11px]">
                   {repo} <span className="text-orange-400">({branch})</span>
                 </span>
               </div>
             </div>
 
-            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center gap-2.5">
-              <Server size={16} className="text-emerald-400 flex-shrink-0" />
+            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center gap-2">
+              <Cloud size={15} className="text-blue-400 flex-shrink-0" />
               <div className="overflow-hidden">
-                <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
-                  Backend API Target:
+                <span className="text-[9px] text-slate-400 uppercase tracking-wider block">
+                  Cloud Database &amp; CDN:
                 </span>
-                <span className="font-bold text-emerald-300 truncate block">
-                  {api.getBaseUrl() || "volmoweb-2.onrender.com"}
+                <span className="font-bold text-blue-300 truncate block text-[11px]">
+                  Cloudinary (oz1mkn2s)
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center gap-2">
+              <Server size={15} className="text-emerald-400 flex-shrink-0" />
+              <div className="overflow-hidden">
+                <span className="text-[9px] text-slate-400 uppercase tracking-wider block">
+                  Backend API:
+                </span>
+                <span className="font-bold text-emerald-300 truncate block text-[11px]">
+                  {api.getBaseUrl() || "volmoweb-2"}
                 </span>
               </div>
             </div>

@@ -13,6 +13,7 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { v2 as cloudinary } from "cloudinary";
 
 dotenv.config();
 
@@ -27,6 +28,57 @@ const NODE_ENV = process.env.NODE_ENV || "production";
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || "piyushshivhare083@gmail.com";
 const COMPANY_MAIL_FROM = process.env.COMPANY_MAIL_FROM || "sales@volmoelectrical.com";
+
+// Cloudinary Configuration
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || "oz1mkn2s";
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY || "458683116565521";
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET || "doPaTXHlqqd9OeIMCNxj-rnpxrI";
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_CLOUD_NAME,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+async function uploadToCloudinaryRaw(data, publicId) {
+  try {
+    const jsonStr = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+    const base64Data = Buffer.from(jsonStr).toString("base64");
+    const dataUri = `data:application/json;base64,${base64Data}`;
+    const res = await cloudinary.uploader.upload(dataUri, {
+      resource_type: "raw",
+      public_id: `volmo_cloud_db/${publicId}`,
+      overwrite: true,
+      invalidate: true,
+    });
+    console.log(`[Cloudinary Cloud DB] Synced ${publicId} -> ${res.secure_url}`);
+    return res.secure_url;
+  } catch (err) {
+    console.warn(`[Cloudinary Cloud DB] Warning syncing ${publicId}:`, err.message);
+    return null;
+  }
+}
+
+async function restoreFromCloudinary() {
+  try {
+    console.log("[Cloudinary Cloud DB] Checking cloud database on startup...");
+    const inqRes = await cloudinary.api.resource("volmo_cloud_db/inquiries", { resource_type: "raw" }).catch(() => null);
+    if (inqRes && inqRes.secure_url) {
+      const resp = await fetch(inqRes.secure_url);
+      if (resp.ok) {
+        const cloudInquiries = await resp.json();
+        if (Array.isArray(cloudInquiries) && cloudInquiries.length > 0) {
+          inquiries = cloudInquiries;
+          saveInquiries();
+          console.log(`[Cloudinary Cloud DB] Restored ${inquiries.length} inquiries from cloud`);
+        }
+      }
+    }
+  } catch (e) {}
+}
+
+restoreFromCloudinary().catch(() => {});
 
 // In-memory + file-backed lead & config storage for standalone deployment
 const dataDir = process.env.DATA_DIR || path.join(__dirname, "data");
@@ -78,18 +130,23 @@ function saveInquiries() {
   try {
     fs.writeFileSync(inquiriesFile, JSON.stringify(inquiries, null, 2));
   } catch (e) {}
+  uploadToCloudinaryRaw(inquiries, "inquiries").catch(() => {});
 }
 
 function saveDealers() {
   try {
     fs.writeFileSync(dealersFile, JSON.stringify(dealers, null, 2));
   } catch (e) {}
+  uploadToCloudinaryRaw(dealers, "dealers").catch(() => {});
 }
 
 function saveConfig() {
   try {
     fs.writeFileSync(configFile, JSON.stringify(siteConfig, null, 2));
   } catch (e) {}
+  if (siteConfig) {
+    uploadToCloudinaryRaw(siteConfig, "site-config").catch(() => {});
+  }
 }
 
 // Nodemailer Transporter helper
@@ -347,7 +404,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use("/uploads", express.static(uploadsDir));
 
 // Image Upload Endpoint (handles single and batch base64 uploads)
-app.post("/api/upload/image", (req, res) => {
+app.post("/api/upload/image", async (req, res) => {
   try {
     const { image, filename: preferredFilename } = req.body || {};
     if (!image || typeof image !== "string") {
@@ -372,20 +429,93 @@ app.post("/api/upload/image", (req, res) => {
       : `volmo_cms_${timestamp}`;
     const filename = safeName.endsWith(`.${ext}`) ? safeName : `${safeName}.${ext}`;
 
+    // Local fallback file
     const filePath = path.join(uploadsDir, filename);
     fs.writeFileSync(filePath, buffer);
 
-    console.log(`[Upload API] Saved image ${filename} (${buffer.length} bytes) to ${filePath}`);
+    let finalUrl = `/uploads/${filename}`;
+    let isCloud = false;
+
+    // Upload to Cloudinary
+    try {
+      const cloudRes = await cloudinary.uploader.upload(image, {
+        folder: "volmo_assets",
+        public_id: safeName,
+        overwrite: true,
+        resource_type: "image",
+      });
+      if (cloudRes && cloudRes.secure_url) {
+        finalUrl = cloudRes.secure_url;
+        isCloud = true;
+        console.log(`[Cloudinary] Image uploaded: ${finalUrl}`);
+      }
+    } catch (cErr) {
+      console.warn("[Cloudinary] Upload warning, falling back to local file:", cErr.message);
+    }
 
     return res.json({
       success: true,
-      url: `/uploads/${filename}`,
+      url: finalUrl,
+      cloud: isCloud,
       filename,
       size: buffer.length,
     });
   } catch (error) {
     console.error("[Upload API] Error saving image:", error);
     return res.status(500).json({ error: error.message || "Failed to save image" });
+  }
+});
+
+// Cloudinary Management Endpoints
+app.get("/api/cloudinary/status", async (_req, res) => {
+  try {
+    const ping = await cloudinary.api.ping();
+    res.json({
+      success: ping.status === "ok",
+      cloudName: CLOUDINARY_CLOUD_NAME,
+      hasApiKey: Boolean(CLOUDINARY_API_KEY),
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message, cloudName: CLOUDINARY_CLOUD_NAME });
+  }
+});
+
+app.post("/api/cloudinary/sync-all-to-cloud", async (_req, res) => {
+  try {
+    const inqUrl = await uploadToCloudinaryRaw(inquiries, "inquiries");
+    const dlrUrl = await uploadToCloudinaryRaw(dealers, "dealers");
+    const cfgUrl = siteConfig ? await uploadToCloudinaryRaw(siteConfig, "site-config") : null;
+    res.json({
+      success: true,
+      message: "Data synced to Cloudinary cloud database successfully",
+      cloudName: CLOUDINARY_CLOUD_NAME,
+      inquiriesUrl: inqUrl,
+      dealersUrl: dlrUrl,
+      configUrl: cfgUrl,
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+app.get("/api/cloudinary/images", async (req, res) => {
+  try {
+    const folder = req.query.folder || "volmo_assets";
+    const resources = await cloudinary.api.resources({
+      type: "upload",
+      prefix: folder,
+      max_results: 60,
+    });
+    const images = (resources.resources || []).map((r) => ({
+      publicId: r.public_id,
+      url: r.secure_url,
+      bytes: r.bytes,
+      format: r.format,
+      createdAt: r.created_at,
+    }));
+    res.json({ success: true, images });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message, images: [] });
   }
 });
 
