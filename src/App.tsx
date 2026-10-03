@@ -23,10 +23,16 @@ import QuickContactModal, { QuickContactData } from "./components/QuickContactMo
 import BottomFloatingActions from "./components/BottomFloatingActions";
 import AiChatbotModal from "./components/AiChatbotModal";
 import WhatsAppChatModal from "./components/WhatsAppChatModal";
+import VolmoShutterIntro from "./components/VolmoShutterIntro";
 import { BatteryType } from "./types";
-import { ShieldAlert, CheckCircle } from "lucide-react";
+import { ShieldAlert, CheckCircle, Zap, Calculator, ArrowRight } from "lucide-react";
 
 export default function App() {
+  // Showroom shutter intro animation state
+  const [isShutterOpen, setIsShutterOpen] = useState(true);
+  // Interactive daily commute slider for homepage savings calculator
+  const [dailyKm, setDailyKm] = useState(40);
+
   // Modal toggles
   const [isDealerOpen, setIsDealerOpen] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -151,6 +157,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans antialiased relative">
+      {/* Volmo Vehicle Upward Roam & Website Shutter Opening Animation */}
+      <VolmoShutterIntro
+        isOpen={isShutterOpen}
+        onComplete={() => setIsShutterOpen(false)}
+      />
+
       {/* Dynamic Pop-up Status Toast notification (custom built in pure Tailwind) */}
       {notification && (
         <div className="fixed bottom-24 right-6 z-50 max-w-sm w-full bg-white border border-slate-200 rounded-2xl p-4 shadow-xl flex items-start gap-3.5 animate-bounce text-left">
@@ -186,7 +198,110 @@ export default function App() {
               <Hero
                 onExploreModels={() => handlePageChange("models")}
                 onApplyPartnership={() => setIsDealerOpen(true)}
+                onReplayShutter={() => setIsShutterOpen(true)}
+                onSelectModel={handleSelectModelFromFooter}
               />
+
+              {/* Interactive EV vs Petrol Savings & Range Simulator */}
+              <section className="py-20 bg-slate-950 text-white border-b border-slate-800 relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    <div className="lg:col-span-5 space-y-4 text-left">
+                      <div className="flex items-center gap-2 text-xs font-mono text-orange-400">
+                        <Calculator size={14} />
+                        <span>INTERACTIVE COMMUTE SIMULATOR</span>
+                      </div>
+                      <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white leading-tight">
+                        See How Much You Save Riding Volmo Electric
+                      </h2>
+                      <p className="text-slate-400 text-sm leading-relaxed">
+                        Drag the slider to match your daily city travel. Compare typical petrol scooter fuel and servicing costs against Volmo’s 18-paise/km smart electric drive.
+                      </p>
+
+                      <div className="pt-2 space-y-3">
+                        <div className="flex items-center justify-between text-xs font-mono">
+                          <span className="text-slate-300">DAILY COMMUTE DISTANCE</span>
+                          <span className="text-orange-400 font-bold text-base tabular-nums">{dailyKm} KM / DAY</span>
+                        </div>
+                        <input
+                          type="range"
+                          min={10}
+                          max={120}
+                          step={5}
+                          value={dailyKm}
+                          onChange={(e) => setDailyKm(Number(e.target.value))}
+                          className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                        />
+                        <div className="flex justify-between text-[11px] font-mono text-slate-500">
+                          <span>10 km/day</span>
+                          <span>60 km/day</span>
+                          <span>120 km/day</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-left flex flex-col justify-between">
+                        <span className="text-xs font-mono text-slate-400">MONTHLY EV CHARGING</span>
+                        <div className="my-4">
+                          <div className="text-3xl font-bold text-white tabular-nums">
+                            ₹{Math.round(dailyKm * 30 * 0.18).toLocaleString("en-IN")}
+                          </div>
+                          <div className="text-xs text-slate-400 mt-1">
+                            vs ₹{Math.round(dailyKm * 30 * 2.8).toLocaleString("en-IN")} on Petrol
+                          </div>
+                        </div>
+                        <span className="text-[11px] font-mono text-emerald-400">
+                          ~18 paise / km electricity
+                        </span>
+                      </div>
+
+                      <div className="bg-slate-900 border border-orange-500/40 p-6 rounded-2xl text-left flex flex-col justify-between">
+                        <span className="text-xs font-mono text-orange-400">ANNUAL NET SAVINGS</span>
+                        <div className="my-4">
+                          <div className="text-3xl font-bold text-orange-400 tabular-nums">
+                            ₹{Math.round(dailyKm * 365 * (2.8 - 0.18)).toLocaleString("en-IN")}
+                          </div>
+                          <div className="text-xs text-slate-400 mt-1">
+                            Saved every single year
+                          </div>
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-300">
+                          Zero oil or engine maintenance
+                        </span>
+                      </div>
+
+                      <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-left flex flex-col justify-between">
+                        <span className="text-xs font-mono text-slate-400">RECOMMENDED PACK</span>
+                        <div className="my-4">
+                          <div className="text-xl font-bold text-white">
+                            {dailyKm <= 45
+                              ? "60V 28Ah Graphene"
+                              : dailyKm <= 75
+                              ? "60V 34Ah Lithium LFP"
+                              : "72V 60Ah Ultra LFP"}
+                          </div>
+                          <div className="text-xs text-slate-400 mt-1">
+                            {dailyKm <= 45
+                              ? "60–70 km per charge"
+                              : dailyKm <= 75
+                              ? "85–95 km per charge"
+                              : "140–160 km per charge"}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handlePageChange("battery-charger")}
+                          className="text-xs font-bold text-orange-400 hover:text-orange-300 inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>View Battery Specs</span>
+                          <ArrowRight size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
               
               {/* Premium Interactive Hub Menu on Homepage */}
               <section className="py-24 bg-white border-b border-slate-200 relative overflow-hidden text-center">

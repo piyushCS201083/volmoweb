@@ -3,40 +3,85 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from "react";
-import { motion } from "motion/react";
-import { Zap, ShieldCheck, ArrowDown, Building, Award } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Zap, ShieldCheck, ArrowDown, Award, Play, ArrowUpRight, BatteryCharging, Gauge } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
 
 interface HeroProps {
   onExploreModels: () => void;
   onApplyPartnership: () => void;
+  onReplayShutter?: () => void;
+  onSelectModel?: (modelId: string) => void;
 }
 
-export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps) {
-  const { heroConfig, siteSections } = useSiteConfig();
+export default function Hero({
+  onExploreModels,
+  onApplyPartnership,
+  onReplayShutter,
+  onSelectModel,
+}: HeroProps) {
+  const { heroConfig, siteSections, modelsData } = useSiteConfig();
+  const [activeShowcaseIdx, setActiveShowcaseIdx] = useState<number>(0);
+
+  const showcaseSlides = [
+    {
+      id: "flagship",
+      name: heroConfig.floatingTag || "Volmo Flagship Lineup",
+      tagline: "100% CMVR RTO-Free · Zero Registration · German Sine-Wave Drive",
+      image: heroConfig.coverPhoto || "/src/assets/images/volmo_hero_banner_1780063638602.png",
+      range: "60 – 160 KM",
+      speed: "25 KM/H (RTO Exempt)",
+    },
+    ...modelsData.slice(0, 4).map((m) => ({
+      id: m.id,
+      name: `Volmo ${m.name}`,
+      tagline: m.tagline,
+      image: m.colors?.[0]?.image || heroConfig.coverPhoto,
+      range: "Up to 160 KM",
+      speed: "25 KM/H (No License)",
+    })),
+  ];
+
+  const currentSlide = showcaseSlides[activeShowcaseIdx] || showcaseSlides[0];
 
   return (
     <section className="relative min-h-[92vh] bg-slate-50 flex flex-col items-center justify-center py-12 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-slate-200">
-      {/* Premium Ambient Electric Background Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[750px] h-[550px] bg-slate-400/[0.06] rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 translate-y-1/2 translate-x-1/2 w-[550px] h-[550px] bg-zinc-400/[0.05] rounded-full blur-[150px] pointer-events-none" />
+      {/* Ambient Background Glows */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[750px] h-[550px] bg-orange-500/[0.05] rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 translate-y-1/2 translate-x-1/2 w-[550px] h-[550px] bg-slate-400/[0.06] rounded-full blur-[150px] pointer-events-none" />
 
-      {/* Decorative cybertech grid pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      {/* Subtle architectural dot pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.06)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10 w-full flex flex-col items-center gap-10 lg:gap-14">
+      <div className="max-w-7xl mx-auto relative z-10 w-full flex flex-col items-center gap-10 lg:gap-12">
         {/* Top Header & Copy */}
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-6">
-          {/* Core Regulatory Exemption Badge */}
+          {/* Regulatory Exemption Line + Replay Shutter Trigger */}
           <motion.div
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-slate-200/80 border border-slate-300 text-slate-800 text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-full shadow-xs"
+            className="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-slate-700"
           >
-            <ShieldCheck size={14} className="stroke-[2.5] text-slate-700" />
-            <span>{heroConfig.badgeText || "No Registration · No License Required"}</span>
+            <span className="inline-flex items-center gap-1.5 text-slate-800">
+              <ShieldCheck size={15} className="text-orange-600" />
+              <span>{heroConfig.badgeText || "No Registration · No License Required"}</span>
+            </span>
+
+            {onReplayShutter && (
+              <>
+                <span className="text-slate-300" aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  onClick={onReplayShutter}
+                  className="inline-flex items-center gap-1.5 text-orange-600 hover:text-orange-700 font-bold underline underline-offset-4 cursor-pointer transition-colors"
+                >
+                  <Play size={12} className="fill-orange-600" />
+                  <span>Replay Shutter Animation</span>
+                </button>
+              </>
+            )}
           </motion.div>
 
           {/* Dynamic Headline */}
@@ -48,7 +93,7 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
               className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-slate-900 leading-[1.05] font-sans"
             >
               {heroConfig.headlinePart1 || "Sustainably Engineered."}
-              <span className="block mt-2 bg-gradient-to-r from-slate-950 via-slate-700 to-slate-500 bg-clip-text text-transparent">
+              <span className="block mt-2 bg-gradient-to-r from-slate-950 via-orange-600 to-slate-700 bg-clip-text text-transparent">
                 {heroConfig.headlinePart2 || "Effortlessly Electric."}
               </span>
             </motion.h1>
@@ -63,7 +108,7 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
             </motion.p>
           </div>
 
-          {/* Action button triggers */}
+          {/* Primary & Secondary Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -86,7 +131,7 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
             </button>
           </motion.div>
 
-          {/* Trust Badges */}
+          {/* Trust Highlights */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -94,7 +139,7 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
             className="flex flex-wrap items-center justify-center gap-4 pt-1"
           >
             <div className="flex items-center gap-3 bg-white border border-slate-200/90 px-4 py-2.5 rounded-2xl shadow-xs">
-              <div className="p-1.5 bg-slate-100 rounded-xl text-slate-700 flex-shrink-0">
+              <div className="p-1.5 bg-orange-50 rounded-xl text-orange-600 flex-shrink-0">
                 <Zap size={14} />
               </div>
               <div className="text-left font-sans text-xs">
@@ -104,7 +149,7 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
             </div>
 
             <div className="flex items-center gap-3 bg-white border border-slate-200/90 px-4 py-2.5 rounded-2xl shadow-xs">
-              <div className="p-1.5 bg-slate-100 rounded-xl text-slate-700 flex-shrink-0">
+              <div className="p-1.5 bg-orange-50 rounded-xl text-orange-600 flex-shrink-0">
                 <Award size={14} />
               </div>
               <div className="text-left font-sans text-xs">
@@ -115,55 +160,103 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
           </motion.div>
         </div>
 
-        {/* Website Front Banner: Large, Cinematic, High-Impact Showcase */}
+        {/* Interactive Showroom Stage & Live Vehicle Switcher */}
         <motion.div
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.25 }}
-          className="relative w-full"
+          className="relative w-full space-y-4"
         >
-          {/* Ambient luxury backdrop glow & shadows */}
-          <div className="absolute inset-x-8 -bottom-10 h-20 bg-slate-900/15 blur-[50px] rounded-full pointer-events-none" />
-          <div className="absolute -inset-1.5 bg-gradient-to-tr from-slate-200/60 via-zinc-200/30 to-slate-200/60 rounded-[36px] sm:rounded-[44px] blur-md pointer-events-none" />
+          {/* Interactive Switcher Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 bg-white border border-slate-200 p-2 rounded-2xl shadow-xs">
+            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+              {showcaseSlides.map((slide, idx) => {
+                const isActive = idx === activeShowcaseIdx;
+                return (
+                  <button
+                    key={slide.id}
+                    type="button"
+                    onClick={() => setActiveShowcaseIdx(idx)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
+                      isActive
+                        ? "bg-slate-900 text-white shadow-sm"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                    }`}
+                  >
+                    {idx === 0 ? "Showroom Stage" : slide.name}
+                  </button>
+                );
+              })}
+            </div>
 
-          {/* Banner Container */}
-          <div className="relative bg-white border border-slate-200/90 p-2 sm:p-3.5 rounded-[32px] sm:rounded-[40px] shadow-2xl shadow-slate-900/10 overflow-hidden group">
-            <div className="relative w-full h-[360px] sm:h-[480px] md:h-[560px] lg:h-[640px] xl:h-[700px] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-slate-900 pointer-events-auto">
-              <motion.img
-                src={heroConfig.coverPhoto || "/src/assets/images/volmo_hero_banner_1780063638602.png"}
-                alt="Ultra high-tech premium Volmo Electric Scooter model cover banner"
-                referrerPolicy="no-referrer"
-                whileHover={{ scale: 1.025 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="w-full h-full object-cover object-center select-none"
-              />
+            {currentSlide.id !== "flagship" && onSelectModel && (
+              <button
+                type="button"
+                onClick={() => onSelectModel(currentSlide.id)}
+                className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors shrink-0"
+              >
+                <span>Configure {currentSlide.name}</span>
+                <ArrowUpRight size={14} />
+              </button>
+            )}
+          </div>
 
-              {/* Cinematic Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/15 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/30 via-transparent to-slate-950/30 pointer-events-none" />
+          {/* Main Showcase Photo Frame (100% Unobstructed Photo) */}
+          <div className="relative bg-white border border-slate-200/90 p-2 sm:p-3.5 rounded-[32px] sm:rounded-[40px] shadow-2xl shadow-slate-900/10 overflow-hidden">
+            <div className="relative w-full rounded-[24px] sm:rounded-[32px] overflow-hidden bg-slate-50">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentSlide.id}
+                  src={currentSlide.image}
+                  alt={currentSlide.name}
+                  referrerPolicy="no-referrer"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="w-full h-auto object-contain select-none block"
+                />
+              </AnimatePresence>
+            </div>
 
-              {/* Front Banner Floating Badges & Model Meta */}
-              <div className="absolute bottom-5 sm:bottom-8 inset-x-5 sm:inset-x-8 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pointer-events-none">
-                {/* Brand Tag Pill */}
-                <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700/80 text-white px-4 py-2 rounded-2xl shadow-xl flex items-center gap-2.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs sm:text-sm font-bold tracking-wider uppercase font-sans">
-                    {heroConfig.floatingTag || "Volmo Professional Series"}
-                  </span>
+            {/* Caption & Specs Bar Placed Cleanly Below the Photo */}
+            <div className="pt-4 pb-2 px-3 sm:px-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="space-y-1 text-left">
+                <div className="flex items-center gap-2 text-xs font-mono text-orange-600 font-semibold">
+                  <span>VOLMO SHOWROOM</span>
+                  <span>·</span>
+                  <span>100% ELECTRIC</span>
                 </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                  {currentSlide.name}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-xl">
+                  {currentSlide.tagline}
+                </p>
+              </div>
 
-                {/* Sub-banner Quick Highlights */}
-                <div className="hidden md:flex items-center gap-3 bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-slate-300 px-4 py-2 rounded-2xl text-xs font-mono shadow-xl">
-                  <span className="text-emerald-400 font-bold">100% Electric</span>
-                  <span className="text-slate-600">•</span>
-                  <span>No RTO Registration</span>
+              <div className="flex flex-wrap items-center gap-4 bg-slate-50 border border-slate-200 px-5 py-3 rounded-2xl text-xs font-mono text-slate-700">
+                <div className="flex items-center gap-2">
+                  <BatteryCharging size={15} className="text-emerald-600" />
+                  <div>
+                    <div className="text-[10px] text-slate-400">RANGE</div>
+                    <div className="font-bold text-slate-900 tabular-nums">{currentSlide.range}</div>
+                  </div>
+                </div>
+                <div className="h-6 w-px bg-slate-200" />
+                <div className="flex items-center gap-2">
+                  <Gauge size={15} className="text-orange-600" />
+                  <div>
+                    <div className="text-[10px] text-slate-400">CLASS</div>
+                    <div className="font-bold text-slate-900">{currentSlide.speed}</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Floating scroll down element centered under banner */}
+        {/* Scroll to Discover */}
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
