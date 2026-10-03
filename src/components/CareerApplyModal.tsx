@@ -22,6 +22,7 @@ import {
 import { CareerOpening, CareerApplication } from "../types";
 import { CAREER_OPENINGS } from "../data/mediaBlogsData";
 import { api } from "../services/api";
+import { submitCloudInquiry } from "../services/cloudinaryCloud";
 
 interface CareerApplyModalProps {
   isOpen: boolean;
@@ -133,16 +134,26 @@ export default function CareerApplyModal({
     };
 
     try {
-      // Save application as lead in backend
-      await api.leads.submitInquiry({
+      const careerInquiry = {
+        id: "I-" + Math.floor(Math.random() * 100000),
         name: `${application.name} (Career: ${activeJob.title})`,
         phone: application.phone,
         model: `Job Application: ${activeJob.title}`,
         color: `${application.city}, ${application.state} | Exp: ${experienceYears}`,
-        batteryType: "LI",
+        batteryType: "LI" as const,
         batteryConfig: `${application.email} | ${application.currentRole || "Applicant"}`,
         rangeKm: 0,
+        status: "new" as const,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Save directly to Cloudinary Cloud Database for permanent storage
+      submitCloudInquiry(careerInquiry).catch((cErr) => {
+        console.warn("[Cloudinary Cloud] Notice:", cErr.message);
       });
+
+      // Save application as lead in backend
+      await api.leads.submitInquiry(careerInquiry);
     } catch (err) {
       console.warn("Application saved locally:", err);
     } finally {

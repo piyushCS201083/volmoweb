@@ -63,7 +63,7 @@ export default function HeroCMS({ onShowToast }: HeroCMSProps) {
           </h4>
           <ImageUploader
             label="Hero Cover Scooter Banner Photo"
-            value={form.coverPhoto || "/src/assets/images/volmo_hero_banner_1780063638602.png"}
+            value={form.coverPhoto || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg"}
             onChange={(newUrl) => setForm({ ...form, coverPhoto: newUrl })}
             aspectRatio="wide"
             helperText="Appears on right side of hero section"

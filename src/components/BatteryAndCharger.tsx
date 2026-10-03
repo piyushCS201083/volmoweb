@@ -38,6 +38,7 @@ import {
 } from "../data";
 import { LeadAcidBatteryItem, LithiumLfpBatteryModel, ChargerModelItem } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
+import { resolveCloudImageUrl } from "../services/cloudinaryCloud";
 import { Edit3 } from "lucide-react";
 
 interface BatteryAndChargerProps {
@@ -269,7 +270,7 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
               <div className="lg:col-span-5">
                 <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-lg group bg-white">
                   <img
-                    src={cfg.grapheneSpotlightImage || currentLeadAcid[0]?.image || "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"}
+                    src={resolveCloudImageUrl(cfg.grapheneSpotlightImage || currentLeadAcid[0]?.image) || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"}
                     alt="Volmo Original Lead-Acid Graphene Battery Pack"
                     referrerPolicy="no-referrer"
                     className="w-full h-72 sm:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
@@ -550,7 +551,7 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-900">
                 <img
-                  src="/src/assets/images/volmo_lithium_battery_1790255491526.jpg"
+                  src="https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg"
                   alt="Volmo Original Lithium Battery Pack with Handle"
                   referrerPolicy="no-referrer"
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
@@ -568,7 +569,7 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
 
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-900">
                 <img
-                  src="/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+                  src="https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
                   alt="Volmo LFP Prismatic High Capacity Battery"
                   referrerPolicy="no-referrer"
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
@@ -875,7 +876,7 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
                 <div className="lg:col-span-4">
                   <div className="rounded-xl overflow-hidden border border-slate-700 shadow-xl bg-slate-950">
                     <img
-                      src="/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+                      src="https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
                       alt="Volmo Smart German Technology Charger"
                       referrerPolicy="no-referrer"
                       className="w-full h-48 sm:h-52 object-cover"

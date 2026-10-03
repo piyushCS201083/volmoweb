@@ -7,6 +7,7 @@ import React, { useState, useRef } from "react";
 import { Upload, Image as ImageIcon, Loader2, CheckCircle2, Cloud } from "lucide-react";
 import { PRESET_MEDIA_ASSETS } from "../../data";
 import { api } from "../../services/api";
+import { uploadImageToCloud, resolveCloudImageUrl } from "../../services/cloudinaryCloud";
 
 interface ImageUploaderProps {
   label: string;
@@ -70,18 +71,24 @@ export default function ImageUploader({
         // Immediate local preview so the user sees their image instantaneously
         onChange(result);
 
-        // Also upload to Backend Server on Render right away to persist on disk
+        // Upload directly to Cloudinary Cloud for permanent global storage
         setIsUploadingServer(true);
         try {
-          const res = await api.upload.uploadImage(result, file.name);
-          if (res && res.url) {
-            onChange(res.url);
-            setServerStatus(`✓ Saved to Render Backend Server (${res.url})`);
+          const cloudRes = await uploadImageToCloud(result, file.name);
+          if (cloudRes.success && cloudRes.url) {
+            onChange(cloudRes.url);
+            setServerStatus(`✓ Permanently Saved to Cloudinary CDN (${cloudRes.url})`);
+          } else {
+            // Secondary fallback to backend proxy
+            const res = await api.upload.uploadImage(result, file.name);
+            if (res && res.url) {
+              onChange(res.url);
+              setServerStatus(`✓ Saved to Server Assets (${res.url})`);
+            }
           }
         } catch (err: any) {
-          // If backend is unreachable or offline, base64 is retained as fallback
-          console.warn("[ImageUploader] Direct server upload fallback:", err.message);
-          setServerStatus("Saved locally. Click 'Save Data' in header to commit to GitHub & Server.");
+          console.warn("[ImageUploader] Direct cloud upload notice:", err.message);
+          setServerStatus("Saved locally. Click 'Save Data' in header to commit.");
         } finally {
           setIsUploadingServer(false);
         }
@@ -154,7 +161,7 @@ export default function ImageUploader({
         >
           {value ? (
             <img
-              src={value}
+              src={resolveCloudImageUrl(value)}
               alt={label}
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform"

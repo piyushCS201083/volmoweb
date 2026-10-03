@@ -363,7 +363,7 @@ export default function Accessories({
           <div className="lg:col-span-6">
             <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-xl bg-slate-100">
               <img
-                src="/src/assets/images/volmo_steel_frame_1790255503151.jpg"
+                src="https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg"
                 alt="Volmo Manufactured High Grade Steel Frame Set"
                 referrerPolicy="no-referrer"
                 className="w-full h-80 sm:h-96 object-cover"
@@ -397,7 +397,7 @@ export default function Accessories({
           <div className="lg:col-span-4 flex justify-center lg:justify-end">
             <div className="w-full max-w-xs rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-slate-900">
               <img
-                src="/src/assets/images/volmo_helmet_merch_1790255531049.jpg"
+                src="https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026846/volmo_assets/volmo_helmet_merch_1790255531049.jpg"
                 alt="Volmo Official Helmets and Merchandise"
                 referrerPolicy="no-referrer"
                 className="w-full h-56 object-cover"

@@ -12,6 +12,7 @@ import {
   AccessoriesPageConfig,
   BatteryChargerPageConfig
 } from "./types";
+import { resolveCloudImageUrl } from "./services/cloudinaryCloud";
 
 export const MODELS_DATA: ModelSpec[] = [
   {
@@ -24,11 +25,11 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Standard Warranty (Motor, Controller, Converter, Charger)",
     isRtoFree: true,
     colors: [
-      { name: "Glossy White", hex: "#FFFFFF", image: "/src/assets/images/volmo_vista_1780058817114.png" },
-      { name: "Tech Grey", hex: "#52525B", image: "/src/assets/images/vista_tech_grey_1790182554836.jpg" },
-      { name: "Midnight Black", hex: "#18181B", image: "/src/assets/images/vista_midnight_black_1790182569741.jpg" }
+      { name: "Glossy White", hex: "#FFFFFF", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026910/volmo_assets/volmo_vista_1780058817114.jpg" },
+      { name: "Tech Grey", hex: "#52525B", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026836/volmo_assets/vista_tech_grey_1790182554836.jpg" },
+      { name: "Midnight Black", hex: "#18181B", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026834/volmo_assets/vista_midnight_black_1790182569741.jpg" }
     ],
-    image: "/src/assets/images/volmo_vista_1780058817114.png",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026910/volmo_assets/volmo_vista_1780058817114.jpg",
     basePriceEstimate: "₹59,999",
     featured: true,
     frontBrake: "Hydraulic Disc Brake (Right-Hand Lever)",
@@ -52,11 +53,11 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Standard Warranty (Motor, Controller, Converter, Charger)",
     isRtoFree: true,
     colors: [
-      { name: "Cherry Red", hex: "#DC2626", image: "/src/assets/images/volmo_glider_1780058835594.png" },
-      { name: "Apple Green", hex: "#22C55E", image: "/src/assets/images/glider_apple_green_1790182589580.jpg" },
-      { name: "Ocean Blue", hex: "#2563EB", image: "/src/assets/images/glider_ocean_blue_1790182609366.jpg" }
+      { name: "Cherry Red", hex: "#DC2626", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026842/volmo_assets/volmo_glider_1780058835594.jpg" },
+      { name: "Apple Green", hex: "#22C55E", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026824/volmo_assets/glider_apple_green_1790182589580.jpg" },
+      { name: "Ocean Blue", hex: "#2563EB", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026825/volmo_assets/glider_ocean_blue_1790182609366.jpg" }
     ],
-    image: "/src/assets/images/volmo_glider_1780058835594.png",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026842/volmo_assets/volmo_glider_1780058835594.jpg",
     basePriceEstimate: "₹63,999",
     featured: false,
     frontBrake: "Ventilated Wave Disc Brake (Right-Hand Lever)",
@@ -80,13 +81,13 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Direct Replacement Warranty on Key Electronics",
     isRtoFree: true,
     colors: [
-      { name: "Royal Blue", hex: "#1D4ED8", image: "/src/assets/images/volmo_classic_1780058851300.png" },
-      { name: "Crimson Red", hex: "#B91C1C", image: "/src/assets/images/classic_crimson_red_1790182628879.jpg" },
-      { name: "Charcoal Grey", hex: "#4B5563", image: "/src/assets/images/classic_sleek_black_1790182659642.jpg" },
-      { name: "Sleek Black", hex: "#0F172A", image: "/src/assets/images/classic_sleek_black_1790182659642.jpg" },
-      { name: "Pearl White", hex: "#F8FAFC", image: "/src/assets/images/classic_pearl_white_1790182643917.jpg" }
+      { name: "Royal Blue", hex: "#1D4ED8", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026840/volmo_assets/volmo_classic_1780058851300.jpg" },
+      { name: "Crimson Red", hex: "#B91C1C", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026818/volmo_assets/classic_crimson_red_1790182628879.jpg" },
+      { name: "Charcoal Grey", hex: "#4B5563", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026822/volmo_assets/classic_sleek_black_1790182659642.jpg" },
+      { name: "Sleek Black", hex: "#0F172A", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026822/volmo_assets/classic_sleek_black_1790182659642.jpg" },
+      { name: "Pearl White", hex: "#F8FAFC", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026820/volmo_assets/classic_pearl_white_1790182643917.jpg" }
     ],
-    image: "/src/assets/images/volmo_classic_1780058851300.png",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026840/volmo_assets/volmo_classic_1780058851300.jpg",
     basePriceEstimate: "₹69,999",
     featured: true,
     frontBrake: "Large Diameter Hydraulic Disc Brake",
@@ -110,11 +111,11 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Fully Integrated Direct Replacement Warranty",
     isRtoFree: true,
     colors: [
-      { name: "Cream Beige", hex: "#F5F5DC", image: "/src/assets/images/volmo_phantom_1780058868036.png" },
-      { name: "Apple Green", hex: "#16A34A", image: "/src/assets/images/phantom_apple_green_1790182691216.jpg" },
-      { name: "Steel Blue", hex: "#4682B4", image: "/src/assets/images/phantom_steel_blue_1790182675033.jpg" }
+      { name: "Cream Beige", hex: "#F5F5DC", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026876/volmo_assets/volmo_phantom_1780058868036.jpg" },
+      { name: "Apple Green", hex: "#16A34A", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026828/volmo_assets/phantom_apple_green_1790182691216.jpg" },
+      { name: "Steel Blue", hex: "#4682B4", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026830/volmo_assets/phantom_steel_blue_1790182675033.jpg" }
     ],
-    image: "/src/assets/images/volmo_phantom_1780058868036.png",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026876/volmo_assets/volmo_phantom_1780058868036.jpg",
     basePriceEstimate: "₹76,999",
     featured: true,
     frontBrake: "Signature Dual Piston Hydraulic Disc Brake",
@@ -134,7 +135,7 @@ export const PULSE_DATA = {
   id: "pulse",
   name: "VOLMO PULSE",
   tagline: "The Cyberpunk Revolution. Coming Soon.",
-  image: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+  image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026889/volmo_assets/volmo_pulse_premium_1780068389740.jpg",
   description: "Specifications are strictly top secret. Engineered for the next generation of extreme electric mobility with a custom aerodynamic frame, sleek integrated LED architecture, and intelligent underglow technology. Get ready for unmatched acceleration and peak performance.",
   isReleased: false
 };
@@ -201,7 +202,7 @@ export const DEFAULT_HERO_CONFIG: HeroConfig = {
   headlinePart1: "Sustainably Engineered.",
   headlinePart2: "Effortlessly Electric.",
   description: "Crafting advanced electric two-wheelers that combine intelligent technology, premium comfort, and sustainable mobility for the roads of tomorrow.",
-  coverPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+  coverPhoto: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg",
   floatingTag: "Volmo Professional Series",
   ctaPrimaryText: "Explore EV Fleet",
   ctaSecondaryText: "Apply For Dealership",
@@ -425,7 +426,7 @@ export interface BrandingConfig {
 export const DEFAULT_BRANDING: BrandingConfig = {
   brandName: "VOLMO",
   brandTagline: "Electric Scooters & Smart Mobility",
-  customLogoUrl: "/volmo_logo.png",
+  customLogoUrl: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026866/volmo_assets/volmo_logo.png",
   footerCopyright: "Volmo Electrical Private Limited. All Rights Reserved. Produced in India.",
 };
 
@@ -528,11 +529,11 @@ export const DEFAULT_SITE_SECTIONS: SiteSectionsConfig = {
   plantTitle: "Volmo EV Manufacturing Plant",
   plantType: "Factory & assembly line",
   plantHours: "Monday - Saturday: 09:00 AM - 07:00 PM",
-  plantPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+  plantPhoto: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg",
   hqTitle: "Volmo Corporate Head Office",
   hqType: "Registered headquarters",
   hqHours: "Monday - Friday: 10:00 AM - 06:05 PM",
-  hqPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+  hqPhoto: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg",
 
   faqBadge: "Support Headquarters",
   faqHeading: "Frequently Asked Queries",
@@ -579,53 +580,53 @@ export const ALL_STATES = [
 ];
 
 export const PRESET_MEDIA_ASSETS = [
-  { label: "Hero Cover Banner (Cyberpunk Street)", url: "/src/assets/images/volmo_hero_banner_1780063638602.png", category: "Cover / Banners" },
-  { label: "Volmo Vista (Pearl White / Tech Silver)", url: "/src/assets/images/volmo_vista_1780058817114.png", category: "Fleet Models" },
-  { label: "Volmo Vista (Tech Grey Metallic)", url: "/src/assets/images/vista_tech_grey_1790182554836.jpg", category: "Fleet Models" },
-  { label: "Volmo Vista (Midnight Black)", url: "/src/assets/images/vista_midnight_black_1790182569741.jpg", category: "Fleet Models" },
-  { label: "Volmo Glider (Cherry Red)", url: "/src/assets/images/volmo_glider_1780058835594.png", category: "Fleet Models" },
-  { label: "Volmo Glider (Apple Green)", url: "/src/assets/images/glider_apple_green_1790182589580.jpg", category: "Fleet Models" },
-  { label: "Volmo Glider (Ocean Blue)", url: "/src/assets/images/glider_ocean_blue_1790182609366.jpg", category: "Fleet Models" },
-  { label: "Volmo Classic (Royal Blue)", url: "/src/assets/images/volmo_classic_1780058851300.png", category: "Fleet Models" },
-  { label: "Volmo Classic (Crimson Red)", url: "/src/assets/images/classic_crimson_red_1790182628879.jpg", category: "Fleet Models" },
-  { label: "Volmo Classic (Pearl White)", url: "/src/assets/images/classic_pearl_white_1790182643917.jpg", category: "Fleet Models" },
-  { label: "Volmo Classic (Sleek Black)", url: "/src/assets/images/classic_sleek_black_1790182659642.jpg", category: "Fleet Models" },
-  { label: "Volmo Phantom (Cream Beige)", url: "/src/assets/images/volmo_phantom_1780058868036.png", category: "Fleet Models" },
-  { label: "Volmo Phantom (Steel Blue)", url: "/src/assets/images/phantom_steel_blue_1790182675033.jpg", category: "Fleet Models" },
-  { label: "Volmo Phantom (Apple Green)", url: "/src/assets/images/phantom_apple_green_1790182691216.jpg", category: "Fleet Models" },
-  { label: "Volmo Pulse Concept (Side View)", url: "/src/assets/images/volmo_pulse_1780058885037.png", category: "Concept Prototypes" },
-  { label: "Volmo Pulse Cyberpunk (Studio 3D)", url: "/src/assets/images/volmo_pulse_premium_1780068389740.png", category: "Concept Prototypes" },
-  { label: "Volmo High-Grade Steel Guard Frame Set", url: "/src/assets/images/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
-  { label: "Volmo Certified Helmets & Merch", url: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
-  { label: "Volmo Lead-Acid Graphene Battery", url: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
-  { label: "Volmo Lithium Smart Energy Pack", url: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg", category: "Batteries" },
-  { label: "Volmo LFP Prismatic Energy Pack", url: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg", category: "Batteries" },
-  { label: "Volmo German Tech Smart Fast Charger", url: "/src/assets/images/volmo_smart_charger_1790255476376.jpg", category: "Chargers" },
-  { label: "Volmo German Tech Charger Lineup", url: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg", category: "Chargers" },
+  { label: "Hero Cover Banner (Cyberpunk Street)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg", category: "Cover / Banners" },
+  { label: "Volmo Vista (Pearl White / Tech Silver)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026910/volmo_assets/volmo_vista_1780058817114.jpg", category: "Fleet Models" },
+  { label: "Volmo Vista (Tech Grey Metallic)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026836/volmo_assets/vista_tech_grey_1790182554836.jpg", category: "Fleet Models" },
+  { label: "Volmo Vista (Midnight Black)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026834/volmo_assets/vista_midnight_black_1790182569741.jpg", category: "Fleet Models" },
+  { label: "Volmo Glider (Cherry Red)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026842/volmo_assets/volmo_glider_1780058835594.jpg", category: "Fleet Models" },
+  { label: "Volmo Glider (Apple Green)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026824/volmo_assets/glider_apple_green_1790182589580.jpg", category: "Fleet Models" },
+  { label: "Volmo Glider (Ocean Blue)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026825/volmo_assets/glider_ocean_blue_1790182609366.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Royal Blue)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026840/volmo_assets/volmo_classic_1780058851300.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Crimson Red)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026818/volmo_assets/classic_crimson_red_1790182628879.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Pearl White)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026820/volmo_assets/classic_pearl_white_1790182643917.jpg", category: "Fleet Models" },
+  { label: "Volmo Classic (Sleek Black)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026822/volmo_assets/classic_sleek_black_1790182659642.jpg", category: "Fleet Models" },
+  { label: "Volmo Phantom (Cream Beige)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026876/volmo_assets/volmo_phantom_1780058868036.jpg", category: "Fleet Models" },
+  { label: "Volmo Phantom (Steel Blue)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026830/volmo_assets/phantom_steel_blue_1790182675033.jpg", category: "Fleet Models" },
+  { label: "Volmo Phantom (Apple Green)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026828/volmo_assets/phantom_apple_green_1790182691216.jpg", category: "Fleet Models" },
+  { label: "Volmo Pulse Concept (Side View)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026883/volmo_assets/volmo_pulse_1780058885037.jpg", category: "Concept Prototypes" },
+  { label: "Volmo Pulse Cyberpunk (Studio 3D)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026889/volmo_assets/volmo_pulse_premium_1780068389740.jpg", category: "Concept Prototypes" },
+  { label: "Volmo High-Grade Steel Guard Frame Set", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
+  { label: "Volmo Certified Helmets & Merch", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026846/volmo_assets/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
+  { label: "Volmo Lead-Acid Graphene Battery", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
+  { label: "Volmo Lithium Smart Energy Pack", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg", category: "Batteries" },
+  { label: "Volmo LFP Prismatic Energy Pack", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg", category: "Batteries" },
+  { label: "Volmo German Tech Smart Fast Charger", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg", category: "Chargers" },
+  { label: "Volmo German Tech Charger Lineup", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg", category: "Chargers" },
 ];
 
 export const COLOR_PHOTO_MAP: Record<string, Record<string, string>> = {
   vista: {
-    "Glossy White": "/src/assets/images/volmo_vista_1780058817114.png",
-    "Tech Grey": "/src/assets/images/vista_tech_grey_1790182554836.jpg",
-    "Midnight Black": "/src/assets/images/vista_midnight_black_1790182569741.jpg",
+    "Glossy White": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026910/volmo_assets/volmo_vista_1780058817114.jpg",
+    "Tech Grey": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026836/volmo_assets/vista_tech_grey_1790182554836.jpg",
+    "Midnight Black": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026834/volmo_assets/vista_midnight_black_1790182569741.jpg",
   },
   glider: {
-    "Cherry Red": "/src/assets/images/volmo_glider_1780058835594.png",
-    "Apple Green": "/src/assets/images/glider_apple_green_1790182589580.jpg",
-    "Ocean Blue": "/src/assets/images/glider_ocean_blue_1790182609366.jpg",
+    "Cherry Red": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026842/volmo_assets/volmo_glider_1780058835594.jpg",
+    "Apple Green": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026824/volmo_assets/glider_apple_green_1790182589580.jpg",
+    "Ocean Blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026825/volmo_assets/glider_ocean_blue_1790182609366.jpg",
   },
   classic: {
-    "Royal Blue": "/src/assets/images/volmo_classic_1780058851300.png",
-    "Crimson Red": "/src/assets/images/classic_crimson_red_1790182628879.jpg",
-    "Charcoal Grey": "/src/assets/images/classic_sleek_black_1790182659642.jpg",
-    "Sleek Black": "/src/assets/images/classic_sleek_black_1790182659642.jpg",
-    "Pearl White": "/src/assets/images/classic_pearl_white_1790182643917.jpg",
+    "Royal Blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026840/volmo_assets/volmo_classic_1780058851300.jpg",
+    "Crimson Red": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026818/volmo_assets/classic_crimson_red_1790182628879.jpg",
+    "Charcoal Grey": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026822/volmo_assets/classic_sleek_black_1790182659642.jpg",
+    "Sleek Black": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026822/volmo_assets/classic_sleek_black_1790182659642.jpg",
+    "Pearl White": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026820/volmo_assets/classic_pearl_white_1790182643917.jpg",
   },
   phantom: {
-    "Cream Beige": "/src/assets/images/volmo_phantom_1780058868036.png",
-    "Apple Green": "/src/assets/images/phantom_apple_green_1790182691216.jpg",
-    "Steel Blue": "/src/assets/images/phantom_steel_blue_1790182675033.jpg",
+    "Cream Beige": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026876/volmo_assets/volmo_phantom_1780058868036.jpg",
+    "Apple Green": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026828/volmo_assets/phantom_apple_green_1790182691216.jpg",
+    "Steel Blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026830/volmo_assets/phantom_steel_blue_1790182675033.jpg",
   },
 };
 
@@ -635,17 +636,21 @@ export function getModelActivePhoto(model: ModelSpec, colorName: string): string
     (c) => c.name.toLowerCase().trim() === colorName?.toLowerCase().trim()
   );
   if (matchedColor?.image) {
-    return matchedColor.image;
+    return resolveCloudImageUrl(matchedColor.image);
   }
 
   // 2. Lookup in standard COLOR_PHOTO_MAP
   const modelMap = COLOR_PHOTO_MAP[model.id?.toLowerCase()];
   if (modelMap && colorName && modelMap[colorName]) {
-    return modelMap[colorName];
+    return resolveCloudImageUrl(modelMap[colorName]);
   }
 
   // 3. Fallback to model's default image
-  return model.image || "/src/assets/images/volmo_vista_1780058817114.png";
+  return resolveCloudImageUrl(
+    model.image ||
+      model.photo ||
+      "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026910/volmo_assets/volmo_vista_1780058817114.jpg"
+  );
 }
 
 export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
@@ -674,7 +679,7 @@ export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
       { label: "Mounting Type", value: "Zero-Drilling Factory Chassis Bolt-On" },
       { label: "Pillion Footrest", value: "Dual Integrated Spring-Loaded Foldable Pegs" }
     ],
-    image: "/src/assets/images/volmo_steel_frame_1790255503151.jpg",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg",
     inStock: true
   },
   {
@@ -702,7 +707,7 @@ export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
       { label: "Colors / Finishes", value: "Matte Stealth Black & Volmo Signature Orange" },
       { label: "Closure Mechanism", value: "Micrometric Quick-Release Steel Buckle" }
     ],
-    image: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026846/volmo_assets/volmo_helmet_merch_1790255531049.jpg",
     inStock: true
   },
   {
@@ -729,7 +734,7 @@ export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
       { label: "Floor Mat Fit", value: "Laser-Molded for Vista, Glider, Classic & Phantom" },
       { label: "Warranty", value: "6 Months Official Manufacturing Warranty" }
     ],
-    image: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026846/volmo_assets/volmo_helmet_merch_1790255531049.jpg",
     inStock: true
   }
 ];
@@ -759,7 +764,7 @@ export const LEAD_ACID_GRAPHENE_BATTERIES: LeadAcidBatteryItem[] = [
       "Reinforced heavy-duty ABS case resistant to harsh road vibrations and shocks",
       "Engineered specifically for Volmo Vista & Glider low-speed urban commuters"
     ],
-    image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"
   },
   {
     id: "volmo-graphene-60v",
@@ -785,7 +790,7 @@ export const LEAD_ACID_GRAPHENE_BATTERIES: LeadAcidBatteryItem[] = [
       "Pairs natively with Volmo 60V German Technology smart fast charger",
       "Standard equipment on Volmo Classic & Phantom Graphene editions"
     ],
-    image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"
   },
   {
     id: "volmo-graphene-72v",
@@ -811,7 +816,7 @@ export const LEAD_ACID_GRAPHENE_BATTERIES: LeadAcidBatteryItem[] = [
       "Engineered for heavy-duty commercial riders and dual-passenger comfort",
       "Fully compatible with Volmo 72V 3A German semiconductor fast chargers"
     ],
-    image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"
   }
 ];
 
@@ -843,7 +848,7 @@ export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
       "Shock-resistant metal casing with ergonomic top handle for indoor charging",
       "Over 2,000+ deep discharge cycles with over 80% health retention"
     ],
-    image: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg"
   },
   {
     id: "lithium-60v-30ah",
@@ -872,7 +877,7 @@ export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
       "Rugged powder-coated steel casing with shock absorption brackets",
       "Zero maintenance and high continuous discharge rate"
     ],
-    image: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg"
   },
   {
     id: "lithium-60v-36ah",
@@ -901,7 +906,7 @@ export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
       "Certified Make in India & AIS-156 Phase 2 thermal safety compliant",
       "Rapid recharge capability with Volmo German Tech 6A chargers"
     ],
-    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
   },
   {
     id: "lithium-60v-45ah",
@@ -930,7 +935,7 @@ export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
       "Heavy-duty laser-welded busbars for zero vibration resistance loss",
       "Pairs seamlessly with Volmo 60V 6A High-Power fast chargers"
     ],
-    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
   },
   {
     id: "lithium-ultra-36kw",
@@ -959,7 +964,7 @@ export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
       "Dual thermal sensors per cell module with automated fan ventilation",
       "Compatible with high-amp fast charging infrastructure"
     ],
-    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
   },
   {
     id: "lithium-mega-43kw",
@@ -988,7 +993,7 @@ export const LITHIUM_LFP_BATTERY_MODELS: LithiumLfpBatteryModel[] = [
       "Reinforced heavy-duty aluminum structural case with anti-shock dampers",
       "Optimized for 72V 6A commercial fast chargers"
     ],
-    image: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
   }
 ];
 
@@ -1020,7 +1025,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "6-Point Protection: Overvoltage, overheat, short circuit, flame-retardant casing, auto shutdown, temp chip",
       "Domestic 3-pin AC plug with rugged heavy-duty copper wiring"
     ],
-    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
   },
   {
     id: "lead-acid-charger-60v-3a",
@@ -1049,7 +1054,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "Flame-retardant shell with automatic full-charge cutoff",
       "High surge suppression for unstable rural power grids"
     ],
-    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
   },
   {
     id: "lead-acid-charger-72v-3a",
@@ -1078,7 +1083,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "Thermal cutoff sensor shuts down power if ambient temperature exceeds safety limits",
       "Heavy-duty output cable with high-current Anderson / 3-pin connector"
     ],
-    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
   },
   {
     id: "lithium-charger-48v-6a",
@@ -1107,7 +1112,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "Soft-start pre-charge prevents inrush sparks and preserves cell chemistry",
       "Flame-retardant casing with intelligent active temperature control fan"
     ],
-    image: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg"
   },
   {
     id: "lithium-charger-60v-6a",
@@ -1136,7 +1141,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "Built-in temperature compensation chip automatically scales output in high heat",
       "Heavy-gauge insulated copper wiring with high-grade lock-in DC plug"
     ],
-    image: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg"
   },
   {
     id: "lithium-charger-72v-6a",
@@ -1165,7 +1170,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "Zero battery back-feed protection prevents drainage when disconnected",
       "Overcurrent, overvoltage, short circuit, and flame-retardant safety envelope"
     ],
-    image: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg"
   },
   {
     id: "lfp-charger-69v-cutoff",
@@ -1195,7 +1200,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
       "New generation pulse conditioning tuned for Lithium Iron Phosphate crystal structure",
       "Full 6-Point Protection: Temp chip, auto cutoff, flame-retardant shell, overvoltage, short-circuit, overheat"
     ],
-    image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
   }
 ];
 
@@ -1232,7 +1237,7 @@ export const DEFAULT_BATTERY_CHARGER_PAGE_CONFIG: BatteryChargerPageConfig = {
   grapheneSectionSubtitle: "Volmo vehicles are powered with original Volmo manufactured Lead-Acid Graphene batteries engineered with top-notch quality and long durable life. Infused with graphene nano-sheets that prevent active material shedding and provide 1 Year Hassle-Free Warranty.",
   grapheneSpotlightTitle: "Engineered with Top-Notch Quality & Long Durable Life",
   grapheneSpotlightSubtitle: "Unlike conventional lead-acid packs that degrade quickly under tropical heat, Volmo's Graphene additive forms a microscopic conductive web across the tubular positive and negative plates. This delivers faster charge absorption, cold weather starting torque, and zero maintenance.",
-  grapheneSpotlightImage: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg",
+  grapheneSpotlightImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg",
   grapheneSpotlightBadge: "1 Year Hassle-Free Warranty",
 
   lithiumSectionBadge: "High-Density Energy Storage",
@@ -1240,7 +1245,7 @@ export const DEFAULT_BATTERY_CHARGER_PAGE_CONFIG: BatteryChargerPageConfig = {
   lithiumSectionSubtitle: "Engineered with original Volmo Grade-A cells, multi-tier intelligent Battery Management Systems (BMS), and backed by a comprehensive 3 Years Long Official Warranty. Available from 1.4 kW up to 4.3 kW high-capacity configurations delivering up to 180 km range per charge.",
   lithiumSpotlightTitle: "Premium Performance with 3 Years Long Official Warranty",
   lithiumSpotlightSubtitle: "Original Volmo manufactured Lithium-Ion (NMC) and Lithium Iron Phosphate (LFP) power packs are engineered for extreme thermal endurance, high cycle life, and lightweight handling. Each pack features real-time cell balancing, short-circuit cutoffs, and IP67 weather-sealed aluminum casings.",
-  lithiumSpotlightImage: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg",
+  lithiumSpotlightImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg",
   lithiumSpotlightBadge: "3 Years Long Official Warranty",
 
   chargerSectionBadge: "Intelligent Charging Systems",
@@ -1248,7 +1253,7 @@ export const DEFAULT_BATTERY_CHARGER_PAGE_CONFIG: BatteryChargerPageConfig = {
   chargerSectionSubtitle: "Equipped with advanced German microcontroller technology, our smart fast chargers incorporate high-tech semiconductors with exceptionally long service life. Fully compatible with both Lead-Acid Graphene and Lithium/LFP arrays, backed by 1 Year Hassle-Free Warranty.",
   chargerSpotlightTitle: "German Microcontroller Technology & Pulse Repair",
   chargerSpotlightSubtitle: "Engineered with precision German semiconductor ICs, Volmo smart chargers feature dynamic multi-stage constant current, constant voltage, and trickle floating algorithms. High-efficiency cooling fins ensure cool operation even during hot summer charging cycles.",
-  chargerSpotlightImage: "/src/assets/images/volmo_smart_charger_1790255476376.jpg",
+  chargerSpotlightImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg",
   chargerSpotlightBadge: "1 Year Hassle-Free Warranty · German Tech",
 
   consultationBadge: "Custom Engineering Support",

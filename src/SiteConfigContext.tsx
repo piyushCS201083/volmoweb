@@ -3,8 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { api } from "./services/api";
+import {
+  getCloudSiteConfig,
+  saveCloudSiteConfig,
+  resolveCloudImageUrl,
+} from "./services/cloudinaryCloud";
 import {
   ModelSpec,
   BatteryType,
@@ -200,6 +205,132 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const [careerOpeningsData, setCareerOpeningsData] = useState<CareerOpening[]>(CAREER_OPENINGS);
   const [mediaBlogsPageConfig, setMediaBlogsPageConfig] = useState<MediaBlogsPageConfig>(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
   const [isLoaded, setIsLoaded] = useState(false);
+  const cloudSyncTimeoutRef = useRef<any>(null);
+
+  const applyFullConfig = (serverConfig: any) => {
+    if (!serverConfig) return;
+    if (serverConfig.models && Array.isArray(serverConfig.models)) {
+      const sanitized = serverConfig.models.map((m: ModelSpec) => ({
+        ...m,
+        photo: resolveCloudImageUrl(m.photo || m.image),
+        image: resolveCloudImageUrl(m.image || m.photo),
+        colors: (m.colors || []).map((c) => ({
+          ...c,
+          image: resolveCloudImageUrl(c.image),
+        })),
+      }));
+      setModelsData(sanitized);
+      localStorage.setItem("volmo_custom_models", JSON.stringify(sanitized));
+    }
+    if (serverConfig.pulse) {
+      const sanitizedPulse = {
+        ...serverConfig.pulse,
+        image: resolveCloudImageUrl(serverConfig.pulse.image),
+      };
+      setPulseData(sanitizedPulse);
+      localStorage.setItem("volmo_custom_pulse", JSON.stringify(sanitizedPulse));
+    }
+    if (serverConfig.features) {
+      setCommonFeatures(serverConfig.features);
+      localStorage.setItem("volmo_custom_features", JSON.stringify(serverConfig.features));
+    }
+    if (serverConfig.contact) {
+      setContactInfo(serverConfig.contact);
+      localStorage.setItem("volmo_custom_contact", JSON.stringify(serverConfig.contact));
+    }
+    if (serverConfig.hero) {
+      const sanitizedHero = {
+        ...serverConfig.hero,
+        coverBannerImage: resolveCloudImageUrl(serverConfig.hero.coverBannerImage),
+      };
+      setHeroConfig(sanitizedHero);
+      localStorage.setItem("volmo_custom_hero", JSON.stringify(sanitizedHero));
+    }
+    if (serverConfig.testimonials) {
+      setTestimonialsData(serverConfig.testimonials);
+      localStorage.setItem("volmo_custom_testimonials", JSON.stringify(serverConfig.testimonials));
+    }
+    if (serverConfig.faqs) {
+      setFaqsData(serverConfig.faqs);
+      localStorage.setItem("volmo_custom_faqs", JSON.stringify(serverConfig.faqs));
+    }
+    if (serverConfig.showrooms) {
+      setShowroomsData(serverConfig.showrooms);
+      localStorage.setItem("volmo_custom_showrooms", JSON.stringify(serverConfig.showrooms));
+    }
+    if (serverConfig.branding) {
+      const sanitizedBranding = {
+        ...serverConfig.branding,
+        logoImage: resolveCloudImageUrl(serverConfig.branding.logoImage),
+      };
+      setBrandingConfig(sanitizedBranding);
+      localStorage.setItem("volmo_custom_branding", JSON.stringify(sanitizedBranding));
+    }
+    if (serverConfig.sections) {
+      setSiteSections(serverConfig.sections);
+      localStorage.setItem("volmo_custom_site_sections", JSON.stringify(serverConfig.sections));
+    }
+    if (serverConfig.accessories) {
+      const sanitizedAcc = (serverConfig.accessories || []).map((a: AccessoryItem) => ({
+        ...a,
+        image: resolveCloudImageUrl(a.image),
+      }));
+      setAccessoriesData(sanitizedAcc);
+      localStorage.setItem("volmo_custom_accessories", JSON.stringify(sanitizedAcc));
+    }
+    if (serverConfig.leadAcidBatteries) {
+      const sanitizedBat = (serverConfig.leadAcidBatteries || []).map((b: LeadAcidBatteryItem) => ({
+        ...b,
+        image: resolveCloudImageUrl(b.image),
+      }));
+      setLeadAcidBatteriesData(sanitizedBat);
+      localStorage.setItem("volmo_custom_graphene_batteries", JSON.stringify(sanitizedBat));
+    }
+    if (serverConfig.lithiumBatteries) {
+      const sanitizedBat = (serverConfig.lithiumBatteries || []).map((b: LithiumLfpBatteryModel) => ({
+        ...b,
+        image: resolveCloudImageUrl(b.image),
+      }));
+      setLithiumBatteriesData(sanitizedBat);
+      localStorage.setItem("volmo_custom_lithium_batteries", JSON.stringify(sanitizedBat));
+    }
+    if (serverConfig.chargers) {
+      const sanitizedChg = (serverConfig.chargers || []).map((c: ChargerModelItem) => ({
+        ...c,
+        image: resolveCloudImageUrl(c.image),
+      }));
+      setChargersData(sanitizedChg);
+      localStorage.setItem("volmo_custom_chargers", JSON.stringify(sanitizedChg));
+    }
+    if (serverConfig.accessoriesPage) {
+      setAccessoriesPageConfig(serverConfig.accessoriesPage);
+      localStorage.setItem("volmo_custom_accessories_page", JSON.stringify(serverConfig.accessoriesPage));
+    }
+    if (serverConfig.batteryChargerPage) {
+      setBatteryChargerPageConfig(serverConfig.batteryChargerPage);
+      localStorage.setItem("volmo_custom_batterycharger_page", JSON.stringify(serverConfig.batteryChargerPage));
+    }
+    if (serverConfig.mediaArticles) {
+      setMediaArticlesData(serverConfig.mediaArticles);
+      localStorage.setItem("volmo_media_articles", JSON.stringify(serverConfig.mediaArticles));
+    }
+    if (serverConfig.companyPhotos) {
+      setCompanyPhotosData(serverConfig.companyPhotos);
+      localStorage.setItem("volmo_company_photos", JSON.stringify(serverConfig.companyPhotos));
+    }
+    if (serverConfig.companyVideos) {
+      setCompanyVideosData(serverConfig.companyVideos);
+      localStorage.setItem("volmo_company_videos", JSON.stringify(serverConfig.companyVideos));
+    }
+    if (serverConfig.careerOpenings) {
+      setCareerOpeningsData(serverConfig.careerOpenings);
+      localStorage.setItem("volmo_career_openings", JSON.stringify(serverConfig.careerOpenings));
+    }
+    if (serverConfig.mediaBlogsPage) {
+      setMediaBlogsPageConfig(serverConfig.mediaBlogsPage);
+      localStorage.setItem("volmo_mediablogs_page", JSON.stringify(serverConfig.mediaBlogsPage));
+    }
+  };
 
   // Load from local storage or static defaults
   useEffect(() => {
@@ -339,86 +470,76 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     }
     setIsLoaded(true);
 
-    // Asynchronous Real-time Backend Synchronization: Fetch latest state from backend server
+    // 1. Instantly pull from Cloudinary Cloud Database (accessible globally from any device)
+    getCloudSiteConfig()
+      .then((cloudConfig) => {
+        if (cloudConfig) {
+          applyFullConfig(cloudConfig);
+          console.log("[Volmo] Synchronized state from Cloudinary Cloud Database (oz1mkn2s)");
+        }
+      })
+      .catch((err) => {
+        console.info("[Volmo] Cloudinary fetch notice:", err.message);
+      });
+
+    // 2. Secondary Backend Server sync
     api.config
       .getConfig()
       .then((serverConfig) => {
         if (serverConfig) {
-          if (serverConfig.models) {
-            setModelsData(serverConfig.models);
-            localStorage.setItem("volmo_custom_models", JSON.stringify(serverConfig.models));
-          }
-          if (serverConfig.pulse) {
-            setPulseData(serverConfig.pulse);
-            localStorage.setItem("volmo_custom_pulse", JSON.stringify(serverConfig.pulse));
-          }
-          if (serverConfig.features) {
-            setCommonFeatures(serverConfig.features);
-            localStorage.setItem("volmo_custom_features", JSON.stringify(serverConfig.features));
-          }
-          if (serverConfig.contact) {
-            setContactInfo(serverConfig.contact);
-            localStorage.setItem("volmo_custom_contact", JSON.stringify(serverConfig.contact));
-          }
-          if (serverConfig.hero) {
-            setHeroConfig(serverConfig.hero);
-            localStorage.setItem("volmo_custom_hero", JSON.stringify(serverConfig.hero));
-          }
-          if (serverConfig.testimonials) {
-            setTestimonialsData(serverConfig.testimonials);
-            localStorage.setItem("volmo_custom_testimonials", JSON.stringify(serverConfig.testimonials));
-          }
-          if (serverConfig.faqs) {
-            setFaqsData(serverConfig.faqs);
-            localStorage.setItem("volmo_custom_faqs", JSON.stringify(serverConfig.faqs));
-          }
-          if (serverConfig.showrooms) {
-            setShowroomsData(serverConfig.showrooms);
-            localStorage.setItem("volmo_custom_showrooms", JSON.stringify(serverConfig.showrooms));
-          }
-          if (serverConfig.branding) {
-            setBrandingConfig(serverConfig.branding);
-            localStorage.setItem("volmo_custom_branding", JSON.stringify(serverConfig.branding));
-          }
-          if (serverConfig.sections) {
-            setSiteSections(serverConfig.sections);
-            localStorage.setItem("volmo_custom_site_sections", JSON.stringify(serverConfig.sections));
-          }
-          if (serverConfig.accessories) {
-            setAccessoriesData(serverConfig.accessories);
-            localStorage.setItem("volmo_custom_accessories", JSON.stringify(serverConfig.accessories));
-          }
-          if (serverConfig.leadAcidBatteries) {
-            setLeadAcidBatteriesData(serverConfig.leadAcidBatteries);
-            localStorage.setItem("volmo_custom_graphene_batteries", JSON.stringify(serverConfig.leadAcidBatteries));
-          }
-          if (serverConfig.lithiumBatteries) {
-            setLithiumBatteriesData(serverConfig.lithiumBatteries);
-            localStorage.setItem("volmo_custom_lithium_batteries", JSON.stringify(serverConfig.lithiumBatteries));
-          }
-          if (serverConfig.chargers) {
-            setChargersData(serverConfig.chargers);
-            localStorage.setItem("volmo_custom_chargers", JSON.stringify(serverConfig.chargers));
-          }
-          if (serverConfig.accessoriesPage) {
-            setAccessoriesPageConfig(serverConfig.accessoriesPage);
-            localStorage.setItem("volmo_custom_accessories_page", JSON.stringify(serverConfig.accessoriesPage));
-          }
-          if (serverConfig.batteryChargerPage) {
-            setBatteryChargerPageConfig(serverConfig.batteryChargerPage);
-            localStorage.setItem("volmo_custom_batterycharger_page", JSON.stringify(serverConfig.batteryChargerPage));
-          }
+          applyFullConfig(serverConfig);
         }
       })
-      .catch((err) => {
-        console.info("[Volmo] Connected to local cache (Backend sync pending):", err.message);
-      });
+      .catch(() => {});
+
+    // 3. Listen for window focus to refresh from Cloudinary across devices
+    const onFocus = () => {
+      getCloudSiteConfig()
+        .then((cloudConfig) => {
+          if (cloudConfig) applyFullConfig(cloudConfig);
+        })
+        .catch(() => {});
+    };
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
   }, []);
 
   const syncSectionToBackend = (section: string, data: any) => {
+    // 1. Sync section to backend API
     api.config.updateSection(section, data).catch((err) => {
       console.warn(`[Volmo] Backend sync for '${section}':`, err.message);
     });
+
+    // 2. Debounce sync full site config to Cloudinary Cloud Database for permanent memory
+    if (cloudSyncTimeoutRef.current) clearTimeout(cloudSyncTimeoutRef.current);
+    cloudSyncTimeoutRef.current = setTimeout(() => {
+      const fullSnapshot = {
+        models: section === "models" ? data : modelsData,
+        pulse: section === "pulse" ? data : pulseData,
+        features: section === "features" ? data : commonFeatures,
+        contact: section === "contact" ? data : contactInfo,
+        hero: section === "hero" ? data : heroConfig,
+        testimonials: section === "testimonials" ? data : testimonialsData,
+        faqs: section === "faqs" ? data : faqsData,
+        showrooms: section === "showrooms" ? data : showroomsData,
+        branding: section === "branding" ? data : brandingConfig,
+        sections: section === "sections" ? data : siteSections,
+        accessories: section === "accessories" ? data : accessoriesData,
+        leadAcidBatteries: section === "leadAcidBatteries" ? data : leadAcidBatteriesData,
+        lithiumBatteries: section === "lithiumBatteries" ? data : lithiumBatteriesData,
+        chargers: section === "chargers" ? data : chargersData,
+        accessoriesPage: section === "accessoriesPage" ? data : accessoriesPageConfig,
+        batteryChargerPage: section === "batteryChargerPage" ? data : batteryChargerPageConfig,
+        mediaArticles: section === "mediaArticles" ? data : mediaArticlesData,
+        companyPhotos: section === "companyPhotos" ? data : companyPhotosData,
+        companyVideos: section === "companyVideos" ? data : companyVideosData,
+        careerOpenings: section === "careerOpenings" ? data : careerOpeningsData,
+        mediaBlogsPage: section === "mediaBlogsPage" ? data : mediaBlogsPageConfig,
+      };
+      saveCloudSiteConfig(fullSnapshot).catch((err) => {
+        console.warn("[Cloudinary Cloud DB] Auto-save notice:", err.message);
+      });
+    }, 600);
   };
 
   const updateModelSpec = (id: string, updatedSpec: Partial<ModelSpec>) => {

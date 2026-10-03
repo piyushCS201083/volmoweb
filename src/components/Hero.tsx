@@ -7,6 +7,7 @@ import React from "react";
 import { motion } from "motion/react";
 import { Zap, ShieldCheck, ArrowDown, Building, Award } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
+import { resolveCloudImageUrl } from "../services/cloudinaryCloud";
 
 interface HeroProps {
   onExploreModels: () => void;
@@ -130,7 +131,7 @@ export default function Hero({ onExploreModels, onApplyPartnership }: HeroProps)
           <div className="relative bg-white border border-slate-200/90 p-2 sm:p-3.5 rounded-[32px] sm:rounded-[40px] shadow-2xl shadow-slate-900/10 overflow-hidden group">
             <div className="relative w-full h-[360px] sm:h-[480px] md:h-[560px] lg:h-[640px] xl:h-[700px] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-slate-900 pointer-events-auto">
               <motion.img
-                src={heroConfig.coverPhoto || "/src/assets/images/volmo_hero_banner_1780063638602.png"}
+                src={resolveCloudImageUrl(heroConfig.coverPhoto) || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg"}
                 alt="Ultra high-tech premium Volmo Electric Scooter model cover banner"
                 referrerPolicy="no-referrer"
                 whileHover={{ scale: 1.025 }}

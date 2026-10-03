@@ -93,7 +93,7 @@ export default function AccessoriesCMS({ onShowToast }: AccessoriesCMSProps) {
         { label: "Compatibility", value: "Universal Fit for Volmo Fleet" },
         { label: "Warranty", value: "1 Year Official Warranty" }
       ],
-      image: "/src/assets/images/volmo_steel_frame_1790255503151.jpg",
+      image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg",
       inStock: true,
     };
     setEditingItem(newItem);

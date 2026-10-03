@@ -9,6 +9,7 @@ import { X, ClipboardCheck, Sparkles, AlertCircle, ExternalLink } from "lucide-r
 import { PriceInquiry, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
 import { api } from "../services/api";
+import { submitCloudInquiry } from "../services/cloudinaryCloud";
 import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 interface PriceInquiryModalProps {
@@ -169,6 +170,11 @@ Please send the ex-showroom price and brochure.`;
     // Save to local storage for instant offline access
     const currentInquiries = JSON.parse(localStorage.getItem("volmo_inquiries") || "[]");
     localStorage.setItem("volmo_inquiries", JSON.stringify([inquiry, ...currentInquiries]));
+
+    // Save to Cloudinary Cloud Database for permanent multi-device persistence
+    submitCloudInquiry(inquiry).catch((err) => {
+      console.warn("[Cloudinary Cloud] Notice:", err.message);
+    });
 
     // Send to backend API for persistent real-time database storage
     api.leads.submitInquiry(inquiry).catch((err) => {

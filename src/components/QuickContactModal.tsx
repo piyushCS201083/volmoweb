@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
 import { api } from "../services/api";
+import { submitCloudInquiry } from "../services/cloudinaryCloud";
 import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 export interface QuickContactData {
@@ -170,18 +171,28 @@ Please share further details with me.`;
     setCustomWhatsAppMessage(formattedMsg);
 
     try {
-      // Record lead in the persistent backend store and dispatch email notification
-      await api.leads.submitInquiry({
+      const inquiryPayload = {
+        id: "I-" + Math.floor(Math.random() * 100000),
         name: contactPayload.name,
         phone: contactPayload.phone,
         email: contactPayload.email,
         model: `Quick Contact: ${topic}`,
         color: email.trim() ? `Email: ${email.trim()}` : "Direct Contact",
-        batteryType: "LI",
+        batteryType: "LI" as const,
         batteryConfig: topic,
         rangeKm: 0,
         message: contactPayload.message,
+        status: "new" as const,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Save directly to Cloudinary Cloud Database for permanent storage
+      submitCloudInquiry(inquiryPayload).catch((cErr) => {
+        console.warn("[Cloudinary Cloud] Notice:", cErr.message);
       });
+
+      // Record lead in the persistent backend store and dispatch email notification
+      await api.leads.submitInquiry(inquiryPayload);
     } catch (err) {
       console.warn("Notice: Saved inquiry locally/optimistically:", err);
     } finally {
