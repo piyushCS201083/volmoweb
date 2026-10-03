@@ -9,7 +9,7 @@ import { X, ClipboardCheck, Sparkles, AlertCircle, ExternalLink } from "lucide-r
 import { PriceInquiry, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
 import { api } from "../services/api";
-import { submitCloudInquiry } from "../services/cloudinaryCloud";
+import { savePriceInquiryToCloud } from "../services/firebase";
 import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 interface PriceInquiryModalProps {
@@ -167,16 +167,16 @@ export default function PriceInquiryModal({
 Please send the ex-showroom price and brochure.`;
     setCustomWhatsAppMessage(formattedMsg);
 
+    // Save to permanent cloud memory in Cloud Firestore
+    savePriceInquiryToCloud(inquiry).catch((err) => {
+      console.warn("[Volmo] Cloud Firestore inquiry sync notice:", err);
+    });
+
     // Save to local storage for instant offline access
     const currentInquiries = JSON.parse(localStorage.getItem("volmo_inquiries") || "[]");
     localStorage.setItem("volmo_inquiries", JSON.stringify([inquiry, ...currentInquiries]));
 
-    // Save to Cloudinary Cloud Database for permanent multi-device persistence
-    submitCloudInquiry(inquiry).catch((err) => {
-      console.warn("[Cloudinary Cloud] Notice:", err.message);
-    });
-
-    // Send to backend API for persistent real-time database storage
+    // Send to backend API for persistent real-time database storage and email notification
     api.leads.submitInquiry(inquiry).catch((err) => {
       console.warn("[Volmo] Price inquiry submitted locally (backend sync pending):", err.message);
     });

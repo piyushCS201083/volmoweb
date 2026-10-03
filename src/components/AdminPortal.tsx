@@ -52,6 +52,7 @@ import {
 import { PriceInquiry, DealershipApp, ModelSpec, BatteryType } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
 import { api } from "../services/api";
+import { fetchPriceInquiriesFromCloud, fetchDealershipsFromCloud } from "../services/firebase";
 import PhotosCMS from "./admin/PhotosCMS";
 import HeroCMS from "./admin/HeroCMS";
 import TestimonialsCMS from "./admin/TestimonialsCMS";
@@ -63,20 +64,15 @@ import BatteryChargerCMS from "./admin/BatteryChargerCMS";
 import MediaBlogsCMS from "./admin/MediaBlogsCMS";
 import SaveDataModal from "./admin/SaveDataModal";
 import CloudDatabaseCMS from "./admin/CloudDatabaseCMS";
-import {
-  getCloudInquiries,
-  getCloudDealers,
-  saveRawDataToCloud,
-} from "../services/cloudinaryCloud";
 
 // Pre-packaged high-res scooter assets for 1-click selection
 const PRESET_ASSETS = [
-  { label: "Volmo Vista (Light Silver/Gray)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026832/volmo_assets/regenerated_image_1790169272003.jpg" },
-  { label: "Volmo Glider (Charcoal Grey)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026842/volmo_assets/volmo_glider_1780058835594.jpg" },
-  { label: "Volmo Classic (Crimson Cherry)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026840/volmo_assets/volmo_classic_1780058851300.jpg" },
-  { label: "Volmo Phantom (Cream Beige)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026876/volmo_assets/volmo_phantom_1780058868036.jpg" },
-  { label: "Volmo Pulse Concept (Side View)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026883/volmo_assets/volmo_pulse_1780058885037.jpg" },
-  { label: "Volmo Pulse Cyberpunk (Angular)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026889/volmo_assets/volmo_pulse_premium_1780068389740.jpg" },
+  { label: "Volmo Vista (Light Silver/Gray)", url: "/src/assets/images/regenerated_image_1790169272003.jpg" },
+  { label: "Volmo Glider (Charcoal Grey)", url: "/src/assets/images/volmo_glider_1780058835594.png" },
+  { label: "Volmo Classic (Crimson Cherry)", url: "/src/assets/images/volmo_classic_1780058851300.png" },
+  { label: "Volmo Phantom (Cream Beige)", url: "/src/assets/images/volmo_phantom_1780058868036.png" },
+  { label: "Volmo Pulse Concept (Side View)", url: "/src/assets/images/volmo_pulse_1780058885037.png" },
+  { label: "Volmo Pulse Cyberpunk (Angular)", url: "/src/assets/images/volmo_pulse_premium_1780068389740.png" },
 ];
 
 const AVAILABLE_ICONS = [
@@ -540,9 +536,9 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     }
   };
 
-  // Load inquiries and dealer submissions from Cloudinary Cloud Database and backend
+  // Load inquiries and dealer submissions from Cloud Firestore database with fallbacks
   const loadLeads = async () => {
-    // 1. Immediate load from local storage to prevent blank screen
+    // Immediate load from local storage to prevent blank screen
     try {
       const storedInquiries = localStorage.getItem("volmo_inquiries");
       if (storedInquiries) setInquiries(JSON.parse(storedInquiries));
@@ -552,11 +548,11 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
       console.error(e);
     }
 
-    // 2. Fetch directly from Cloudinary Cloud Database (available globally across all devices)
+    // 1. Live sync from Cloud Firestore permanent cloud memory
     try {
       const [cloudInquiries, cloudDealers] = await Promise.all([
-        getCloudInquiries(),
-        getCloudDealers(),
+        fetchPriceInquiriesFromCloud(),
+        fetchDealershipsFromCloud(),
       ]);
       if (cloudInquiries && cloudInquiries.length > 0) {
         setInquiries(cloudInquiries);
@@ -566,40 +562,26 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
         setDealers(cloudDealers);
         localStorage.setItem("volmo_dealers", JSON.stringify(cloudDealers));
       }
-    } catch (cErr: any) {
-      console.warn("[Admin] Cloudinary leads sync check:", cErr.message);
+      setBackendStatus("connected");
+    } catch (err: any) {
+      console.warn("[Admin] Cloud Firestore leads load notice:", err.message);
     }
 
-    // 3. Live sync from backend API
+    // 2. Secondary fallback sync from backend API
     try {
       const [backendInquiries, backendDealers] = await Promise.all([
         api.leads.getInquiries(),
         api.leads.getDealers(),
       ]);
       if (backendInquiries && backendInquiries.length > 0) {
-        setInquiries((prev) => {
-          const map = new Map<string, PriceInquiry>();
-          prev.forEach((i) => map.set(i.id, i));
-          backendInquiries.forEach((i) => map.set(i.id, i));
-          const merged = Array.from(map.values());
-          localStorage.setItem("volmo_inquiries", JSON.stringify(merged));
-          return merged;
-        });
+        setInquiries((prev) => (prev.length > 0 ? prev : backendInquiries));
       }
       if (backendDealers && backendDealers.length > 0) {
-        setDealers((prev) => {
-          const map = new Map<string, DealershipApp>();
-          prev.forEach((d) => map.set(d.id, d));
-          backendDealers.forEach((d) => map.set(d.id, d));
-          const merged = Array.from(map.values());
-          localStorage.setItem("volmo_dealers", JSON.stringify(merged));
-          return merged;
-        });
+        setDealers((prev) => (prev.length > 0 ? prev : backendDealers));
       }
       setBackendStatus("connected");
     } catch (err: any) {
-      console.warn("[Admin] Leads loaded from local cache:", err.message);
-      setBackendStatus("offline");
+      console.warn("[Admin] Backend API leads note:", err.message);
     }
   };
 
@@ -743,14 +725,11 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     showToast("Admin password updated on server and saved forever!");
   };
 
-  // Status Change handlers with Cloudinary and backend sync
+  // Status Change handlers with backend sync
   const handleInquiryStatus = (id: string, status: PriceInquiry["status"]) => {
     const updated = inquiries.map((item) => (item.id === id ? { ...item, status } : item));
     setInquiries(updated);
     localStorage.setItem("volmo_inquiries", JSON.stringify(updated));
-    saveRawDataToCloud(updated, "inquiries").catch((err) => {
-      console.warn("[Cloud Database] Notice:", err.message);
-    });
     api.leads.updateInquiryStatus(id, status).catch((err) => {
       console.warn("[Admin] Failed to update inquiry status on backend:", err.message);
     });
@@ -761,9 +740,6 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     const updated = dealers.map((item) => (item.id === id ? { ...item, status } : item));
     setDealers(updated);
     localStorage.setItem("volmo_dealers", JSON.stringify(updated));
-    saveRawDataToCloud(updated, "dealers").catch((err) => {
-      console.warn("[Cloud Database] Notice:", err.message);
-    });
     api.leads.updateDealerStatus(id, status).catch((err) => {
       console.warn("[Admin] Failed to update dealer status on backend:", err.message);
     });
@@ -775,9 +751,6 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
       const updated = inquiries.filter((item) => item.id !== id);
       setInquiries(updated);
       localStorage.setItem("volmo_inquiries", JSON.stringify(updated));
-      saveRawDataToCloud(updated, "inquiries").catch((err) => {
-        console.warn("[Cloud Database] Notice:", err.message);
-      });
       api.leads.deleteInquiry(id).catch((err) => {
         console.warn("[Admin] Failed to delete inquiry from backend:", err.message);
       });
@@ -790,9 +763,6 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
       const updated = dealers.filter((item) => item.id !== id);
       setDealers(updated);
       localStorage.setItem("volmo_dealers", JSON.stringify(updated));
-      saveRawDataToCloud(updated, "dealers").catch((err) => {
-        console.warn("[Cloud Database] Notice:", err.message);
-      });
       api.leads.deleteDealer(id).catch((err) => {
         console.warn("[Admin] Failed to delete dealer application from backend:", err.message);
       });
@@ -870,7 +840,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
         { name: "Polar White", hex: "#FFFFFF" },
         { name: "Obsidian Black", hex: "#111111" },
       ],
-      image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026832/volmo_assets/regenerated_image_1790169272003.jpg",
+      image: "/src/assets/images/regenerated_image_1790169272003.jpg",
       basePriceEstimate: "₹59,999",
       featured: false,
       frontBrake: "Front Disc Brake",

@@ -94,7 +94,7 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
 
             <ImageUploader
               label="Homepage Main Cover Photo"
-              value={heroConfig.coverPhoto || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg"}
+              value={heroConfig.coverPhoto || "/src/assets/images/volmo_hero_banner_1780063638602.png"}
               onChange={(newUrl) => {
                 updateHeroConfig({ coverPhoto: newUrl });
                 onShowToast("Hero cover photo updated successfully!");
@@ -201,7 +201,7 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
 
             <ImageUploader
               label="Pulse Teaser Showcase Image"
-              value={pulseData.image || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026889/volmo_assets/volmo_pulse_premium_1780068389740.jpg"}
+              value={pulseData.image || "/src/assets/images/volmo_pulse_premium_1780068389740.png"}
               onChange={(newVal) => {
                 updatePulseData({ image: newVal });
                 onShowToast("Pulse flagship photo updated!");

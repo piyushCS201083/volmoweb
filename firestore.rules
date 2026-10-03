@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidPriceInquiry(data) {
+      return data.keys().hasAll(['id', 'name', 'phone', 'model', 'status', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'name', 'phone', 'email', 'model', 'color', 'batteryType', 'batteryConfig', 'rangeKm', 'message', 'status', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 7 && data.phone.size() <= 20 &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 100)) &&
+        data.model is string && data.model.size() > 0 && data.model.size() <= 100 &&
+        (!('color' in data) || (data.color is string && data.color.size() <= 100)) &&
+        (!('batteryType' in data) || (data.batteryType in ['LA', 'LI'])) &&
+        (!('batteryConfig' in data) || (data.batteryConfig is string && data.batteryConfig.size() <= 200)) &&
+        (!('rangeKm' in data) || (data.rangeKm is number)) &&
+        (!('message' in data) || (data.message is string && data.message.size() <= 1000)) &&
+        data.status in ['new', 'contacted', 'completed'] &&
+        data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidDealershipApp(data) {
+      return data.keys().hasAll(['id', 'name', 'email', 'phone', 'city', 'state', 'status', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'name', 'email', 'phone', 'city', 'state', 'experience', 'pastBusiness', 'investmentRange', 'message', 'status', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.email is string && data.email.size() > 0 && data.email.size() <= 100 &&
+        data.phone is string && data.phone.size() >= 7 && data.phone.size() <= 20 &&
+        data.city is string && data.city.size() > 0 && data.city.size() <= 100 &&
+        data.state is string && data.state.size() > 0 && data.state.size() <= 100 &&
+        (!('experience' in data) || (data.experience is string && data.experience.size() <= 200)) &&
+        (!('pastBusiness' in data) || (data.pastBusiness is string && data.pastBusiness.size() <= 200)) &&
+        (!('investmentRange' in data) || (data.investmentRange is string && data.investmentRange.size() <= 100)) &&
+        (!('message' in data) || (data.message is string && data.message.size() <= 1000)) &&
+        data.status in ['applied', 'under_review', 'approved', 'rejected'] &&
+        data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidSiteConfig(data) {
+      return data.keys().hasAll(['id', 'section', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'section', 'data', 'updatedAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.section is string && data.section.size() > 0 && data.section.size() <= 64 &&
+        (!('data' in data) || (data.data is string && data.data.size() <= 1000000)) &&
+        data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidCloudPhoto(data) {
+      return data.keys().hasAll(['id', 'filename', 'dataUrl', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'filename', 'dataUrl', 'mimeType', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.filename is string && data.filename.size() > 0 && data.filename.size() <= 256 &&
+        data.dataUrl is string && data.dataUrl.size() > 0 && data.dataUrl.size() <= 1000000 &&
+        (!('mimeType' in data) || (data.mimeType is string && data.mimeType.size() <= 64)) &&
+        data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    // Inquiries Collection
+    match /inquiries/{inquiryId} {
+      allow get, list: if true;
+      allow create: if isValidId(inquiryId) && isValidPriceInquiry(incoming()) && incoming().id == inquiryId;
+      allow update: if isValidId(inquiryId) && isValidPriceInquiry(incoming()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['status']);
+      allow delete: if isValidId(inquiryId);
+    }
+
+    // Dealerships Collection
+    match /dealerships/{dealershipId} {
+      allow get, list: if true;
+      allow create: if isValidId(dealershipId) && isValidDealershipApp(incoming()) && incoming().id == dealershipId;
+      allow update: if isValidId(dealershipId) && isValidDealershipApp(incoming()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['status']);
+      allow delete: if isValidId(dealershipId);
+    }
+
+    // Site Configuration Collection (Universal Cross-Device Persistence)
+    match /site_config/{configId} {
+      allow get, list: if true;
+      allow create, update: if isValidId(configId) && isValidSiteConfig(incoming()) && incoming().id == configId;
+      allow delete: if false;
+    }
+
+    // Cloud Photos Collection (Permanent Photo Storage)
+    match /cloud_photos/{photoId} {
+      allow get, list: if true;
+      allow create, update: if isValidId(photoId) && isValidCloudPhoto(incoming()) && incoming().id == photoId;
+      allow delete: if isValidId(photoId);
+    }
+  }
+}

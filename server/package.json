@@ -6,8 +6,6 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "backend": "node server.js",
-    "start:backend": "node server.js",
     "dev": "node server.js",
     "build": "echo 'Ready'"
   },

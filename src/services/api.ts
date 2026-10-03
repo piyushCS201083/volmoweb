@@ -12,12 +12,10 @@ const rawEnvUrl = ((import.meta as any).env?.VITE_API_URL as string) || "";
 // If the environment contains the legacy volmoweb-1 URL, automatically upgrade to volmoweb-2
 const effectiveEnvUrl = rawEnvUrl.includes("volmoweb-1.onrender.com") ? RENDER_BACKEND_URL : rawEnvUrl;
 
-// Base API URL supports standalone frontend deployment via VITE_API_URL or defaults to live Render backend
+// Base API URL: In browser environments, use relative URLs ("") to hit the current hosting server directly
 export const API_BASE_URL = (
   effectiveEnvUrl ||
-  (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname.includes("run.app"))
-    ? ""
-    : RENDER_BACKEND_URL)
+  (typeof window !== "undefined" ? "" : RENDER_BACKEND_URL)
 ).replace(/\/$/, "");
 
 class ApiError extends Error {

@@ -25,7 +25,6 @@ import {
 import { api } from "../../services/api";
 import { useSiteConfig } from "../../SiteConfigContext";
 import { PriceInquiry, DealershipApp } from "../../types";
-import { saveCloudSiteConfig, saveRawDataToCloud } from "../../services/cloudinaryCloud";
 
 interface CloudDatabaseCMSProps {
   onShowToast: (msg: string) => void;
@@ -106,20 +105,12 @@ export default function CloudDatabaseCMS({
   const handleSyncAllToCloud = async () => {
     setSyncingAll(true);
     try {
-      // 1. Direct Cloudinary Cloud Database save
-      await Promise.all([
-        saveRawDataToCloud(inquiries, "inquiries"),
-        saveRawDataToCloud(dealers, "dealers"),
-      ]);
-
-      // 2. Also trigger backend sync
-      const res = await api.cloudinary.syncAllToCloud().catch(() => null);
-      if (res) setLastSyncResult(res);
-
+      const res = await api.cloudinary.syncAllToCloud();
+      setLastSyncResult(res);
       onShowToast("✓ All form submissions and site data permanently synced to Cloud Database!");
       onRefreshLeads();
     } catch (err: any) {
-      onShowToast("Cloud sync notice: " + err.message);
+      onShowToast("Cloud sync failed: " + err.message);
     } finally {
       setSyncingAll(false);
     }

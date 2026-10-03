@@ -22,7 +22,7 @@ export function createExpressApp(): Express {
   // Cross-Origin Resource Sharing (CORS) - Allows frontend deployed separately to access this API
   app.use(
     cors({
-      origin: SERVER_CONFIG.CORS_ORIGIN === "*" ? true : SERVER_CONFIG.CORS_ORIGIN,
+      origin: true,
       credentials: true,
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -45,6 +45,18 @@ export function createExpressApp(): Express {
   const publicUploadsDir = path.resolve(process.cwd(), "public", "uploads");
   if (fs.existsSync(publicUploadsDir)) {
     app.use("/uploads", express.static(publicUploadsDir));
+  }
+
+  // Ensure scooter and component assets are always served reliably
+  const srcImagesDir = path.resolve(process.cwd(), "src", "assets", "images");
+  if (fs.existsSync(srcImagesDir)) {
+    app.use("/src/assets/images", express.static(srcImagesDir));
+    app.use("/assets/images", express.static(srcImagesDir));
+    app.use("/images", express.static(srcImagesDir));
+  }
+  const publicDir = path.resolve(process.cwd(), "public");
+  if (fs.existsSync(publicDir)) {
+    app.use(express.static(publicDir));
   }
 
   // Mount API endpoints

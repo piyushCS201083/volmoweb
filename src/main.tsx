@@ -12,6 +12,10 @@ if (typeof window !== "undefined") {
       event.preventDefault();
     }
   });
+
+  window.addEventListener("vite:preloadError", () => {
+    window.location.reload();
+  });
 }
 
 createRoot(document.getElementById('root')!).render(

@@ -22,7 +22,7 @@ import {
 import { CareerOpening, CareerApplication } from "../types";
 import { CAREER_OPENINGS } from "../data/mediaBlogsData";
 import { api } from "../services/api";
-import { submitCloudInquiry } from "../services/cloudinaryCloud";
+import { savePriceInquiryToCloud } from "../services/firebase";
 
 interface CareerApplyModalProps {
   isOpen: boolean;
@@ -133,27 +133,38 @@ export default function CareerApplyModal({
       createdAt: new Date().toISOString(),
     };
 
+    const careerLeadId = "CAR-" + Math.floor(10000 + Math.random() * 90000);
+    // 1. Save directly to Cloud Firestore permanent memory
+    savePriceInquiryToCloud({
+      id: careerLeadId,
+      name: `${application.name} (Career: ${activeJob.title})`,
+      phone: application.phone,
+      email: application.email,
+      model: `Job Application: ${activeJob.title}`,
+      color: `${application.city}, ${application.state} | Exp: ${experienceYears}`,
+      batteryType: "LI",
+      batteryConfig: `${application.email} | ${application.currentRole || "Applicant"}`,
+      rangeKm: 0,
+      message: application.coverNote,
+      status: "new",
+      createdAt: new Date().toISOString(),
+    }).catch((err) => {
+      console.warn("[Volmo] Cloud Firestore career sync notice:", err);
+    });
+
     try {
-      const careerInquiry = {
-        id: "I-" + Math.floor(Math.random() * 100000),
+      // 2. Save application as lead in backend and email recipient
+      await api.leads.submitInquiry({
         name: `${application.name} (Career: ${activeJob.title})`,
         phone: application.phone,
+        email: application.email,
         model: `Job Application: ${activeJob.title}`,
         color: `${application.city}, ${application.state} | Exp: ${experienceYears}`,
-        batteryType: "LI" as const,
+        batteryType: "LI",
         batteryConfig: `${application.email} | ${application.currentRole || "Applicant"}`,
         rangeKm: 0,
-        status: "new" as const,
-        createdAt: new Date().toISOString(),
-      };
-
-      // Save directly to Cloudinary Cloud Database for permanent storage
-      submitCloudInquiry(careerInquiry).catch((cErr) => {
-        console.warn("[Cloudinary Cloud] Notice:", cErr.message);
+        message: application.coverNote,
       });
-
-      // Save application as lead in backend
-      await api.leads.submitInquiry(careerInquiry);
     } catch (err) {
       console.warn("Application saved locally:", err);
     } finally {

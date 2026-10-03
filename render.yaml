@@ -10,7 +10,7 @@ services:
     region: oregon
     rootDir: server
     buildCommand: npm install
-    startCommand: node server.js
+    startCommand: npm start
     envVars:
       - key: NODE_VERSION
         value: 20

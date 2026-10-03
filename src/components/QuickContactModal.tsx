@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
 import { api } from "../services/api";
-import { submitCloudInquiry } from "../services/cloudinaryCloud";
+import { savePriceInquiryToCloud } from "../services/firebase";
 import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 export interface QuickContactData {
@@ -170,29 +170,38 @@ export default function QuickContactModal({
 Please share further details with me.`;
     setCustomWhatsAppMessage(formattedMsg);
 
+    const leadId = "Q-" + Math.floor(10000 + Math.random() * 90000);
+    // 1. Save to permanent memory in Cloud Firestore
+    savePriceInquiryToCloud({
+      id: leadId,
+      name: contactPayload.name,
+      phone: contactPayload.phone,
+      email: contactPayload.email,
+      model: `Quick Contact: ${topic}`,
+      color: email.trim() ? `Email: ${email.trim()}` : "Direct Contact",
+      batteryType: "LI",
+      batteryConfig: topic,
+      rangeKm: 0,
+      message: contactPayload.message,
+      status: "new",
+      createdAt: new Date().toISOString(),
+    }).catch((err) => {
+      console.warn("[Volmo] Cloud Firestore quick inquiry sync notice:", err);
+    });
+
     try {
-      const inquiryPayload = {
-        id: "I-" + Math.floor(Math.random() * 100000),
+      // 2. Record lead in the persistent backend store and dispatch email notification
+      await api.leads.submitInquiry({
         name: contactPayload.name,
         phone: contactPayload.phone,
         email: contactPayload.email,
         model: `Quick Contact: ${topic}`,
         color: email.trim() ? `Email: ${email.trim()}` : "Direct Contact",
-        batteryType: "LI" as const,
+        batteryType: "LI",
         batteryConfig: topic,
         rangeKm: 0,
         message: contactPayload.message,
-        status: "new" as const,
-        createdAt: new Date().toISOString(),
-      };
-
-      // Save directly to Cloudinary Cloud Database for permanent storage
-      submitCloudInquiry(inquiryPayload).catch((cErr) => {
-        console.warn("[Cloudinary Cloud] Notice:", cErr.message);
       });
-
-      // Record lead in the persistent backend store and dispatch email notification
-      await api.leads.submitInquiry(inquiryPayload);
     } catch (err) {
       console.warn("Notice: Saved inquiry locally/optimistically:", err);
     } finally {

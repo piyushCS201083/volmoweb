@@ -1,0 +1,189 @@
+{
+  "entities": {
+    "PriceInquiry": {
+      "title": "PriceInquiry",
+      "description": "Customer price inquiry or quote lead submitted through website",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "model": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "color": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "batteryType": {
+          "type": "string",
+          "enum": ["LA", "LI"]
+        },
+        "batteryConfig": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "rangeKm": {
+          "type": "number"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "contacted", "completed"]
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "name", "phone", "model", "status", "createdAt"]
+    },
+    "DealershipApplication": {
+      "title": "DealershipApplication",
+      "description": "Franchise or dealership partnership application",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "state": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "experience": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "pastBusiness": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "investmentRange": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "status": {
+          "type": "string",
+          "enum": ["applied", "under_review", "approved", "rejected"]
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "name", "email", "phone", "city", "state", "status", "createdAt"]
+    },
+    "SiteConfigSection": {
+      "title": "SiteConfigSection",
+      "description": "Persistent section configuration or CMS data item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "section": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "data": {
+          "type": "string",
+          "maxLength": 1000000
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "section", "updatedAt"]
+    },
+    "CloudPhoto": {
+      "title": "CloudPhoto",
+      "description": "Permanently stored photo asset in Cloud Firestore",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "filename": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "dataUrl": {
+          "type": "string",
+          "maxLength": 1000000
+        },
+        "mimeType": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "filename", "dataUrl", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/inquiries/{inquiryId}": {
+      "schema": "PriceInquiry",
+      "description": "Collection of customer price inquiries and quote requests"
+    },
+    "/dealerships/{dealershipId}": {
+      "schema": "DealershipApplication",
+      "description": "Collection of dealership and franchise partnership applications"
+    },
+    "/site_config/{configId}": {
+      "schema": "SiteConfigSection",
+      "description": "Global persistent site configuration and CMS content sections"
+    },
+    "/cloud_photos/{photoId}": {
+      "schema": "CloudPhoto",
+      "description": "Collection of permanently stored cloud photos and user-uploaded assets"
+    }
+  }
+}

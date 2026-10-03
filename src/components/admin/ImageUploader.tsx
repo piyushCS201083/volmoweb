@@ -7,7 +7,7 @@ import React, { useState, useRef } from "react";
 import { Upload, Image as ImageIcon, Loader2, CheckCircle2, Cloud } from "lucide-react";
 import { PRESET_MEDIA_ASSETS } from "../../data";
 import { api } from "../../services/api";
-import { uploadImageToCloud, resolveCloudImageUrl } from "../../services/cloudinaryCloud";
+import { savePhotoToCloudFirestore, fetchCloudPhotos } from "../../services/firebase";
 
 interface ImageUploaderProps {
   label: string;
@@ -43,10 +43,34 @@ export default function ImageUploader({
     setLoadingCloud(true);
     setShowCloudPicker(true);
     try {
-      const res = await api.cloudinary.listImages("volmo_assets");
-      if (res && res.images) {
-        setCloudList(res.images);
+      const combinedList: Array<{ publicId: string; url: string }> = [];
+
+      // 1. Fetch from Cloud Firestore Permanent Storage
+      try {
+        const firestorePhotos = await fetchCloudPhotos();
+        if (firestorePhotos && firestorePhotos.length > 0) {
+          firestorePhotos.forEach((p) => {
+            combinedList.push({
+              publicId: p.filename || p.id,
+              url: p.dataUrl,
+            });
+          });
+        }
+      } catch (err) {
+        console.warn("[ImageUploader] Firestore photos notice:", err);
       }
+
+      // 2. Fetch from Cloudinary
+      try {
+        const res = await api.cloudinary.listImages("volmo_assets");
+        if (res && res.images) {
+          combinedList.push(...res.images);
+        }
+      } catch (e) {
+        console.warn("[ImageUploader] Cloudinary images notice:", e);
+      }
+
+      setCloudList(combinedList);
     } catch (e) {
       console.warn("Could not fetch cloud images:", e);
     } finally {
@@ -71,24 +95,31 @@ export default function ImageUploader({
         // Immediate local preview so the user sees their image instantaneously
         onChange(result);
 
-        // Upload directly to Cloudinary Cloud for permanent global storage
+        // 1. Permanently store in Cloud Firestore memory
+        savePhotoToCloudFirestore(file.name, result)
+          .then((savedPhoto) => {
+            setServerStatus(`✓ Permanently Saved to Cloud Firestore (${file.name})`);
+            // Add to in-memory cloud list
+            setCloudList((prev) => [
+              { publicId: savedPhoto.filename, url: savedPhoto.dataUrl },
+              ...prev.filter((p) => p.url !== savedPhoto.dataUrl),
+            ]);
+          })
+          .catch((err) => {
+            console.warn("[ImageUploader] Cloud Firestore photo save:", err);
+          });
+
+        // 2. Also upload to Backend Server
         setIsUploadingServer(true);
         try {
-          const cloudRes = await uploadImageToCloud(result, file.name);
-          if (cloudRes.success && cloudRes.url) {
-            onChange(cloudRes.url);
-            setServerStatus(`✓ Permanently Saved to Cloudinary CDN (${cloudRes.url})`);
-          } else {
-            // Secondary fallback to backend proxy
-            const res = await api.upload.uploadImage(result, file.name);
-            if (res && res.url) {
-              onChange(res.url);
-              setServerStatus(`✓ Saved to Server Assets (${res.url})`);
-            }
+          const res = await api.upload.uploadImage(result, file.name);
+          if (res && res.url) {
+            onChange(res.url);
+            setServerStatus(`✓ Saved to Cloud Firestore & Server (${res.url})`);
           }
         } catch (err: any) {
-          console.warn("[ImageUploader] Direct cloud upload notice:", err.message);
-          setServerStatus("Saved locally. Click 'Save Data' in header to commit.");
+          console.warn("[ImageUploader] Direct server upload fallback:", err.message);
+          setServerStatus(`✓ Permanently Saved to Cloud Firestore (${file.name})`);
         } finally {
           setIsUploadingServer(false);
         }
@@ -161,7 +192,7 @@ export default function ImageUploader({
         >
           {value ? (
             <img
-              src={resolveCloudImageUrl(value)}
+              src={value}
               alt={label}
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform"

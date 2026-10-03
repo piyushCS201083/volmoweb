@@ -48,25 +48,59 @@ async function startServer() {
   const http = await import("node:http");
   const app = createExpressApp();
   const server = http.createServer(app);
-  const isProduction = process.env.NODE_ENV === "production";
   const isStandaloneBackend = process.env.STANDALONE_BACKEND === "true";
+  const distPath = path.resolve(__dirname, "dist");
+  const distIndexPath = path.resolve(distPath, "index.html");
 
-  if (!isProduction && !isStandaloneBackend) {
-    // Development mode: Vite running in middleware mode
+  if (!isStandaloneBackend && fs.existsSync(distIndexPath)) {
+    // Serve compiled static bundle from dist/ for fast, reliable loading without HMR WebSocket overhead
+    const express = await import("express");
+    app.use(
+      express.default.static(distPath, {
+        setHeaders: (res, filePath) => {
+          if (filePath.endsWith("index.html")) {
+            res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+          }
+        },
+      })
+    );
+    app.get("*", (req, res, next) => {
+      if (
+        req.originalUrl.startsWith("/api") ||
+        req.originalUrl.startsWith("/uploads") ||
+        req.originalUrl.startsWith("/src/assets/images") ||
+        req.originalUrl.startsWith("/assets/images") ||
+        req.originalUrl.startsWith("/images")
+      ) {
+        return next();
+      }
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.sendFile(distIndexPath);
+    });
+    console.log("[Server] Serving compiled static build from dist/");
+  } else if (!isStandaloneBackend) {
+    // Fallback development mode: Vite running in middleware mode
+    process.env.DISABLE_HMR = "true";
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       root: __dirname,
       server: {
         middlewareMode: true,
-        hmr: process.env.DISABLE_HMR === "true" ? false : { server },
+        hmr: false,
+        watch: null,
       },
       appType: "spa",
     });
     app.use(vite.middlewares);
 
-    // Fallback for HTML serving in development mode
     app.use("*", async (req, res, next) => {
-      if (req.originalUrl.startsWith("/api")) {
+      if (
+        req.originalUrl.startsWith("/api") ||
+        req.originalUrl.startsWith("/uploads") ||
+        req.originalUrl.startsWith("/src/assets/images") ||
+        req.originalUrl.startsWith("/assets/images") ||
+        req.originalUrl.startsWith("/images")
+      ) {
         return next();
       }
       try {
@@ -80,36 +114,7 @@ async function startServer() {
       }
     });
 
-    console.log("[Dev Server] Vite middleware mounted for hot development");
-  } else if (!isStandaloneBackend) {
-    // Production mode: Serve built client assets
-    const distPath = path.resolve(__dirname, "dist");
-    if (fs.existsSync(distPath)) {
-      const express = await import("express");
-      app.use(express.default.static(distPath));
-      app.get("*", (req, res, next) => {
-        if (req.originalUrl.startsWith("/api")) {
-          return next();
-        }
-        res.sendFile(path.resolve(distPath, "index.html"));
-      });
-      console.log("[Prod Server] Serving static build from dist/");
-    } else {
-      console.warn("[Prod Server] 'dist' folder not found. Serving as standalone backend API.");
-      app.get("/", (_req, res) => {
-        res.json({
-          service: "Volmo Electric Backend API",
-          status: "online",
-          timestamp: new Date().toISOString(),
-          endpoints: {
-            health: "/api/health",
-            auth: "/api/auth",
-            leads: "/api/leads",
-            config: "/api/config",
-          },
-        });
-      });
-    }
+    console.log("[Dev Server] Vite middleware mounted");
   } else {
     console.log("[Standalone Mode] Running as dedicated backend API server");
     app.get("/", (_req, res) => {

@@ -107,7 +107,7 @@ export default function BatteryChargerCMS({ onShowToast }: BatteryChargerCMSProp
         "1 Year Hassle-Free Warranty with direct swap protocol",
         "Tubular positive plates prevent material shedding"
       ],
-      image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg",
+      image: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg",
     };
     setEditingGraphene(newItem);
     setIsNewGraphene(true);
@@ -160,7 +160,7 @@ export default function BatteryChargerCMS({ onShowToast }: BatteryChargerCMSProp
         "Long 3 Years official warranty coverage",
         "Multi-tier Smart BMS with thermal protection"
       ],
-      image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg",
+      image: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg",
     };
     setEditingLithium(newItem);
     setIsNewLithium(true);
@@ -213,7 +213,7 @@ export default function BatteryChargerCMS({ onShowToast }: BatteryChargerCMSProp
         "1 Year Hassle-Free Warranty guarantee",
         "6-Light Smart Fast Charging LED telemetry"
       ],
-      image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg",
+      image: "/src/assets/images/volmo_smart_charger_1790255476376.jpg",
     };
     setEditingCharger(newItem);
     setIsNewCharger(true);

@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, Send, CheckCircle, Store, IndianRupee, ShieldCheck, ExternalLink } from "lucide-react";
 import { DealershipApp } from "../types";
 import { api } from "../services/api";
-import { submitCloudDealerApp } from "../services/cloudinaryCloud";
+import { saveDealershipToCloud } from "../services/firebase";
 import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY, VOLMO_WHATSAPP_NUMBER } from "../utils/whatsapp";
 
 interface DealershipModalProps {
@@ -154,16 +154,16 @@ ${app.message ? `💬 Note: ${app.message}\n` : ""}
 Please share partnership brochure and next onboarding steps.`;
     setCustomWhatsAppMessage(formattedMsg);
 
+    // Save to permanent memory in Cloud Firestore
+    saveDealershipToCloud(app).catch((err) => {
+      console.warn("[Volmo] Cloud Firestore dealership sync notice:", err);
+    });
+
     // Save to localstorage for instant offline access
     const existingApps = JSON.parse(localStorage.getItem("volmo_dealers") || "[]");
     localStorage.setItem("volmo_dealers", JSON.stringify([app, ...existingApps]));
 
-    // Save to Cloudinary Cloud Database for permanent multi-device persistence
-    submitCloudDealerApp(app).catch((err) => {
-      console.warn("[Cloudinary Cloud] Notice:", err.message);
-    });
-
-    // Send to backend API for persistent real-time database storage
+    // Send to backend API for persistent real-time database storage and email notification
     api.leads.submitDealer(app).catch((err) => {
       console.warn("[Volmo] Dealership submitted locally (backend sync pending):", err.message);
     });
