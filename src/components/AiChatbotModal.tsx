@@ -131,8 +131,7 @@ export default function AiChatbotModal({
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (err: any) {
-      console.error("Chatbot request failed:", err);
+    } catch {
       const errorMessage: ChatMessage = {
         id: `err-${Date.now()}`,
         role: "assistant",
