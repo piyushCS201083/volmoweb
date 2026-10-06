@@ -33,7 +33,7 @@ export default function Hero({
       range: "60 – 160 KM",
       speed: "25 KM/H (RTO Exempt)",
     },
-    ...modelsData.slice(0, 4).map((m) => ({
+    ...modelsData.map((m) => ({
       id: m.id,
       name: `Volmo ${m.name}`,
       tagline: m.tagline,

@@ -65,14 +65,20 @@ const COLOR_FILTER_MAP: Record<string, string> = {
   // Phantom Swatches (Original is Cream Beige)
   "Cream Beige": "brightness(1) contrast(1)",
   "Steel Blue": "hue-rotate(170deg) saturate(0.8) brightness(0.85)",
+
+  // Pulse Swatches (Original is Cyber Black / Neon Cyan)
+  "Cyber Black": "brightness(0.22) contrast(1.3) saturate(0)",
+  "Neon Cyan": "hue-rotate(185deg) saturate(1.8) brightness(1.05)",
+  "Matte Grey": "brightness(0.65) contrast(1.1) saturate(0.2)",
+  "Flash Red": "hue-rotate(345deg) saturate(1.5) brightness(1)",
 };
 
 export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: ModelDetailPageProps) {
   const [selectedColor, setSelectedColor] = useState<ModelColor>(model.colors[0]);
   const [activeAngle, setActiveAngle] = useState<AngleType>("side");
-  const [batteryType, setBatteryType] = useState<BatteryType>(model.id === "classic" || model.id === "phantom" ? "LI" : "LA");
+  const [batteryType, setBatteryType] = useState<BatteryType>(model.id === "classic" || model.id === "phantom" || model.id === "pulse" ? "LI" : "LA");
   const [leadAcidCount, setLeadAcidCount] = useState<number>(5);
-  const [lithiumRange, setLithiumRange] = useState<number>(model.id === "phantom" ? 120 : 80);
+  const [lithiumRange, setLithiumRange] = useState<number>(model.id === "phantom" || model.id === "pulse" ? 120 : 80);
   const [cockpitViewMode, setCockpitViewMode] = useState<"simulator" | "photo">("simulator");
   const [frontViewMode, setFrontViewMode] = useState<"simulator" | "photo">("simulator");
   const [chassisViewMode, setChassisViewMode] = useState<"spec" | "photo">("spec");
@@ -110,7 +116,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
   // Sync color changes switch when model changes
   useEffect(() => {
     setSelectedColor(model.colors[0]);
-    setBatteryType(model.id === "classic" || model.id === "phantom" ? "LI" : "LA");
+    setBatteryType(model.id === "classic" || model.id === "phantom" || model.id === "pulse" ? "LI" : "LA");
   }, [model]);
 
   // Handle speed dial animation simulation when dashboard is online

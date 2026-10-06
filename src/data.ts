@@ -127,16 +127,74 @@ export const MODELS_DATA: ModelSpec[] = [
       "Urban Elite (42 km/h fluent overtake)",
       "Phantom Sport (60 km/h high energy trigger)"
     ]
+  },
+  {
+    id: "pulse",
+    name: "PULSE",
+    tagline: "The High-Torque Cyber Sport - Bold Aggressive Styling & Dynamic Performance",
+    speed: "60 km/hr",
+    motor: "1200 Watt Peak-Performance Heavy Duty Motor",
+    controller: "Intel-Vector Intelligent Sine Wave Chip",
+    warranty: "1 Year Fully Integrated Direct Replacement Warranty",
+    isRtoFree: true,
+    colors: [
+      { name: "Cyber Black", hex: "#0F172A", image: "/src/assets/images/volmo_pulse_1780058885037.png" },
+      { name: "Neon Cyan", hex: "#06B6D4", image: "/src/assets/images/volmo_pulse_premium_1780068389740.png" },
+      { name: "Matte Grey", hex: "#475569", image: "/src/assets/images/volmo_pulse_1780058885037.png" },
+      { name: "Flash Red", hex: "#DC2626", image: "/src/assets/images/volmo_pulse_premium_1780068389740.png" }
+    ],
+    image: "/src/assets/images/volmo_pulse_1780058885037.png",
+    basePriceEstimate: "₹76,999",
+    featured: true,
+    frontBrake: "Signature Dual Piston Hydraulic Disc Brake",
+    rearBrake: "Synchronized Compound Drum Brake with Combi-Brake System (CBS)",
+    groundClearance: "175 mm (Optimized Weight-Loaded Height)",
+    wheelSize: "12-inch Premium Machined Alloys with Low Profile Radial Tyres",
+    batterySpecs: "72V 38Ah Ultra-Dense NMC Lithium-Ion or 72V 32Ah Deep-Cycle VRLA Lead-Acid",
+    ridingModes: [
+      "Pulse ECO (22 km/h silent cruise)",
+      "Urban Velocity (42 km/h fluent commute)",
+      "Hyper Pulse (60 km/h peak performance)"
+    ],
+    specsTitle: "Volmo Pulse Cyber Sport Specifications",
+    specsSubtitle: "Engineered with peak 1200W high-torque motor, dual piston disc brakes, and rugged CMVR non-RTO certification.",
+    luggageTrunk: "20-Litre spacious modular under-seat utility trunk with USB quick charge",
+    lightingArray: "Twin Sport LED Projector Headlamps + Aerodynamic Underglow DRL Array",
+    assistEngine: "3km/h Reverse Drive parking assist toggle with smart acoustic buzzer",
+    sideAngleLabel: "Aerodynamic Sport Profile",
+    sideAngleDesc: "Aggressive posture, reinforced dual cradle chassis, and contoured sport dual seat.",
+    sideImage: "/src/assets/images/volmo_pulse_1780058885037.png",
+    frontAngleLabel: "Twin Aerodynamic Headlamp",
+    frontAngleDesc: "Twin high-luminance LED matrix projectors with daytime running signature lights.",
+    frontImage: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+    frontTitle: "Signature Twin Projector Matrix",
+    frontDescription: "High-beam penetration spanning 45+ meters of night road visibility with zero battery drain.",
+    dashboardAngleLabel: "High-Contrast Digital Cockpit",
+    dashboardAngleDesc: "Wide LED instrument cluster showing speed, battery status, trip odometer, and ride modes.",
+    dashboardImage: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+    dashboardTitle: "Next-Gen Digital Cockpit",
+    dashboardSubtitle: "Real-time battery SOC, dynamic speedometer, and active fault diagnostic telemetry.",
+    dashboardOdometer: "00142 km",
+    dashboardTrip: "18.4 km",
+    dashboardMaxSpeed: 60,
+    chassisAngleLabel: "Reinforced Heavy-Duty Chassis",
+    chassisAngleDesc: "Robotic MIG-welded steel frame built for dual riders and tough Indian road conditions.",
+    chassisImage: "/src/assets/images/volmo_steel_frame_1790255503151.jpg",
+    chassisBadge: "Class-Leading Frame Strength",
+    frontSuspension: "Heavy-Duty Telescopic Front Hydraulic Fork (31mm inner tube)",
+    rearSuspension: "Dual Spring-Loaded Hydraulic Shock Absorbers with 5-Step Preload Adjustment",
+    bldcRotor: "1200W Peak High-Torque Waterproof BLDC Hub Motor with Neodymium Magnets",
+    chassisDisclaimer: "Certified under CMVR non-RTO rules with zero registration and zero license required."
   }
 ];
 
 export const PULSE_DATA = {
   id: "pulse",
   name: "VOLMO PULSE",
-  tagline: "The Cyberpunk Revolution. Coming Soon.",
+  tagline: "The High-Torque Cyber Sport - Performance & Agility",
   image: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
-  description: "Specifications are strictly top secret. Engineered for the next generation of extreme electric mobility with a custom aerodynamic frame, sleek integrated LED architecture, and intelligent underglow technology. Get ready for unmatched acceleration and peak performance.",
-  isReleased: false
+  description: "Now available across our showrooms! Engineered with a 1200W peak motor, dual-piston disc brakes, aerodynamic sport frame, and intelligent LED lighting architecture. Get ready for unmatched acceleration and 100% RTO-free riding.",
+  isReleased: true
 };
 
 export const COMMON_FEATURES = [
@@ -497,13 +555,13 @@ export const DEFAULT_SITE_SECTIONS: SiteSectionsConfig = {
 
   fleetBadge: "India's Leading RTO-Free Fleet",
   fleetHeading: "Choose Your Volmo Ride",
-  fleetSubtitle: "Zero registration. Zero license requirements. Zero road tax. Base models start from Vista, up to our flagship Phantom Top Model. Customize exactly to your required budget and range.",
+  fleetSubtitle: "Zero registration. Zero license requirements. Zero road tax. Choose from our 5 premier models: Vista, Glider, Classic, Phantom, and the all-new Volmo Pulse. Customize exactly to your required budget and range.",
 
-  pulseBadge: "Coming Soon Hyped",
-  pulseSecretCode: "Top Secret Project Volmo Rx",
-  pulseCustomerCount: "1,840+ Customers",
-  pulseCustomerText: "Already pre-registered for the release drop inbox.",
-  pulseButtonText: "Notify Me first",
+  pulseBadge: "New Arrival Spotlight",
+  pulseSecretCode: "Official Volmo Sport Flagship",
+  pulseCustomerCount: "2,400+ Riders",
+  pulseCustomerText: "Booked test rides and deliveries across India.",
+  pulseButtonText: "Explore Volmo Pulse",
 
   featuresBadge: "High-Performance Standards",
   featuresHeading: "Next-Gen Features. Fully Integrated.",
@@ -593,8 +651,8 @@ export const PRESET_MEDIA_ASSETS = [
   { label: "Volmo Phantom (Cream Beige)", url: "/src/assets/images/volmo_phantom_1780058868036.png", category: "Fleet Models" },
   { label: "Volmo Phantom (Steel Blue)", url: "/src/assets/images/phantom_steel_blue_1790182675033.jpg", category: "Fleet Models" },
   { label: "Volmo Phantom (Apple Green)", url: "/src/assets/images/phantom_apple_green_1790182691216.jpg", category: "Fleet Models" },
-  { label: "Volmo Pulse Concept (Side View)", url: "/src/assets/images/volmo_pulse_1780058885037.png", category: "Concept Prototypes" },
-  { label: "Volmo Pulse Cyberpunk (Studio 3D)", url: "/src/assets/images/volmo_pulse_premium_1780068389740.png", category: "Concept Prototypes" },
+  { label: "Volmo Pulse (Cyber Black)", url: "/src/assets/images/volmo_pulse_1780058885037.png", category: "Fleet Models" },
+  { label: "Volmo Pulse (Neon Cyan)", url: "/src/assets/images/volmo_pulse_premium_1780068389740.png", category: "Fleet Models" },
   { label: "Volmo High-Grade Steel Guard Frame Set", url: "/src/assets/images/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
   { label: "Volmo Certified Helmets & Merch", url: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
   { label: "Volmo Lead-Acid Graphene Battery", url: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
@@ -626,6 +684,12 @@ export const COLOR_PHOTO_MAP: Record<string, Record<string, string>> = {
     "Cream Beige": "/src/assets/images/volmo_phantom_1780058868036.png",
     "Apple Green": "/src/assets/images/phantom_apple_green_1790182691216.jpg",
     "Steel Blue": "/src/assets/images/phantom_steel_blue_1790182675033.jpg",
+  },
+  pulse: {
+    "Cyber Black": "/src/assets/images/volmo_pulse_1780058885037.png",
+    "Neon Cyan": "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+    "Matte Grey": "/src/assets/images/volmo_pulse_1780058885037.png",
+    "Flash Red": "/src/assets/images/volmo_pulse_premium_1780068389740.png",
   },
 };
 
@@ -669,7 +733,7 @@ export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
     specs: [
       { label: "Material Grade", value: "High-Grade 18-Gauge Heavy Tubular Stainless Steel" },
       { label: "Finish Options", value: "Mirror Polish Chrome & Matte Electro-Black" },
-      { label: "Compatibility", value: "Custom Fit for Vista, Glider, Classic & Phantom" },
+      { label: "Compatibility", value: "Custom Fit for Vista, Glider, Classic, Phantom & Pulse" },
       { label: "Protection Scope", value: "360° Front, Side Aprons, Floorboard & Tail" },
       { label: "Mounting Type", value: "Zero-Drilling Factory Chassis Bolt-On" },
       { label: "Pillion Footrest", value: "Dual Integrated Spring-Loaded Foldable Pegs" }
@@ -726,7 +790,7 @@ export const DEFAULT_ACCESSORIES: AccessoryItem[] = [
       { label: "Included Items", value: "Rider Jacket, Gloves, Floor Mat, Cover, Keyring" },
       { label: "Material Standards", value: "Heavy-Duty Cordura, Water-Resistant Polyester" },
       { label: "Branding", value: "Volmo Electrical Pvt. Ltd. Authenticated" },
-      { label: "Floor Mat Fit", value: "Laser-Molded for Vista, Glider, Classic & Phantom" },
+      { label: "Floor Mat Fit", value: "Laser-Molded for Vista, Glider, Classic, Phantom & Pulse" },
       { label: "Warranty", value: "6 Months Official Manufacturing Warranty" }
     ],
     image: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg",
@@ -1032,7 +1096,7 @@ export const CHARGER_MODELS: ChargerModelItem[] = [
     warranty: "1 Year Hassle-Free Warranty",
     badge: "1 Year Hassle-Free Warranty · 60V 3A",
     description: "Volmo Branded German technology 60V 3A smart fast charger engineered for 60V 5-battery Lead-Acid & Graphene arrays. Features pulse repair technology and high-tech semiconductors for durable, reliable charging.",
-    compatibility: "60V Lead-Acid & Graphene 5-Battery Systems (Classic / Phantom)",
+    compatibility: "60V Lead-Acid & Graphene 5-Battery Systems (Classic / Phantom / Pulse)",
     specs: [
       { label: "Model Code", value: "VEPL-LA-603A" },
       { label: "Input Voltage", value: "180V - 260V AC ~ 50Hz" },

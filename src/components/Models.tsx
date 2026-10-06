@@ -126,6 +126,12 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
       leadAcidCount: 5,
       lithiumRange: 80,
     },
+    pulse: {
+      selectedColor: "Cyber Black",
+      batteryType: "LA",
+      leadAcidCount: 5,
+      lithiumRange: 80,
+    },
   });
 
   // Color Swatch clicking handler
@@ -288,7 +294,7 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
             {siteSections?.fleetHeading || "Choose Your Volmo Ride"}
           </h2>
           <p className="text-slate-600 text-sm font-normal font-sans max-w-lg mx-auto">
-            {siteSections?.fleetSubtitle || "Zero registration. Zero license requirements. Zero road tax. Base models start from Vista, up to our flagship Phantom Top Model. Customize exactly to your required budget and range."}
+            {siteSections?.fleetSubtitle || "Zero registration. Zero license requirements. Zero road tax. Choose from our 5 premier models: Vista, Glider, Classic, Phantom, and the all-new Volmo Pulse. Customize exactly to your required budget and range."}
           </p>
 
           {/* Real-time Fleet Battery & Price Sync Toolbar */}
@@ -837,24 +843,37 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
               </div>
             </div>
 
-            <div>
-              {pulseSubscribed ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="bg-emerald-500/15 border border-emerald-500/35 p-4 rounded-xl text-emerald-400 text-xs font-mono text-center sm:text-left shadow-sm"
-                >
-                  <strong>Pre-registered Successfully!</strong> Pre-release specifications and VIP slot pricing will be emailed directly to <strong>piyushshivhare003@gmail.com</strong> soon.
-                </motion.div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setPulseSubscribed(true)}
-                  className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all cursor-pointer active:scale-95 text-xs uppercase tracking-widest block"
-                >
-                  {siteSections?.pulseButtonText || "Notify Me first"}
-                </button>
-              )}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setActiveModelId("pulse")}
+                className="px-6 py-3.5 bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold rounded-xl transition-all cursor-pointer active:scale-95 text-xs uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-cyan-900/30"
+              >
+                <Eye size={15} />
+                <span>View Pulse Cockpit &amp; Specs &rarr;</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const pulseCfg = selections.pulse || {
+                    selectedColor: "Cyber Black",
+                    batteryType: "LA" as BatteryType,
+                    leadAcidCount: 5,
+                    lithiumRange: 80,
+                  };
+                  onEnquireClick(
+                    "pulse",
+                    pulseCfg.selectedColor,
+                    pulseCfg.batteryType,
+                    pulseCfg.batteryType === "LA" ? pulseCfg.leadAcidCount * 12 : pulseCfg.lithiumRange
+                  );
+                }}
+                className="px-6 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white font-bold rounded-xl transition-all cursor-pointer active:scale-95 text-xs uppercase tracking-widest flex items-center justify-center gap-2"
+              >
+                <Zap size={14} className="text-cyan-400" />
+                <span>Quick Price Enquiry</span>
+              </button>
             </div>
           </div>
         </div>

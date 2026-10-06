@@ -28,8 +28,27 @@ import { BatteryType } from "./types";
 import { ShieldAlert, CheckCircle, Zap, Calculator, ArrowRight } from "lucide-react";
 
 export default function App() {
-  // Showroom shutter intro animation state
-  const [isShutterOpen, setIsShutterOpen] = useState(true);
+  // Showroom shutter intro animation state (plays once per session so refreshes load directly)
+  const [isShutterOpen, setIsShutterOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return !sessionStorage.getItem("volmo_shutter_seen");
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
+
+  const handleShutterComplete = () => {
+    setIsShutterOpen(false);
+    if (typeof window !== "undefined") {
+      try {
+        sessionStorage.setItem("volmo_shutter_seen", "true");
+      } catch {}
+    }
+  };
+
   // Interactive daily commute slider for homepage savings calculator
   const [dailyKm, setDailyKm] = useState(40);
 
@@ -160,7 +179,7 @@ export default function App() {
       {/* Volmo Vehicle Upward Roam & Website Shutter Opening Animation */}
       <VolmoShutterIntro
         isOpen={isShutterOpen}
-        onComplete={() => setIsShutterOpen(false)}
+        onComplete={handleShutterComplete}
       />
 
       {/* Dynamic Pop-up Status Toast notification (custom built in pure Tailwind) */}

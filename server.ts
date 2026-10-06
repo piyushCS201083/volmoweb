@@ -52,6 +52,16 @@ async function startServer() {
   const distPath = path.resolve(__dirname, "dist");
   const distIndexPath = path.resolve(distPath, "index.html");
 
+  if (!isStandaloneBackend && !fs.existsSync(distIndexPath)) {
+    console.log("[Server] Compiling frontend static bundle with Vite for robust production delivery...");
+    try {
+      const { execSync } = await import("node:child_process");
+      execSync("npx vite build", { stdio: "inherit", cwd: __dirname });
+    } catch (e: any) {
+      console.warn("[Server] Vite build notice:", e.message);
+    }
+  }
+
   if (!isStandaloneBackend && fs.existsSync(distIndexPath)) {
     // Serve compiled static bundle from dist/ for fast, reliable loading without HMR WebSocket overhead
     const express = await import("express");
@@ -70,7 +80,8 @@ async function startServer() {
         req.originalUrl.startsWith("/uploads") ||
         req.originalUrl.startsWith("/src/assets/images") ||
         req.originalUrl.startsWith("/assets/images") ||
-        req.originalUrl.startsWith("/images")
+        req.originalUrl.startsWith("/images") ||
+        req.originalUrl.startsWith("/assets/")
       ) {
         return next();
       }

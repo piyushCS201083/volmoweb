@@ -13,8 +13,9 @@ if (typeof window !== "undefined") {
     }
   });
 
-  window.addEventListener("vite:preloadError", () => {
-    window.location.reload();
+  window.addEventListener("vite:preloadError", (event) => {
+    event.preventDefault();
+    console.warn("[App] Vite asset preload notice:", event);
   });
 }
 

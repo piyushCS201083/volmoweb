@@ -22,21 +22,28 @@ export default function VolmoShutterIntro({ isOpen, onComplete }: VolmoShutterIn
       return;
     }
 
-    setSlidingUp(false);
-
-    // Pause briefly so the visitor sees the full Volmo shutter graphic, then smoothly slide up to reveal the website
+    // Smoothly start sliding up after brief brand flash
     const startTimer = setTimeout(() => {
       setSlidingUp(true);
-    }, 900);
+    }, 400);
 
-    // Complete and unmount once the shutter has slid completely above the viewport
+    // Complete and unmount
     const doneTimer = setTimeout(() => {
       onComplete();
-    }, 2850);
+    }, 1600);
+
+    // Allow user to dismiss with any key
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+        onComplete();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       clearTimeout(startTimer);
       clearTimeout(doneTimer);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onComplete]);
 
@@ -46,14 +53,27 @@ export default function VolmoShutterIntro({ isOpen, onComplete }: VolmoShutterIn
         <div
           onClick={onComplete}
           className="fixed inset-0 z-[70] pointer-events-auto overflow-hidden select-none cursor-pointer"
-          title="Click anywhere to open immediately"
+          title="Click anywhere to enter website immediately"
         >
+          {/* Quick Skip Button in Corner */}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onComplete();
+            }}
+            className="absolute top-6 right-6 z-30 bg-black/60 hover:bg-black/85 text-white/90 hover:text-white px-4 py-2 rounded-full border border-white/20 text-xs font-mono font-bold tracking-wider uppercase transition-all shadow-lg backdrop-blur-md cursor-pointer flex items-center gap-1.5 active:scale-95"
+          >
+            <span>Enter Site</span>
+            <span>&rarr;</span>
+          </button>
+
           {/* Animated Showroom Shutter Panel that slides upwards to reveal the website */}
           <motion.div
             initial={{ y: "0%" }}
             animate={{ y: slidingUp ? "-106%" : "0%" }}
             transition={{
-              duration: 1.9,
+              duration: 1.1,
               ease: [0.22, 1, 0.36, 1],
             }}
             className="relative w-full h-full bg-slate-900 overflow-hidden border-b-[6px] border-orange-500 shadow-[0_30px_80px_rgba(0,0,0,0.65)]"

@@ -154,11 +154,27 @@ class StorageService {
 
   // Read site config
   getConfig(): any {
-    if (this.configCache) return this.configCache;
+    if (this.configCache) {
+      if (Array.isArray(this.configCache.models)) {
+        const existingIds = new Set(this.configCache.models.map((m: any) => m.id));
+        const missing = MODELS_DATA.filter((dm) => !existingIds.has(dm.id));
+        if (missing.length > 0) {
+          this.configCache.models = [...this.configCache.models, ...missing];
+        }
+      }
+      return this.configCache;
+    }
     try {
       if (fs.existsSync(CONFIG_FILE)) {
         const raw = fs.readFileSync(CONFIG_FILE, "utf-8");
         this.configCache = JSON.parse(raw);
+        if (Array.isArray(this.configCache.models)) {
+          const existingIds = new Set(this.configCache.models.map((m: any) => m.id));
+          const missing = MODELS_DATA.filter((dm) => !existingIds.has(dm.id));
+          if (missing.length > 0) {
+            this.configCache.models = [...this.configCache.models, ...missing];
+          }
+        }
         return this.configCache;
       }
     } catch (e) {
@@ -332,10 +348,18 @@ class StorageService {
       }
 
       if (cloudConfig.success && cloudConfig.data && typeof cloudConfig.data === "object") {
+        if (Array.isArray(cloudConfig.data.models)) {
+          const existingIds = new Set(cloudConfig.data.models.map((m: any) => m.id));
+          const missing = MODELS_DATA.filter((dm) => !existingIds.has(dm.id));
+          if (missing.length > 0) {
+            cloudConfig.data.models = [...cloudConfig.data.models, ...missing];
+            uploadRawDataToCloudinary(cloudConfig.data, "site-config", CLOUDINARY_FOLDERS.DATA).catch(() => {});
+          }
+        }
         this.configCache = cloudConfig.data;
         try {
           fs.writeFileSync(CONFIG_FILE, JSON.stringify(cloudConfig.data, null, 2), "utf-8");
-          console.log("[Storage] Restored site configuration from Cloudinary cloud database");
+          console.log("[Storage] Restored site configuration from Cloudinary cloud database (with all models preserved)");
         } catch (e) {}
       }
     } catch (err: any) {

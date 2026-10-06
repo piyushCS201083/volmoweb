@@ -589,6 +589,7 @@ export default function Accessories({
                       <option value="Glider">Volmo Glider (High Torque Urban)</option>
                       <option value="Classic">Volmo Classic (Dual Suspension Executive)</option>
                       <option value="Phantom">Volmo Phantom (Vintage Luxury)</option>
+                      <option value="Pulse">Volmo Pulse (Dynamic High-Torque Sport)</option>
                       <option value="Other">Planning New Purchase / Dealership</option>
                     </select>
                   </div>

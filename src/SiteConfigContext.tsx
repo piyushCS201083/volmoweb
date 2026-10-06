@@ -208,8 +208,18 @@ function safeLoadObject<T extends object>(key: string, defaultVal: T): T {
   return defaultVal;
 }
 
+export function ensureAllFleetModels(models: ModelSpec[]): ModelSpec[] {
+  if (!Array.isArray(models) || models.length === 0) return MODELS_DATA;
+  const existingIds = new Set(models.map((m) => m.id));
+  const missing = MODELS_DATA.filter((dm) => !existingIds.has(dm.id));
+  if (missing.length === 0) return models;
+  return [...models, ...missing];
+}
+
 export function SiteConfigProvider({ children }: { children: React.ReactNode }) {
-  const [modelsData, setModelsData] = useState<ModelSpec[]>(() => safeLoadArray("volmo_custom_models", MODELS_DATA));
+  const [modelsData, setModelsData] = useState<ModelSpec[]>(() => {
+    return ensureAllFleetModels(safeLoadArray("volmo_custom_models", MODELS_DATA));
+  });
   const [pulseData, setPulseData] = useState<CustomPulseData>(() => safeLoadObject("volmo_custom_pulse", PULSE_DATA));
   const [commonFeatures, setCommonFeatures] = useState<CustomFeature[]>(() => safeLoadArray("volmo_custom_features", COMMON_FEATURES));
   const [contactInfo, setContactInfo] = useState<CustomContactInfo>(() => safeLoadObject("volmo_custom_contact", CONTACT_INFO));
@@ -276,8 +286,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
               colors: updatedColors,
             };
           });
-          setModelsData(migrated);
-          localStorage.setItem("volmo_custom_models", JSON.stringify(migrated));
+          const existingIds = new Set(migrated.map((m) => m.id));
+          const missingDefaults = MODELS_DATA.filter((dm) => !existingIds.has(dm.id));
+          const fullModels = [...migrated, ...missingDefaults];
+          setModelsData(fullModels);
+          localStorage.setItem("volmo_custom_models", JSON.stringify(fullModels));
         } else {
           setModelsData(MODELS_DATA);
         }
@@ -377,8 +390,15 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       .then((cloudConfig) => {
         if (cloudConfig && Object.keys(cloudConfig).length > 0) {
           if (Array.isArray(cloudConfig.models) && cloudConfig.models.length > 0) {
-            setModelsData(cloudConfig.models);
-            localStorage.setItem("volmo_custom_models", JSON.stringify(cloudConfig.models));
+            const allModels = ensureAllFleetModels(cloudConfig.models);
+            setModelsData(allModels);
+            localStorage.setItem("volmo_custom_models", JSON.stringify(allModels));
+            if (allModels.length !== cloudConfig.models.length) {
+              saveSiteConfigToCloud("models", allModels).catch(() => {});
+            }
+          } else {
+            setModelsData(MODELS_DATA);
+            saveSiteConfigToCloud("models", MODELS_DATA).catch(() => {});
           }
           if (cloudConfig.pulse && typeof cloudConfig.pulse === "object") {
             setPulseData({ ...PULSE_DATA, ...cloudConfig.pulse });
@@ -478,8 +498,9 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     // 2. Real-time Firestore subscription so any edit on one device immediately syncs to other devices
     const unsubscribe = subscribeToSiteConfig((section, data) => {
       if (section === "models") {
-        setModelsData(data);
-        localStorage.setItem("volmo_custom_models", JSON.stringify(data));
+        const allModels = ensureAllFleetModels(data);
+        setModelsData(allModels);
+        localStorage.setItem("volmo_custom_models", JSON.stringify(allModels));
       } else if (section === "pulse") {
         setPulseData(data);
         localStorage.setItem("volmo_custom_pulse", JSON.stringify(data));
@@ -547,8 +568,9 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     api.config
       .getConfig()
       .then((serverConfig) => {
-        if (serverConfig) {
-          if (serverConfig.models) setModelsData((prev) => (prev.length ? prev : serverConfig.models));
+        if (serverConfig?.models) {
+          const allModels = ensureAllFleetModels(serverConfig.models);
+          setModelsData((prev) => (prev.length ? ensureAllFleetModels(prev) : allModels));
         }
       })
       .catch((err) => {
