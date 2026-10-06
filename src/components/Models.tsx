@@ -452,6 +452,320 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
 
             // Constraint helper for Lithium battery choices
             const isVistaOrGlider = model.id === "vista" || model.id === "glider";
+            const isPulse = model.id === "pulse";
+
+            if (isPulse) {
+              return (
+                <motion.div
+                  key={model.id}
+                  id={`model-card-${model.id}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6 }}
+                  className="col-span-full lg:col-span-2 w-full bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 relative group shadow-lg hover:shadow-xl hover:border-slate-300 transition-all duration-300"
+                >
+                  {/* Badges */}
+                  <div className="absolute top-6 left-6 z-20 flex gap-2">
+                    <span className="bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 text-[10px] font-bold font-mono uppercase px-3 py-1 rounded-full shadow-sm tracking-widest">
+                      RTO FREE
+                    </span>
+                    <span className="bg-slate-900 text-white text-[10px] font-bold font-mono uppercase px-3 py-1 rounded-full shadow-sm tracking-widest">
+                      FLEET FLAGSHIP
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                    {/* Left Column: Photo Preview & Swatches */}
+                    <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+                      <div className="relative border border-slate-100 bg-slate-50/80 rounded-2xl p-4 sm:p-8 overflow-hidden flex items-center justify-center min-h-[260px] sm:min-h-[340px]">
+                        {/* Dynamic ambient color glow matched to selected color */}
+                        <div 
+                          className="absolute inset-0 opacity-15 pointer-events-none transition-colors duration-500"
+                          style={{
+                            background: `radial-gradient(circle at center, ${selectedColorObj?.hex || "#64748B"} 0%, transparent 70%)`
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-100/50 via-transparent to-transparent z-10 pointer-events-none" />
+
+                        {/* Active Color Pill Badge */}
+                        <div className="absolute bottom-3.5 right-3.5 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md border border-slate-200/90 px-2.5 py-1 rounded-full shadow-xs">
+                          <span 
+                            className="w-2.5 h-2.5 rounded-full border border-slate-300 shadow-inner"
+                            style={{ backgroundColor: selectedColorObj?.hex || "#FFFFFF" }}
+                          />
+                          <span className="text-[10px] font-bold text-slate-700 font-mono uppercase tracking-wider">
+                            {config.selectedColor}
+                          </span>
+                        </div>
+
+                        {/* Scooter Image with color transition */}
+                        <AnimatePresence mode="wait">
+                          <motion.img
+                            key={`${model.id}-${config.selectedColor}-${activePhoto}`}
+                            initial={{ opacity: 0.4, scale: 0.96 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0.4, scale: 0.96 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            src={activePhoto}
+                            alt={`Volmo ${model.name} in ${config.selectedColor}`}
+                            referrerPolicy="no-referrer"
+                            className="max-h-[220px] sm:max-h-[300px] w-auto object-contain select-none group-hover:scale-105 transition-transform duration-500 relative z-0"
+                          />
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Colors Customization Swatch */}
+                      <div className="space-y-2 border-t border-slate-100 pt-4">
+                        <div className="flex justify-between text-xs font-bold text-slate-500">
+                          <span>CHOOSE BODY COLOUR:</span>
+                          <span className="text-slate-800 font-bold flex items-center gap-1.5">
+                            <span 
+                              className="inline-block w-2 h-2 rounded-full border border-slate-300"
+                              style={{ backgroundColor: selectedColorObj?.hex || "#FFFFFF" }}
+                            />
+                            {config.selectedColor}
+                          </span>
+                        </div>
+
+                        <div className="flex gap-2.5 flex-wrap items-center">
+                          {model.colors.map((c) => {
+                            const isSelected = config.selectedColor === c.name;
+                            return (
+                              <button
+                                key={c.name}
+                                onClick={() => handleColorChange(model.id, c.name)}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center p-0.5 border cursor-pointer hover:scale-110 active:scale-95 transition-all relative ${
+                                  isSelected
+                                    ? "border-slate-900 ring-2 ring-slate-900/30 scale-110 shadow-sm"
+                                    : "border-slate-200 hover:border-slate-400"
+                                }`}
+                                title={`Select ${c.name}`}
+                                aria-label={`Select ${c.name} for ${model.name}`}
+                              >
+                                <span
+                                  className="w-full h-full rounded-full border border-slate-50/50 shadow-inner"
+                                  style={{ backgroundColor: c.hex }}
+                                />
+                                {isSelected && (
+                                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-slate-900 rounded-full border-2 border-white" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Header, Battery Customizer & Action Controls */}
+                    <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-6">
+                      {/* Model Header */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <span className="text-[10px] font-mono uppercase bg-orange-50 text-orange-600 border border-orange-200 px-2 py-0.5 rounded font-bold inline-block mb-1.5">
+                            Cyberpunk High-Torque Sport
+                          </span>
+                          <h3 className="text-2xl font-black tracking-tight text-slate-850 uppercase sm:text-4xl font-sans">
+                            VOLMO {model.name}
+                          </h3>
+                          <p className="text-slate-500 text-xs sm:text-sm mt-1 italic font-semibold font-sans">
+                            {model.tagline}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-slate-400 text-[10px] uppercase font-mono tracking-widest block font-bold">
+                            {priceInfo.hasModifier ? "Configured Price" : "Base Est. Starts"}
+                          </span>
+                          <span className="text-2xl sm:text-3xl font-black text-slate-805 font-sans text-slate-800 transition-colors">
+                            {priceInfo.formatted} *
+                          </span>
+                          {priceInfo.hasModifier ? (
+                            <span className="text-[10px] font-mono block text-slate-400">
+                              <span className="line-through mr-1">{model.basePriceEstimate}</span>
+                              <span className={priceInfo.modifier > 0 ? "text-emerald-600 font-bold" : "text-amber-600 font-bold"}>
+                                {priceInfo.modifier > 0 ? `(+₹${priceInfo.modifier.toLocaleString("en-IN")})` : `(-₹${Math.abs(priceInfo.modifier).toLocaleString("en-IN")})`}
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 font-mono block">
+                              Base 60V SLA Pack
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Interactive Dynamic Battery Layout Engine */}
+                      <div className="bg-slate-50 border border-slate-200 p-4 sm:p-5 rounded-2xl space-y-4">
+                        <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                            Configure Battery &amp; Range
+                          </span>
+                          <span className="text-[10px] bg-slate-200/50 text-slate-700 px-2 py-0.5 rounded-md font-mono font-bold">
+                            Warranty Dependent
+                          </span>
+                        </div>
+
+                        {/* Battery Type switch (Lead Acid vs Lithium Ion) */}
+                        <div className="grid grid-cols-2 gap-2 bg-slate-200/50 p-1 rounded-xl">
+                          <button
+                            type="button"
+                            onClick={() => handleBatteryTypeToggle(model.id, "LA")}
+                            className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              config.batteryType === "LA"
+                                ? "bg-white text-slate-900 shadow-sm"
+                                : "text-slate-600 hover:text-slate-900"
+                            }`}
+                          >
+                            Lead-Acid (SLA)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleBatteryTypeToggle(model.id, "LI")}
+                            className={`py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              config.batteryType === "LI"
+                                ? "bg-white text-slate-900 shadow-sm"
+                                : "text-slate-600 hover:text-slate-900"
+                            }`}
+                          >
+                            Lithium-Ion (LI)
+                          </button>
+                        </div>
+
+                        {/* Battery Capacity / Range Selector */}
+                        <div>
+                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+                            Select Battery Pack / Tested Range
+                          </label>
+
+                          {config.batteryType === "LA" ? (
+                            /* Lead-Acid battery count select buttons (4, 5, 6) */
+                            <div className="grid grid-cols-3 gap-2">
+                              {[
+                                { count: 4, range: 48, delta: "-₹4k", label: "4 Bat (48V)" },
+                                { count: 5, range: 60, delta: "Base", label: "5 Bat (60V)" },
+                                { count: 6, range: 72, delta: "+₹5k", label: "6 Bat (72V)" },
+                              ].map((option) => (
+                                <button
+                                  key={option.count}
+                                  type="button"
+                                  onClick={() => handleLeadAcidCountChange(model.id, option.count)}
+                                  className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                                    config.leadAcidCount === option.count
+                                      ? "bg-slate-900 border-slate-900 text-white shadow-sm"
+                                      : "bg-white border-slate-200 text-slate-700 hover:border-slate-300"
+                                  }`}
+                                >
+                                  <div className="font-bold text-xs">{option.range} KM</div>
+                                  <div className="text-[9px] opacity-75">{option.label}</div>
+                                  <div className="text-[9px] font-mono mt-0.5 font-bold">{option.delta}</div>
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            /* Lithium-Ion range options (60, 80, 100, 120, 145, 180) */
+                            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                              {[
+                                { range: 60, delta: "+₹12k" },
+                                { range: 80, delta: "+₹18k" },
+                                { range: 100, delta: "+₹25k" },
+                                { range: 120, delta: "+₹32k" },
+                                { range: 145, delta: "+₹40k" },
+                                { range: 180, delta: "+₹49k" },
+                              ].map((option) => (
+                                <button
+                                  key={option.range}
+                                  type="button"
+                                  onClick={() => handleLithiumRangeChange(model.id, option.range)}
+                                  className={`p-2 rounded-xl border text-center transition-all cursor-pointer ${
+                                    config.lithiumRange === option.range
+                                      ? "bg-slate-900 border-slate-900 text-white shadow-sm"
+                                      : "bg-white border-slate-200 text-slate-700 hover:border-slate-300"
+                                  }`}
+                                >
+                                  <div className="font-bold text-xs">{option.range} KM</div>
+                                  <div className="text-[9px] font-mono mt-0.5 font-bold">{option.delta}</div>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Specs grid strip */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left pt-2 border-t border-slate-200">
+                          <div>
+                            <span className="text-slate-450 block uppercase tracking-wider font-semibold text-[9px]">
+                              ⚡ Top Speed
+                            </span>
+                            <strong className="text-slate-800 text-xs font-bold">{model.speed}</strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-450 block uppercase tracking-wider font-semibold text-[9px]">
+                              ⏳ Charge Time
+                            </span>
+                            <strong className="text-slate-800 text-xs font-bold">{currentParams.charging}</strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-450 block uppercase tracking-wider font-semibold text-[9px]">
+                              🛠️ Warranty
+                            </span>
+                            <strong className="text-emerald-600 text-xs font-bold">{currentParams.warranty}</strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-450 block uppercase tracking-wider font-semibold text-[9px]">
+                              ⚡ Controller
+                            </span>
+                            <strong className="text-slate-800 text-xs font-bold">Sine Wave 72V</strong>
+                          </div>
+                        </div>
+
+                        {/* Sync status & Apply to all indicator */}
+                        <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-200/80">
+                          <span className="flex items-center gap-1.5 font-medium text-[11px] text-slate-600">
+                            <RefreshCw size={11} className={syncBatteryAcrossModels ? "text-emerald-600 animate-spin-slow" : "text-slate-400"} />
+                            <span>{syncBatteryAcrossModels ? "Battery & price synced across fleet" : "Configured individually"}</span>
+                          </span>
+                          {!syncBatteryAcrossModels && (
+                            <button
+                              type="button"
+                              onClick={() => handleApplyToAllModels(model.id)}
+                              className="text-[10px] font-bold text-slate-800 hover:text-emerald-600 transition-colors cursor-pointer underline"
+                            >
+                              Apply to all models &rarr;
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Card footer actions */}
+                      <div className="border-t border-slate-100 pt-4 flex flex-col sm:flex-row gap-3">
+                        <button
+                          onClick={() => setActiveModelId(model.id)}
+                          className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 rounded-2xl cursor-pointer active:scale-[0.98] transition-all text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-md shadow-slate-900/10"
+                        >
+                          <Eye size={15} />
+                          <span>View Specifications &amp; Cockpit &rarr;</span>
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            onEnquireClick(
+                              model.id,
+                              config.selectedColor,
+                              config.batteryType,
+                              config.batteryType === "LA" ? config.leadAcidCount * 12 : config.lithiumRange
+                            )
+                          }
+                          className="flex-1 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-slate-700 hover:text-slate-900 font-semibold py-3.5 rounded-2xl cursor-pointer active:scale-[0.98] transition-all text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm"
+                        >
+                          <Zap size={14} className="text-slate-500" />
+                          <span>Quick Price Enquiry</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            }
 
             return (
               <motion.div
