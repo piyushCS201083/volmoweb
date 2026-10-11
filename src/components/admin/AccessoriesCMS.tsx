@@ -119,6 +119,15 @@ export default function AccessoriesCMS({ onShowToast }: AccessoriesCMSProps) {
       onShowToast(`Accessory "${editingItem.title}" created successfully!`);
     } else {
       updateSingleAccessory(editingItem.id, editingItem);
+      if (editingItem.id === "volmo-steel-frame-guard-set") {
+        const updatedPage = { ...pageForm, steelFrameBannerImage: editingItem.image };
+        setPageForm(updatedPage);
+        updateAccessoriesPageConfig(updatedPage);
+      } else if (editingItem.id === "volmo-helmets-safety") {
+        const updatedPage = { ...pageForm, merchHelmetBannerImage: editingItem.image };
+        setPageForm(updatedPage);
+        updateAccessoriesPageConfig(updatedPage);
+      }
       onShowToast(`Accessory "${editingItem.title}" updated successfully!`);
     }
 
@@ -567,6 +576,49 @@ export default function AccessoriesCMS({ onShowToast }: AccessoriesCMSProps) {
             </div>
           </div>
 
+          {/* Section Feature Photos (Steel Frame Guard Set & Merchandise/Helmets Banner) */}
+          <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-850 pb-3">
+              <div className="flex items-center gap-2">
+                <Shield size={16} className="text-orange-400" />
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+                  Featured Section Photos (Steel Frame Set &amp; Merchandise Banner)
+                </h4>
+              </div>
+              <span className="text-[10px] text-slate-500 font-mono">Bottom showcase sections on Accessories page</span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 space-y-2">
+                <ImageUploader
+                  label="High-Grade Steel Frame Set Section Photo"
+                  value={
+                    pageForm.steelFrameBannerImage ||
+                    "/src/assets/images/volmo_steel_frame_1790255503151.jpg"
+                  }
+                  onChange={(url) =>
+                    setPageForm({ ...pageForm, steelFrameBannerImage: url })
+                  }
+                  helperText="Displayed in the 'High-Grade Steel Frame Set To Protect Volmo Vehicles' feature section"
+                />
+              </div>
+
+              <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 space-y-2">
+                <ImageUploader
+                  label="Volmo Merchandise & Certified Helmets Banner Photo"
+                  value={
+                    pageForm.merchHelmetBannerImage ||
+                    "/src/assets/images/volmo_helmet_merch_1790255531049.jpg"
+                  }
+                  onChange={(url) =>
+                    setPageForm({ ...pageForm, merchHelmetBannerImage: url })
+                  }
+                  helperText="Displayed in the bottom orange 'Volmo Merchandise & Certified Helmets' banner"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Save Bar */}
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
@@ -574,7 +626,7 @@ export default function AccessoriesCMS({ onShowToast }: AccessoriesCMSProps) {
               className="px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all cursor-pointer shadow-lg shadow-orange-600/20 flex items-center gap-2"
             >
               <Save size={15} />
-              <span>Save Page Layout &amp; Headers</span>
+              <span>Save Page Layout, Photos &amp; Headers</span>
             </button>
           </div>
         </form>

@@ -1518,7 +1518,9 @@ export const DEFAULT_ACCESSORIES_PAGE_CONFIG: AccessoriesPageConfig = {
   powerBannerBadge: "Dedicated Power Page",
   powerBannerTitle: "Looking for Original Volmo Batteries & German Tech Chargers?",
   powerBannerDescription: "Visit our new dedicated Battery & Charger page for complete specs on Lead-Acid Graphene packs (1-Year Warranty), Lithium/LFP models from 1.4 kW to 4.3 kW (3-Years Warranty), and German Technology Fast Chargers (48V/60V/72V 3A & 6A, 69V LFP Cutoff).",
-  powerBannerButtonText: "Go To Battery & Charger"
+  powerBannerButtonText: "Go To Battery & Charger",
+  steelFrameBannerImage: "/src/assets/images/volmo_steel_frame_1790255503151.jpg",
+  merchHelmetBannerImage: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg"
 };
 
 export const DEFAULT_BATTERY_CHARGER_PAGE_CONFIG: BatteryChargerPageConfig = {

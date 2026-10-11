@@ -249,6 +249,8 @@ export interface AccessoriesPageConfig {
   powerBannerTitle: string;
   powerBannerDescription: string;
   powerBannerButtonText: string;
+  steelFrameBannerImage?: string;
+  merchHelmetBannerImage?: string;
 }
 
 export interface BatteryChargerPageConfig {
