@@ -118,7 +118,7 @@
         {
           "name": "Royal blue",
           "hex": "#001eff",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344838/volmo_assets/chatgpt_image_oct_7__2026__09_12_33_am_png.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791707391/volmo_assets/classic__1__png.png"
         }
       ],
       "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png",
@@ -191,19 +191,18 @@
           "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397139/volmo_assets/volmo_pulse_at_golden_hour_png.png"
         },
         {
-          "name": "Neon Cyan",
-          "hex": "#06B6D4",
+          "name": "Matte Grey",
+          "hex": "#475569",
           "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397155/volmo_assets/volmo_pulse_at_sunset__1__png.png"
         },
         {
-          "name": "Matte Grey",
-          "hex": "#475569",
+          "name": "sand Cream",
+          "hex": "#eade90",
           "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397228/volmo_assets/volmo_pulse_at_sunset_png.png"
         },
         {
-          "name": "Flash Red",
-          "hex": "#DC2626",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397213/volmo_assets/volmo_pulse_at_sunset__2__png.png"
+          "name": "violet purple",
+          "hex": "#b089d7"
         }
       ],
       "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png",
@@ -318,6 +317,54 @@
   },
   "testimonials": [
     {
+      "id": 1791712521116,
+      "name": "SUJAL MORE",
+      "role": "Verified Volmo Rider",
+      "location": "GWALIOR",
+      "model": "VOLMO PULSE",
+      "config": "100KM",
+      "avatarUrl": "data:image/jpeg;base64,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",
+      "rating": 5,
+      "highlightText": "AMAZING PERFORMANCE",
+      "text": "I REALLY LIKED THIS , YOU SHOULD BUY IT"
+    },
+    {
+      "id": 1791711168226,
+      "name": "Sonu chauhan",
+      "role": "Macanic",
+      "location": "Gvaliyar",
+      "model": "VOLMO VISTA",
+      "config": "60V Smart Battery Pack",
+      "avatarUrl": "data:image/jpeg;base64,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",
+      "rating": 5,
+      "highlightText": "Achi hai gaadi",
+      "text": "Gaadi bahut badhiya h"
+    },
+    {
+      "id": 1791703904342,
+      "name": "pawan shrivastav",
+      "role": "job",
+      "location": "gwalior",
+      "model": "VOLMO PHANTOM",
+      "config": "60V Smart Battery Pack",
+      "avatarUrl": "data:image/jpeg;base64,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",
+      "rating": 4,
+      "highlightText": "looks amazing",
+      "text": "my favourite ev"
+    },
+    {
+      "id": 1791703445034,
+      "name": "mohit savita",
+      "role": "student",
+      "location": "gwalior",
+      "model": "VOLMO PULSE",
+      "config": "60V Smart Battery Pack",
+      "avatarUrl": "",
+      "rating": 5,
+      "highlightText": "best scooter",
+      "text": "amazing experience"
+    },
+    {
       "id": 1,
       "name": "Rajesh Sharma",
       "role": "Local Business Owner",
@@ -366,7 +413,287 @@
       "text": "As a doctor, quietness and eco-friendliness are high priorities for me. The Glider fits right in for my commute to the clinic. The regenerative braking feel is very natural and returns a visible charge on the console telemetry display. Great build quality!"
     }
   ],
-  "showrooms": [],
+  "showrooms": [
+    {
+      "id": "mp-flagship",
+      "name": "Volmo Company Operated Showroom (Flagship)",
+      "city": "Gwalior",
+      "state": "Madhya Pradesh",
+      "address": "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "mp-1",
+      "name": "Volmo Gwalior Smart EV Fleet Flagship",
+      "city": "Gwalior",
+      "state": "Madhya Pradesh",
+      "address": "Opposite Arogyadhaam Hospital, City Center, Gwalior - 474011",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791694406771",
+      "name": "Reena prajapati enterprises (morvinandan)",
+      "city": "Bhitarwar",
+      "state": "Madhya Pradesh",
+      "address": "ward no. 08 , main road bhitarwar , Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791694572588",
+      "name": "MAA SATI ELECTRIC VEHICLES",
+      "city": "Joura",
+      "state": "Madhya Pradesh",
+      "address": "Ward no. 18 , M.S Road joura , morena",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791694663922",
+      "name": "YAAN ENTERPRISES",
+      "city": "Morena",
+      "state": "Madhya Pradesh",
+      "address": "Morena , Ambah road , morena",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791694781346",
+      "name": "SHREE JI E BIKES",
+      "city": "Seondha",
+      "state": "Madhya Pradesh",
+      "address": "Berchha tiraha , seondha , datia",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791694855487",
+      "name": "N S Colour Lab",
+      "city": "PORSA",
+      "state": "Madhya Pradesh",
+      "address": "Ambedkar bhavan ke pass , ater road , porsa",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791694995765",
+      "name": "M/S Samadhiya Corporation",
+      "city": "Shivpuri",
+      "state": "Madhya Pradesh",
+      "address": "ward no. 31 , narendra nagar road , shivpuri ",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695089580",
+      "name": "SHRI LAL SALES",
+      "city": "Pohri , bhatnawar",
+      "state": "Madhya Pradesh",
+      "address": "Bhatnawar , shivpuri",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695144750",
+      "name": "JK ENTERPRISES",
+      "city": "KARERA",
+      "state": "Madhya Pradesh",
+      "address": "Ward no. 13, kamaksha devi mandir ke peeche , karera , shivpuri",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695246816",
+      "name": "JAI KUWAR BABA",
+      "city": "CHINOR",
+      "state": "Madhya Pradesh",
+      "address": "5, Chinor rd , gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695293722",
+      "name": "SHIVSHAKTI TRADERS",
+      "city": "Gormi",
+      "state": "Madhya Pradesh",
+      "address": "saroj devi , gormi mehgaon road , sbi bank ke saamne , gormi , bhind",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695404194",
+      "name": "ARIHANT SHOPPING CENTER",
+      "city": "Mohna",
+      "state": "Madhya Pradesh",
+      "address": "sadar bazar , near tazia , mohna ,gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695513265",
+      "name": "Hemant Associates ",
+      "city": "Agra",
+      "state": "Uttar Pradesh",
+      "address": "Agra",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695613234",
+      "name": "SHRI BANKE BIHARI AUTOMOBILES",
+      "city": "Shivpuri",
+      "state": "Madhya Pradesh",
+      "address": "near community hall , gandhi park , shivpuri",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695694456",
+      "name": "Maa pitambra motors",
+      "city": "Joura",
+      "state": "Madhya Pradesh",
+      "address": "Joura , morena",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695885797",
+      "name": "Balaji Enterprises",
+      "city": "Dabra",
+      "state": "Madhya Pradesh",
+      "address": "Dabra, Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791695986325",
+      "name": "Jai Maa lakheshwari enterprises",
+      "city": "Dabra",
+      "state": "Madhya Pradesh",
+      "address": "ward no. 5 , dabra, Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791696068096",
+      "name": "Gayatri automobile",
+      "city": "Dabra",
+      "state": "Madhya Pradesh",
+      "address": "Dabra, Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791696142769",
+      "name": "M/s Lala Bhai Battery",
+      "city": "Mohna",
+      "state": "Madhya Pradesh",
+      "address": "04, , Danda Mohalla,Mohana, Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791696581434",
+      "name": "Tiwari Traders",
+      "city": "Niwari",
+      "state": "Madhya Pradesh",
+      "address": "Niwari , datia , Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791697088978",
+      "name": "Bajrang Bali motors",
+      "city": "wajidpur",
+      "state": "Madhya Pradesh",
+      "address": "wajidpur , fatehbad road , agra",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791697165128",
+      "name": "Manu traders ",
+      "city": "datia",
+      "state": "Madhya Pradesh",
+      "address": "parshuram mandir road , datia",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791697271786",
+      "name": "Abhiraj Motors ",
+      "city": "Gwalior",
+      "state": "Madhya Pradesh",
+      "address": "idgah ,kampoo , Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791697369796",
+      "name": "Anshika motors",
+      "city": "chinor",
+      "state": "Madhya Pradesh",
+      "address": "chinor ,gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791697495592",
+      "name": "Anjali motors",
+      "city": "Gohad",
+      "state": "Madhya Pradesh",
+      "address": "gohad, Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791698006641",
+      "name": "M/S Vaishali Enterprises",
+      "city": "Morena",
+      "state": "Madhya Pradesh",
+      "address": "pull road , morena",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791698094804",
+      "name": "S.S Enterprises",
+      "city": "Lalitpara",
+      "state": "Madhya Pradesh",
+      "address": "lalitpara, Gwalior",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791700253146",
+      "name": "Anant Auto",
+      "city": "Lalitpur",
+      "state": "Uttar Pradesh",
+      "address": "near jio office , lalitpur road , jhansi",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791700309915",
+      "name": "A K Brothers",
+      "city": "Dhaulpur",
+      "state": "Rajasthan",
+      "address": "sunder colony , dholpur",
+      "phone": "7880008405",
+      "status": "Active"
+    },
+    {
+      "id": "sr-1791700556407",
+      "name": "Agarwal Traders",
+      "city": "Gohad",
+      "state": "Madhya Pradesh",
+      "address": "gwalior road ,gohad, Gwalior",
+      "phone": "7880008405",
+      "status": "Expanding"
+    }
+  ],
   "faqs": [
     {
       "id": 1,
@@ -493,7 +820,7 @@
           "value": "Dual Integrated Spring-Loaded Foldable Pegs"
         }
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791701005/volmo_assets/whatsapp_image_2026-10-11_at_12_11_28_pm_jpeg.jpg",
       "inStock": true
     },
     {
@@ -1361,7 +1688,9 @@
     "powerBannerBadge": "Dedicated Power Page",
     "powerBannerTitle": "Looking for Original Volmo Batteries & German Tech Chargers?",
     "powerBannerDescription": "Visit our new dedicated Battery & Charger page for complete specs on Lead-Acid Graphene packs (1-Year Warranty), Lithium/LFP models from 1.4 kW to 4.3 kW (3-Years Warranty), and German Technology Fast Chargers (48V/60V/72V 3A & 6A, 69V LFP Cutoff).",
-    "powerBannerButtonText": "Go To Battery & Charger"
+    "powerBannerButtonText": "Go To Battery & Charger",
+    "steelFrameBannerImage": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791703263/volmo_assets/volmo_steel_frame_1790255503151_png.png",
+    "merchHelmetBannerImage": "/src/assets/images/volmo_helmet_merch_1790255531049.jpg"
   },
   "batteryChargerPage": {
     "heroBadge": "Volmo Energy Systems · Factory Direct",
@@ -1409,12 +1738,14 @@
     "chargerSectionSubtitle": "Equipped with advanced German microcontroller technology, our smart fast chargers incorporate high-tech semiconductors with exceptionally long service life. Fully compatible with both Lead-Acid Graphene and Lithium/LFP arrays, backed by 1 Year Hassle-Free Warranty.",
     "chargerSpotlightTitle": "German Microcontroller Technology & Pulse Repair",
     "chargerSpotlightSubtitle": "Engineered with precision German semiconductor ICs, Volmo smart chargers feature dynamic multi-stage constant current, constant voltage, and trickle floating algorithms. High-efficiency cooling fins ensure cool operation even during hot summer charging cycles.",
-    "chargerSpotlightImage": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462293/volmo_assets/chatgpt_image_sep_23__2026__05_02_20_pm_png.png",
+    "chargerSpotlightImage": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791518477/volmo_assets/volmo_smart_charger_in_neon_light_png.png",
     "chargerSpotlightBadge": "1 Year Hassle-Free Warranty · German Tech",
     "consultationBadge": "Custom Engineering Support",
     "consultationTitle": "Need Custom Energy or Battery Configuration?",
     "consultationSubtitle": "Whether you require a custom 72V 60Ah delivery fleet pack, specialized fast charging stations for commercial operations, or custom frame guards, talk to our power engineering team today.",
-    "consultationButtonText": "Talk To Power Engineer"
+    "consultationButtonText": "Talk To Power Engineer",
+    "lithiumBanner1Image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517780/volmo_assets/volmo_lithium_battery_at_golden_hour_png.png",
+    "lithiumBanner2Image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791693673/volmo_assets/volmo_lithium_sunset_1791521360520_jpg_png.png"
   },
   "mediaArticles": [
     {
@@ -1460,7 +1791,7 @@
       "title": "High-Precision Robotic Chassis Welding Plant",
       "caption": "Robotic arm weld fixtures ensuring structural rigidity and anti-rust dip coating for all Volmo scooter tubular chassis.",
       "category": "Manufacturing",
-      "imageUrl": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80",
+      "imageUrl": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791699943/volmo_assets/whatsapp_image_2026-10-09_at_10_00_04_am_jpeg.jpg",
       "date": "August 2026"
     },
     {
@@ -1468,7 +1799,7 @@
       "title": "Flagship Showroom & Experience Lounge",
       "caption": "State-of-the-art interactive showroom with live telemetry displays and customized color studios for test rides.",
       "category": "Showroom",
-      "imageUrl": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1000&q=80",
+      "imageUrl": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791693963/volmo_assets/whatsapp_image_2026-09-22_at_1_25_17_pm_jpeg.jpg",
       "date": "July 2026"
     },
     {
@@ -1476,7 +1807,7 @@
       "title": "Lithium Pack Automated Testing & Cell Balancing",
       "caption": "Rigorous 48-hour cycle testing and thermal stress analysis on our Smart BMS 60V and 72V battery banks.",
       "category": "Testing",
-      "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80",
+      "imageUrl": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791693896/volmo_assets/whatsapp_image_2026-10-09_at_9_58_23_am_jpeg.jpg",
       "date": "June 2026"
     },
     {
@@ -1484,7 +1815,7 @@
       "title": "Customer Fleet Key Handover Ceremony",
       "caption": "Delivery milestone celebrating 150+ happy families receiving their green mobility keys in a single weekend.",
       "category": "Delivery",
-      "imageUrl": "https://images.unsplash.com/photo-1558980394-4c7c9299fe96?auto=format&fit=crop&w=1000&q=80",
+      "imageUrl": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791694039/volmo_assets/whatsapp_image_2026-10-11_at_10_16_37_am_jpeg.jpg",
       "date": "May 2026"
     }
   ],
@@ -1580,5 +1911,93 @@
     "careersBadge": "Career Openings at Volmo",
     "careersTitle": "Shape the Future of Green Urban Transit",
     "careersSubtitle": "Join our fast-growing engineering, manufacturing, battery technology, and sales leadership teams headquartered in Rajasthan."
-  }
+  },
+  "locateUsPage": {
+    "heroBadge": "Volmo Electrical Private Limited · Official Locations",
+    "heroTitle": "Contact Us",
+    "heroSubtitle": "Find our Corporate Head Office, EV Manufacturing Plant, and Company Operated Showroom in Gwalior, Madhya Pradesh. Use the live interactive map on the right to navigate directly to all our official facilities.",
+    "locatorBadge": "Pan-India EV Retail Network",
+    "locatorHeading": "Find Volmo Showrooms Near You",
+    "locatorSubtitle": "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!",
+    "stat1Label": "Active Dealerships",
+    "stat1Override": "",
+    "stat2Label": "States Covered",
+    "stat2Override": "",
+    "stat3Label": "Ready Showrooms",
+    "stat3Override": "",
+    "stat4Label": "Coming Up Soon",
+    "stat4Override": "",
+    "searchPlaceholder": "Search by city, zipcode, showroom name...",
+    "allStatesLabel": "All 29 States & UTs",
+    "allStatusLabel": "All Outlets & Service Hubs",
+    "activeStatusLabel": "Active Operational",
+    "serviceHubStatusLabel": "Service & Spares Hub",
+    "expandingStatusLabel": "Expanding Soon",
+    "resultsCountSuffix": "outlets across India",
+    "clearFiltersText": "Clear Filters",
+    "emptyStateMessage": "No dealerships found matching your search.",
+    "resetButtonText": "Reset Locator Form",
+    "getRouteButtonText": "Get Route",
+    "phoneLabelPrefix": "+91",
+    "franchiseBadge": "FRANCHISE INITIATIVES OPEN",
+    "franchiseHeading": "Start Your Volmo Franchise in Your Hometown City Today",
+    "franchiseDescription": "Indian green energy transition is picking up pace rapidly. Introduce zero-registration, zero-license premium commuters to students and families in your state, backed by solid marketing support, premium replacement inventories, and solid margins.",
+    "franchiseCardTitle": "Investment Benefits Overview",
+    "franchiseBenefits": [
+      "Zero Franchise Entry Fee for first partners in new states",
+      "Direct 100% genuine spare support from Gwalior Plant",
+      "Integrated digital leads funnel directly sent to you"
+    ],
+    "franchiseButtonText": "Apply for Dealership"
+  },
+  "corporateLocations": [
+    {
+      "id": "head-office",
+      "title": "Volmo Corporate Head Office",
+      "type": "Company Head Office",
+      "tag": "Corporate & Registered Office",
+      "shortPill": "HQ",
+      "address": "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006",
+      "phone": "7880008401",
+      "email": "sales@volmoelectrical.com",
+      "hours": "Monday - Saturday: 10:00 AM - 07:00 PM",
+      "mapsUrl": "https://maps.app.goo.gl/ay94JjuHWHfiF6tb9?g_st=iw",
+      "mapEmbedUrl": "https://maps.google.com/maps?q=Shivhare%20Colony%20Singhpur%20Road%20Baradari%20Choraha%20Morar%20Gwalior%20Madhya%20Pradesh%20474006&t=&z=16&ie=UTF8&iwloc=&output=embed",
+      "iconName": "Building2",
+      "accent": "from-blue-600 to-indigo-600",
+      "badgeBg": "bg-blue-50 text-blue-700 border-blue-200"
+    },
+    {
+      "id": "manufacturing-plant",
+      "title": "Volmo EV Manufacturing Plant",
+      "type": "Manufacturing Plant",
+      "tag": "Assembly & Battery Lab",
+      "shortPill": "Plant",
+      "address": "Behind Arogyadhaam Hospital, City Center, Gwalior, Madhya Pradesh - 474011",
+      "phone": "7880008401",
+      "email": "sales@volmoelectrical.com",
+      "hours": "Monday - Saturday: 09:00 AM - 07:00 PM",
+      "mapsUrl": "https://maps.google.com/?q=26.202997,78.184883",
+      "mapEmbedUrl": "https://maps.google.com/maps?q=26.202997,78.184883&t=&z=17&ie=UTF8&iwloc=&output=embed",
+      "iconName": "Factory",
+      "accent": "from-orange-600 to-amber-600",
+      "badgeBg": "bg-orange-50 text-orange-700 border-orange-200"
+    },
+    {
+      "id": "company-showroom",
+      "title": "Volmo Company Operated Showroom",
+      "type": "Company Operated Showroom",
+      "tag": "Official Retail & Test Rides",
+      "shortPill": "Showroom",
+      "address": "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
+      "phone": "7880008401",
+      "email": "sales@volmoelectrical.com",
+      "hours": "Monday - Sunday: 10:00 AM - 08:30 PM",
+      "mapsUrl": "https://www.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en",
+      "mapEmbedUrl": "https://maps.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en&t=&ie=UTF8&iwloc=&output=embed",
+      "iconName": "Store",
+      "accent": "from-emerald-600 to-teal-600",
+      "badgeBg": "bg-emerald-50 text-emerald-700 border-emerald-200"
+    }
+  ]
 }

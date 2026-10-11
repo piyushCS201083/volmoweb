@@ -229,6 +229,46 @@ export function ensureAllFleetModels(models: ModelSpec[]): ModelSpec[] {
   return [...models, ...missing];
 }
 
+function safeLoadShowrooms(key: string, defaultVal: ShowroomItem[]): ShowroomItem[] {
+  const LEGACY_PLACEHOLDER_IDS = new Set([
+    "mp-2",
+    "mp-3",
+    "mp-4",
+    "up-1",
+    "up-2",
+    "up-3",
+    "up-4",
+    "dl-1",
+    "dl-2",
+    "mh-1",
+    "mh-2",
+    "rj-1",
+    "rj-2",
+    "gj-1",
+    "ka-1",
+    "hr-1",
+    "pb-1",
+    "cg-1",
+  ]);
+  try {
+    const stored = typeof window !== "undefined" ? localStorage.getItem(key) : null;
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const hasLegacyPlaceholders = parsed.some(
+          (s: any) => s && (LEGACY_PLACEHOLDER_IDS.has(s.id) || String(s.id || "").startsWith("auto-"))
+        );
+        if (hasLegacyPlaceholders) {
+          localStorage.removeItem(key);
+          return defaultVal;
+        }
+        return parsed;
+      }
+    }
+  } catch {}
+  return defaultVal;
+}
+
 export function SiteConfigProvider({ children }: { children: React.ReactNode }) {
   const [modelsData, setModelsData] = useState<ModelSpec[]>(() => {
     return ensureAllFleetModels(safeLoadArray("volmo_custom_models", MODELS_DATA));
@@ -239,7 +279,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const [heroConfig, setHeroConfig] = useState<HeroConfig>(() => safeLoadObject("volmo_custom_hero", DEFAULT_HERO_CONFIG));
   const [testimonialsData, setTestimonialsData] = useState<TestimonialItem[]>(() => safeLoadArray("volmo_custom_testimonials", DEFAULT_TESTIMONIALS));
   const [faqsData, setFaqsData] = useState<FAQItem[]>(() => safeLoadArray("volmo_custom_faqs", DEFAULT_FAQS));
-  const [showroomsData, setShowroomsData] = useState<ShowroomItem[]>(() => safeLoadArray("volmo_custom_showrooms", DEFAULT_SHOWROOMS));
+  const [showroomsData, setShowroomsData] = useState<ShowroomItem[]>(() => safeLoadShowrooms("volmo_custom_showrooms", DEFAULT_SHOWROOMS));
   const [brandingConfig, setBrandingConfig] = useState<BrandingConfig>(() => safeLoadObject("volmo_custom_branding", DEFAULT_BRANDING));
   const [siteSections, setSiteSections] = useState<SiteSectionsConfig>(() => safeLoadObject("volmo_custom_site_sections", DEFAULT_SITE_SECTIONS));
   const [accessoriesData, setAccessoriesData] = useState<AccessoryItem[]>(() => safeLoadArray("volmo_custom_accessories", DEFAULT_ACCESSORIES));
@@ -333,7 +373,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       if (storedFaqs) setFaqsData(safeLoadArray("volmo_custom_faqs", DEFAULT_FAQS));
       else setFaqsData(DEFAULT_FAQS);
 
-      if (storedShowrooms) setShowroomsData(safeLoadArray("volmo_custom_showrooms", DEFAULT_SHOWROOMS));
+      if (storedShowrooms) setShowroomsData(safeLoadShowrooms("volmo_custom_showrooms", DEFAULT_SHOWROOMS));
       else setShowroomsData(DEFAULT_SHOWROOMS);
 
       if (storedBranding) setBrandingConfig(safeLoadObject("volmo_custom_branding", DEFAULT_BRANDING));
@@ -410,6 +450,10 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       setCorporateLocationsData(DEFAULT_CORPORATE_LOCATIONS);
     }
 
+    let firestoreLoadedShowrooms = false;
+    let firestoreLoadedLocateUsPage = false;
+    let firestoreLoadedCorporateLocations = false;
+
     // 1. Asynchronous Cross-Device Cloud Firestore Load: Fetch permanently stored configuration
     fetchAllSiteConfigFromCloud()
       .then((cloudConfig) => {
@@ -450,8 +494,11 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
             localStorage.setItem("volmo_custom_faqs", JSON.stringify(cloudConfig.faqs));
           }
           if (Array.isArray(cloudConfig.showrooms) && cloudConfig.showrooms.length > 0) {
+            firestoreLoadedShowrooms = true;
             setShowroomsData(cloudConfig.showrooms);
             localStorage.setItem("volmo_custom_showrooms", JSON.stringify(cloudConfig.showrooms));
+            // Keep backend server cache in sync with authoritative Firestore showrooms
+            api.config.updateSection("showrooms", cloudConfig.showrooms).catch(() => {});
           }
           if (cloudConfig.branding && typeof cloudConfig.branding === "object") {
             setBrandingConfig({ ...DEFAULT_BRANDING, ...cloudConfig.branding });
@@ -506,12 +553,16 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
             localStorage.setItem("volmo_mediablogs_page", JSON.stringify(cloudConfig.mediaBlogsPage));
           }
           if (cloudConfig.locateUsPage && typeof cloudConfig.locateUsPage === "object") {
+            firestoreLoadedLocateUsPage = true;
             setLocateUsPageConfig({ ...DEFAULT_LOCATE_US_PAGE_CONFIG, ...cloudConfig.locateUsPage });
             localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(cloudConfig.locateUsPage));
+            api.config.updateSection("locateUsPage", cloudConfig.locateUsPage).catch(() => {});
           }
           if (Array.isArray(cloudConfig.corporateLocations) && cloudConfig.corporateLocations.length > 0) {
+            firestoreLoadedCorporateLocations = true;
             setCorporateLocationsData(cloudConfig.corporateLocations);
             localStorage.setItem("volmo_corporate_locations", JSON.stringify(cloudConfig.corporateLocations));
+            api.config.updateSection("corporateLocations", cloudConfig.corporateLocations).catch(() => {});
           }
         } else {
           // Seed initial defaults into Cloud Firestore if empty
@@ -555,6 +606,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         setFaqsData(data);
         localStorage.setItem("volmo_custom_faqs", JSON.stringify(data));
       } else if (section === "showrooms") {
+        firestoreLoadedShowrooms = true;
         setShowroomsData(data);
         localStorage.setItem("volmo_custom_showrooms", JSON.stringify(data));
       } else if (section === "branding") {
@@ -597,15 +649,17 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         setMediaBlogsPageConfig(data);
         localStorage.setItem("volmo_mediablogs_page", JSON.stringify(data));
       } else if (section === "locateUsPage") {
+        firestoreLoadedLocateUsPage = true;
         setLocateUsPageConfig(data);
         localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(data));
       } else if (section === "corporateLocations") {
+        firestoreLoadedCorporateLocations = true;
         setCorporateLocationsData(data);
         localStorage.setItem("volmo_corporate_locations", JSON.stringify(data));
       }
     });
 
-    // 3. Fallback sync from backend server
+    // 3. Fallback sync from backend server (only used when Cloud Firestore has not loaded authoritative data)
     api.config
       .getConfig()
       .then((serverConfig) => {
@@ -613,24 +667,39 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
           const allModels = ensureAllFleetModels(serverConfig.models);
           setModelsData((prev) => (prev.length ? ensureAllFleetModels(prev) : allModels));
         }
-        if (Array.isArray(serverConfig?.showrooms) && serverConfig.showrooms.length > 0) {
+        if (
+          !firestoreLoadedShowrooms &&
+          !localStorage.getItem("volmo_custom_showrooms") &&
+          Array.isArray(serverConfig?.showrooms) &&
+          serverConfig.showrooms.length > 0
+        ) {
           setShowroomsData(serverConfig.showrooms);
           localStorage.setItem("volmo_custom_showrooms", JSON.stringify(serverConfig.showrooms));
         }
-        if (serverConfig?.locateUsPage && typeof serverConfig.locateUsPage === "object") {
+        if (
+          !firestoreLoadedLocateUsPage &&
+          !localStorage.getItem("volmo_locate_us_page_config") &&
+          serverConfig?.locateUsPage &&
+          typeof serverConfig.locateUsPage === "object"
+        ) {
           setLocateUsPageConfig((prev) => {
             const merged = { ...DEFAULT_LOCATE_US_PAGE_CONFIG, ...prev, ...serverConfig.locateUsPage };
             localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(merged));
             return merged;
           });
         }
-        if (Array.isArray(serverConfig?.corporateLocations) && serverConfig.corporateLocations.length > 0) {
+        if (
+          !firestoreLoadedCorporateLocations &&
+          !localStorage.getItem("volmo_corporate_locations") &&
+          Array.isArray(serverConfig?.corporateLocations) &&
+          serverConfig.corporateLocations.length > 0
+        ) {
           setCorporateLocationsData(serverConfig.corporateLocations);
           localStorage.setItem("volmo_corporate_locations", JSON.stringify(serverConfig.corporateLocations));
         }
         if (Array.isArray(serverConfig?.testimonials) && serverConfig.testimonials.length > 0) {
           setTestimonialsData((prev) => {
-            if (serverConfig.testimonials.length >= prev.length) {
+            if (serverConfig.testimonials.length > prev.length) {
               localStorage.setItem("volmo_custom_testimonials", JSON.stringify(serverConfig.testimonials));
               return serverConfig.testimonials;
             }
