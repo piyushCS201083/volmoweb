@@ -628,6 +628,15 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
           setCorporateLocationsData(serverConfig.corporateLocations);
           localStorage.setItem("volmo_corporate_locations", JSON.stringify(serverConfig.corporateLocations));
         }
+        if (Array.isArray(serverConfig?.testimonials) && serverConfig.testimonials.length > 0) {
+          setTestimonialsData((prev) => {
+            if (serverConfig.testimonials.length >= prev.length) {
+              localStorage.setItem("volmo_custom_testimonials", JSON.stringify(serverConfig.testimonials));
+              return serverConfig.testimonials;
+            }
+            return prev;
+          });
+        }
       })
       .catch((err) => {
         console.info("[Volmo] Backend cache sync note:", err.message);
@@ -734,7 +743,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
 
   const addTestimonial = (item: TestimonialItem) => {
     setTestimonialsData((prev) => {
-      const updated = [...prev, item];
+      const updated = [item, ...prev];
       localStorage.setItem("volmo_custom_testimonials", JSON.stringify(updated));
       syncSectionToBackend("testimonials", updated);
       return updated;

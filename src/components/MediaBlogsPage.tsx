@@ -59,6 +59,7 @@ export default function MediaBlogsPage({
 }: MediaBlogsPageProps) {
   const {
     testimonialsData,
+    addTestimonial,
     mediaArticlesData,
     companyPhotosData,
     companyVideosData,
@@ -72,6 +73,70 @@ export default function MediaBlogsPage({
   const photosList = companyPhotosData && companyPhotosData.length > 0 ? companyPhotosData : COMPANY_PHOTOS;
   const videosList = companyVideosData && companyVideosData.length > 0 ? companyVideosData : COMPANY_VIDEOS;
   const jobsList = careerOpeningsData && careerOpeningsData.length > 0 ? careerOpeningsData : CAREER_OPENINGS;
+
+  // ==========================================
+  // VISITOR REVIEW FORM & OVERALL RATINGS
+  // ==========================================
+  const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
+  const [visitorName, setVisitorName] = useState("");
+  const [visitorRole, setVisitorRole] = useState("");
+  const [visitorLocation, setVisitorLocation] = useState("");
+  const [visitorModel, setVisitorModel] = useState("VOLMO VISTA");
+  const [visitorConfig, setVisitorConfig] = useState("");
+  const [visitorRating, setVisitorRating] = useState<number>(5);
+  const [visitorHighlight, setVisitorHighlight] = useState("");
+  const [visitorText, setVisitorText] = useState("");
+  const [reviewSuccessMsg, setReviewSuccessMsg] = useState<string | null>(null);
+
+  const overallRatingValue =
+    reviewsList.length > 0
+      ? (
+          reviewsList.reduce((acc, item) => acc + (Number(item.rating) || 5), 0) /
+          reviewsList.length
+        ).toFixed(1)
+      : "5.0";
+
+  const handleVisitorReviewSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!visitorName.trim() || !visitorText.trim()) return;
+
+    const cleanText = visitorText.trim();
+    const cleanHighlight =
+      visitorHighlight.trim() ||
+      (cleanText.length > 65 ? `${cleanText.slice(0, 65)}...` : cleanText);
+
+    const newReview = {
+      id: Date.now(),
+      name: visitorName.trim(),
+      role: visitorRole.trim() || "Verified Volmo Rider",
+      location: visitorLocation.trim() || "India",
+      model: visitorModel || "VOLMO VISTA",
+      config: visitorConfig.trim() || "60V Smart Battery Pack",
+      avatarUrl: "",
+      rating: Number(visitorRating) || 5,
+      highlightText: cleanHighlight,
+      text: cleanText,
+    };
+
+    // Immediately add to state + persist in real time to Cloud Firestore & Backend
+    addTestimonial(newReview);
+
+    // Reset form and show instant confirmation
+    setVisitorName("");
+    setVisitorRole("");
+    setVisitorLocation("");
+    setVisitorConfig("");
+    setVisitorRating(5);
+    setVisitorHighlight("");
+    setVisitorText("");
+    setIsReviewFormOpen(false);
+    setReviewSuccessMsg(
+      "Thank you! Your review has been published live and saved to the cloud server in real time."
+    );
+    setTimeout(() => {
+      setReviewSuccessMsg(null);
+    }, 6000);
+  };
 
   // ==========================================
   // SAVINGS CALCULATOR STATE
@@ -605,47 +670,360 @@ export default function MediaBlogsPage({
             What Volmo Riders Say
           </h2>
           <p className="text-xs sm:text-sm text-slate-600">
-            Hear from daily commuters, families, and young riders who made the switch to Volmo electric scooters.
+            Hear from daily commuters, families, and young riders who made the switch to Volmo electric scooters. Post your own review below — live &amp; instant!
           </p>
         </div>
 
+        {/* Overall Ratings Dashboard & Write a Review Action Bar */}
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-md p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left: Overall Average Score */}
+          <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-center sm:items-start lg:items-center text-center sm:text-left lg:text-center gap-4 border-b lg:border-b-0 lg:border-r border-slate-100 pb-6 lg:pb-0 lg:pr-6">
+            <div className="space-y-1">
+              <div className="text-5xl sm:text-6xl font-black text-slate-900 tracking-tight font-mono">
+                {overallRatingValue}
+                <span className="text-xl text-slate-400 font-normal">/5</span>
+              </div>
+              <div className="flex items-center justify-center sm:justify-start lg:justify-center gap-1 text-amber-400 py-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    size={20}
+                    fill={star <= Math.round(Number(overallRatingValue)) ? "currentColor" : "none"}
+                    className={star <= Math.round(Number(overallRatingValue)) ? "text-amber-400" : "text-slate-300"}
+                  />
+                ))}
+              </div>
+              <p className="text-xs font-bold text-slate-700">
+                Based on <span className="text-emerald-700 font-mono">{reviewsList.length}</span> Verified Rider Reviews
+              </p>
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                <ShieldCheck size={11} />
+                Real-Time Cloud Synced
+              </span>
+            </div>
+          </div>
+
+          {/* Middle: Star Rating Distribution Bars */}
+          <div className="lg:col-span-5 space-y-2.5">
+            {[5, 4, 3, 2, 1].map((star) => {
+              const count = reviewsList.filter((r) => Math.round(Number(r.rating) || 5) === star).length;
+              const pct = reviewsList.length > 0 ? Math.round((count / reviewsList.length) * 100) : 0;
+              return (
+                <div key={star} className="flex items-center gap-3 text-xs">
+                  <div className="w-14 flex items-center gap-1 font-mono font-bold text-slate-700 shrink-0">
+                    <span>{star}</span>
+                    <Star size={12} fill="currentColor" className="text-amber-400" />
+                  </div>
+                  <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60">
+                    <div
+                      className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-500"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <div className="w-16 text-right font-mono text-[11px] text-slate-500 shrink-0">
+                    {count} ({pct}%)
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right: Instant Post Review CTA */}
+          <div className="lg:col-span-3 flex flex-col justify-center items-stretch gap-3 bg-slate-50 p-5 rounded-2xl border border-slate-200/80 text-center">
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-slate-900 block">
+                Own or Test-Rode a Volmo?
+              </span>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Share your experience directly with the community. Instant publishing — no login required.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsReviewFormOpen((prev) => !prev)}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-emerald-600/20 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <Star size={14} fill="currentColor" />
+              <span>{isReviewFormOpen ? "Close Review Form" : "Write a Review"}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Success Banner when visitor posts a review */}
+        <AnimatePresence>
+          {reviewSuccessMsg && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="bg-emerald-50 border border-emerald-300 text-emerald-900 px-5 py-4 rounded-2xl flex items-center justify-between gap-3 shadow-sm"
+            >
+              <div className="flex items-center gap-3 text-xs sm:text-sm font-bold">
+                <CheckCircle2 size={20} className="text-emerald-600 shrink-0" />
+                <span>{reviewSuccessMsg}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setReviewSuccessMsg(null)}
+                className="text-emerald-700 hover:text-emerald-950 p-1 cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Visitor Instant Review Submission Form */}
+        <AnimatePresence>
+          {isReviewFormOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <form
+                onSubmit={handleVisitorReviewSubmit}
+                className="bg-white rounded-3xl border-2 border-emerald-500/40 shadow-xl p-6 sm:p-8 space-y-6 text-left"
+              >
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      Instant Public Review · Real-Time Cloud Sync
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 mt-1">
+                      Post Your Volmo Rider Review
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsReviewFormOpen(false)}
+                    className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 cursor-pointer"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Interactive Star Selector */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase font-mono">
+                    Your Overall Rating *
+                  </label>
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setVisitorRating(star)}
+                        className={`p-2 rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
+                          visitorRating >= star
+                            ? "bg-amber-50 border-amber-300 text-amber-500 scale-105"
+                            : "bg-slate-50 border-slate-200 text-slate-300 hover:text-amber-300"
+                        }`}
+                      >
+                        <Star size={22} fill={visitorRating >= star ? "currentColor" : "none"} />
+                      </button>
+                    ))}
+                    <span className="ml-2 text-xs font-mono font-bold text-slate-700">
+                      {visitorRating} / 5 Stars
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Your Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Amit Verma"
+                      value={visitorName}
+                      onChange={(e) => setVisitorName(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      City / Location *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Gwalior, MP"
+                      value={visitorLocation}
+                      onChange={(e) => setVisitorLocation(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Volmo Scooter Model
+                    </label>
+                    <select
+                      value={visitorModel}
+                      onChange={(e) => setVisitorModel(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm bg-white font-semibold"
+                    >
+                      <option value="VOLMO VISTA">VOLMO VISTA</option>
+                      <option value="VOLMO GLIDER">VOLMO GLIDER</option>
+                      <option value="VOLMO CLASSIC">VOLMO CLASSIC</option>
+                      <option value="VOLMO PHANTOM">VOLMO PHANTOM</option>
+                      <option value="VOLMO PULSE">VOLMO PULSE</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Profession / Rider Tag
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Daily Commuter / Student"
+                      value={visitorRole}
+                      onChange={(e) => setVisitorRole(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Review Headline / Short Highlight
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Smooth ride and huge savings on daily commute!"
+                      value={visitorHighlight}
+                      onChange={(e) => setVisitorHighlight(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Battery / Range Setup (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 60V Lithium-Ion (80km Range)"
+                      value={visitorConfig}
+                      onChange={(e) => setVisitorConfig(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    Your Detailed Review *
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    placeholder="Share your experience with mileage, comfort, build quality, and savings..."
+                    value={visitorText}
+                    onChange={(e) => setVisitorText(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm leading-relaxed"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsReviewFormOpen(false)}
+                    className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs uppercase tracking-wider cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/20 cursor-pointer flex items-center gap-2"
+                  >
+                    <CheckCircle2 size={15} />
+                    <span>Publish Review Now</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Reviews Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reviewsList.slice(0, 3).map((rev, idx) => (
-            <div
-              key={rev.id || idx}
-              className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col justify-between space-y-4 hover:shadow-lg hover:border-emerald-500/30 transition-all"
-            >
-              <div className="space-y-3">
-                {/* 5 Stars */}
-                <div className="flex items-center gap-1 text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={15} fill="currentColor" />
-                  ))}
+          {reviewsList.map((rev: any, idx) => {
+            const starCount = Math.min(5, Math.max(1, Math.round(Number(rev.rating) || 5)));
+            const bodyText = rev.text || rev.content || "";
+            const headline = rev.highlightText || "";
+            const cityText = rev.location || rev.city || "Gwalior, MP";
+            const modelText = rev.model || rev.modelRidden || "VOLMO GLIDER";
+
+            return (
+              <div
+                key={rev.id || idx}
+                className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col justify-between space-y-4 hover:shadow-lg hover:border-emerald-500/30 transition-all text-left"
+              >
+                <div className="space-y-3">
+                  {/* Star Rating */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1 text-amber-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={15}
+                          fill={i < starCount ? "currentColor" : "none"}
+                          className={i < starCount ? "text-amber-400" : "text-slate-200"}
+                        />
+                      ))}
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      <ShieldCheck size={11} />
+                      {starCount}.0 / 5
+                    </span>
+                  </div>
+
+                  {headline && (
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                      "{headline}"
+                    </h4>
+                  )}
+
+                  <p className="text-xs sm:text-sm text-slate-700 italic leading-relaxed">
+                    "{bodyText}"
+                  </p>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-700 italic leading-relaxed">
-                  "{rev.content}"
-                </p>
-              </div>
-
-              <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0">
-                  {rev.name.charAt(0)}
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-slate-900 leading-snug">
-                    {rev.name}
-                  </h4>
-                  <div className="flex items-center gap-1 text-[11px] text-slate-500">
-                    <span>{rev.city || "Rajasthan"}</span>
-                    <span>&middot;</span>
-                    <span className="text-emerald-700 font-semibold">{rev.modelRidden || "Volmo Glider"}</span>
+                <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                    {rev.avatarUrl ? (
+                      <img
+                        src={rev.avatarUrl}
+                        alt={rev.name}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      (rev.name || "V").charAt(0).toUpperCase()
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="text-xs font-bold text-slate-900 leading-snug truncate">
+                      {rev.name}
+                    </h4>
+                    <div className="flex flex-wrap items-center gap-1 text-[11px] text-slate-500">
+                      <span>{cityText}</span>
+                      <span>&middot;</span>
+                      <span className="text-emerald-700 font-semibold">{modelText}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
