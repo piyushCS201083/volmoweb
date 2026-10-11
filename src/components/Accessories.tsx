@@ -21,9 +21,12 @@ import {
   Cpu
 } from "lucide-react";
 import { DEFAULT_ACCESSORIES, DEFAULT_ACCESSORIES_PAGE_CONFIG } from "../data";
-import { AccessoryItem } from "../types";
+import { AccessoryItem, PriceInquiry } from "../types";
 import { useSiteConfig } from "../SiteConfigContext";
 import { Edit3 } from "lucide-react";
+import { openWhatsApp, VOLMO_WHATSAPP_DISPLAY } from "../utils/whatsapp";
+import { savePriceInquiryToCloud } from "../services/firebase";
+import { api } from "../services/api";
 
 interface AccessoriesProps {
   onEnquireClick?: (accessoryTitle: string) => void;
@@ -48,6 +51,8 @@ export default function Accessories({
   const [buyerPhone, setBuyerPhone] = useState("");
   const [buyerCity, setBuyerCity] = useState("");
   const [scooterModel, setScooterModel] = useState("Vista");
+  const [buyerNotes, setBuyerNotes] = useState("");
+  const [whatsAppMessage, setWhatsAppMessage] = useState("");
 
   const categories = [
     { id: "all", label: "All Genuine Accessories" },
@@ -63,17 +68,67 @@ export default function Accessories({
       ? currentAccessories
       : currentAccessories.filter((item) => item.category === activeCategory);
 
+  const handleOpenOrderModal = (item: AccessoryItem) => {
+    setOrderSubmitted(false);
+    setOrderModalItem(item);
+  };
+
+  const handleCloseOrderModal = () => {
+    setOrderModalItem(null);
+    setOrderSubmitted(false);
+    setBuyerName("");
+    setBuyerPhone("");
+    setBuyerCity("");
+    setBuyerNotes("");
+    setWhatsAppMessage("");
+  };
+
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!buyerName || !buyerPhone) return;
+    if (!buyerName.trim() || !buyerPhone.trim() || !orderModalItem) return;
+
+    const cleanPhone = buyerPhone.trim();
+    const formattedWaMsg = `Hello Volmo Electric, I have submitted an enquiry for a Genuine Volmo Accessory:
+🛡️ Accessory: ${orderModalItem.title} (${orderModalItem.categoryLabel})
+🛵 For Scooter Model: Volmo ${scooterModel}
+👤 Name: ${buyerName.trim()}
+📞 Phone: ${cleanPhone}
+📍 City/State: ${buyerCity.trim() || "India"}${buyerNotes.trim() ? `\n💬 Note: ${buyerNotes.trim()}` : ""}
+
+Please share the official price quote, warranty details, and dispatch availability.`;
+
+    setWhatsAppMessage(formattedWaMsg);
+
+    const inquiryRecord: PriceInquiry = {
+      id: "ACC-" + Math.floor(100000 + Math.random() * 900000),
+      name: buyerName.trim(),
+      phone: cleanPhone,
+      model: `Accessory: ${orderModalItem.title}`,
+      color: `For Volmo ${scooterModel}`,
+      batteryType: "LA",
+      batteryConfig: `${orderModalItem.categoryLabel} (${orderModalItem.warranty})`,
+      rangeKm: 0,
+      message: `City: ${buyerCity.trim() || "N/A"}${buyerNotes.trim() ? ` | Note: ${buyerNotes.trim()}` : ""}`,
+      status: "new",
+      createdAt: new Date().toISOString(),
+    };
+
+    // Save to Cloud Firestore & Backend API
+    savePriceInquiryToCloud(inquiryRecord).catch((err) => {
+      console.warn("[Volmo] Accessory inquiry Firestore sync notice:", err);
+    });
+    try {
+      const currentInquiries = JSON.parse(localStorage.getItem("volmo_inquiries") || "[]");
+      localStorage.setItem("volmo_inquiries", JSON.stringify([inquiryRecord, ...currentInquiries]));
+    } catch {}
+    api.leads.submitInquiry(inquiryRecord).catch((err) => {
+      console.warn("[Volmo] Accessory inquiry backend sync notice:", err.message);
+    });
+
+    if (onEnquireClick) {
+      onEnquireClick(orderModalItem.title);
+    }
     setOrderSubmitted(true);
-    setTimeout(() => {
-      setOrderSubmitted(false);
-      setOrderModalItem(null);
-      setBuyerName("");
-      setBuyerPhone("");
-      setBuyerCity("");
-    }, 3000);
   };
 
   return (
@@ -283,13 +338,7 @@ export default function Accessories({
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      if (onEnquireClick) {
-                        onEnquireClick(item.title);
-                      } else {
-                        setOrderModalItem(item);
-                      }
-                    }}
+                    onClick={() => handleOpenOrderModal(item)}
                     className="flex-1 py-3 px-4 rounded-xl bg-orange-600 hover:bg-orange-500 active:scale-95 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-orange-600/20 cursor-pointer text-center flex items-center justify-center gap-1.5"
                   >
                     <span>Order / Quote</span>
@@ -342,8 +391,11 @@ export default function Accessories({
               <button
                 type="button"
                 onClick={() => {
-                  const steelItem = DEFAULT_ACCESSORIES.find((a) => a.id === "volmo-steel-frame-guard-set");
-                  if (steelItem) setOrderModalItem(steelItem);
+                  const steelItem =
+                    currentAccessories.find((a) => a.id === "volmo-steel-frame-guard-set") ||
+                    DEFAULT_ACCESSORIES.find((a) => a.id === "volmo-steel-frame-guard-set") ||
+                    currentAccessories[0];
+                  if (steelItem) handleOpenOrderModal(steelItem);
                 }}
                 className="px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer flex items-center gap-2"
               >
@@ -493,7 +545,7 @@ export default function Accessories({
                   onClick={() => {
                     const acc = selectedAccessory;
                     setSelectedAccessory(null);
-                    setOrderModalItem(acc);
+                    handleOpenOrderModal(acc);
                   }}
                   className="flex-1 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-orange-600/20 cursor-pointer"
                 >
@@ -508,17 +560,17 @@ export default function Accessories({
       {/* Quote / Accessory Order Modal */}
       <AnimatePresence>
         {orderModalItem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm overflow-y-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl p-6 sm:p-8 space-y-6 text-left"
+              className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-slate-200 shadow-2xl p-6 sm:p-8 space-y-6 text-left my-auto"
             >
               <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
                   <span className="text-[10px] font-mono font-bold text-orange-600 uppercase tracking-wider block">
-                    Direct Factory Accessory Request
+                    Direct Factory Accessory Enquiry
                   </span>
                   <h3 className="text-xl font-black text-slate-900">
                     {orderModalItem.title}
@@ -526,27 +578,92 @@ export default function Accessories({
                 </div>
                 <button
                   type="button"
-                  onClick={() => setOrderModalItem(null)}
-                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm cursor-pointer"
+                  onClick={handleCloseOrderModal}
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-sm cursor-pointer shrink-0"
                 >
                   &times;
                 </button>
               </div>
 
               {orderSubmitted ? (
-                <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
-                  <CheckCircle2 size={36} className="text-emerald-600 mx-auto" />
-                  <h4 className="text-base font-bold text-emerald-900">Inquiry Received!</h4>
-                  <p className="text-xs text-emerald-700">
-                    Our accessories dispatched manager in Gwalior will reach out to <strong>{buyerPhone}</strong> with authorized dealer pricing &amp; dispatch schedule.
-                  </p>
+                <div className="space-y-5">
+                  <div className="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
+                    <CheckCircle2 size={38} className="text-emerald-600 mx-auto" />
+                    <h4 className="text-lg font-black text-emerald-950">Enquiry Submitted Successfully!</h4>
+                    <p className="text-xs text-emerald-800 leading-relaxed">
+                      Thank you, <strong>{buyerName}</strong>! Your enquiry for <strong>{orderModalItem.title}</strong> has been saved. Our dispatch desk will contact you at <strong>{buyerPhone}</strong>.
+                    </p>
+                  </div>
+
+                  {/* Send on WhatsApp Option */}
+                  <div className="bg-[#25D366]/10 border border-[#25D366]/30 rounded-2xl p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-lg bg-[#25D366] text-white flex items-center justify-center shrink-0">
+                          <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                          </svg>
+                        </div>
+                        <span className="text-xs font-black text-slate-900 uppercase tracking-wide">
+                          Also Send on WhatsApp
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold bg-[#25D366] text-white px-2.5 py-0.5 rounded-full">
+                        {VOLMO_WHATSAPP_DISPLAY}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-600">
+                      For instant pricing &amp; availability on WhatsApp, review or edit your enquiry message below and click send:
+                    </p>
+
+                    <textarea
+                      rows={4}
+                      value={whatsAppMessage}
+                      onChange={(e) => setWhatsAppMessage(e.target.value)}
+                      className="w-full bg-white border border-slate-300 rounded-xl p-3 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#25D366] leading-relaxed"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => openWhatsApp(whatsAppMessage)}
+                      className="w-full py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba59] active:scale-[0.98] text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-[#25D366]/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.974.572 1.913.92 2.796.92 3.18 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.767-5.77zm6.929 5.766c0 3.82-3.109 6.929-6.929 6.929-.982 0-1.921-.21-2.775-.609l-3.953 1.036 1.056-3.856a6.883 6.883 0 0 1-.926-3.499c0-3.821 3.11-6.93 6.929-6.93 3.821 0 6.93 3.109 6.93 6.929z" />
+                      </svg>
+                      <span>Send Enquiry on WhatsApp</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleCloseOrderModal}
+                    className="w-full py-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs uppercase tracking-wider cursor-pointer"
+                  >
+                    Done &amp; Close
+                  </button>
                 </div>
               ) : (
                 <form onSubmit={handleOrderSubmit} className="space-y-4">
-                  <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-xs space-y-1">
-                    <span className="text-slate-500 font-medium">Selected Item:</span>
-                    <span className="font-bold text-slate-900 block">{orderModalItem.title}</span>
-                    <span className="text-orange-600 font-mono font-bold block">{orderModalItem.warranty}</span>
+                  <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl flex items-center gap-3.5 text-xs">
+                    <img
+                      src={orderModalItem.image}
+                      alt={orderModalItem.title}
+                      referrerPolicy="no-referrer"
+                      className="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0"
+                    />
+                    <div className="space-y-0.5 min-w-0">
+                      <span className="text-[10px] text-slate-500 font-mono uppercase block">
+                        {orderModalItem.categoryLabel}
+                      </span>
+                      <span className="font-bold text-slate-900 block truncate">
+                        {orderModalItem.title}
+                      </span>
+                      <span className="text-orange-600 font-mono font-bold text-[11px] block">
+                        {orderModalItem.warranty}
+                      </span>
+                    </div>
                   </div>
 
                   <div>
@@ -602,10 +719,23 @@ export default function Accessories({
                     </select>
                   </div>
 
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Additional Requirement / Note (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Quantity, helmet size, or delivery preference..."
+                      value={buyerNotes}
+                      onChange={(e) => setBuyerNotes(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
+                    />
+                  </div>
+
                   <div className="pt-2 flex items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => setOrderModalItem(null)}
+                      onClick={handleCloseOrderModal}
                       className="flex-1 py-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider cursor-pointer"
                     >
                       Cancel
@@ -614,7 +744,7 @@ export default function Accessories({
                       type="submit"
                       className="flex-1 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-orange-600/20 cursor-pointer"
                     >
-                      Submit Request
+                      Submit Enquiry
                     </button>
                   </div>
                 </form>
