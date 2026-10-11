@@ -78,6 +78,7 @@ export default function MediaBlogsPage({
   // VISITOR REVIEW FORM & OVERALL RATINGS
   // ==========================================
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
   const [visitorName, setVisitorName] = useState("");
   const [visitorRole, setVisitorRole] = useState("");
   const [visitorLocation, setVisitorLocation] = useState("");
@@ -86,7 +87,44 @@ export default function MediaBlogsPage({
   const [visitorRating, setVisitorRating] = useState<number>(5);
   const [visitorHighlight, setVisitorHighlight] = useState("");
   const [visitorText, setVisitorText] = useState("");
+  const [visitorAvatarUrl, setVisitorAvatarUrl] = useState<string>("");
   const [reviewSuccessMsg, setReviewSuccessMsg] = useState<string | null>(null);
+
+  const handleAvatarFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const rawDataUrl = ev.target?.result as string;
+      if (!rawDataUrl) return;
+
+      // Resize/compress to a clean square DP so it stays lightweight for real-time Cloud Firestore sync
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const size = 200;
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          const minDim = Math.min(img.width, img.height);
+          const sx = (img.width - minDim) / 2;
+          const sy = (img.height - minDim) / 2;
+          ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+          const compressed = canvas.toDataURL("image/jpeg", 0.82);
+          setVisitorAvatarUrl(compressed);
+        } else {
+          setVisitorAvatarUrl(rawDataUrl);
+        }
+      };
+      img.onerror = () => {
+        setVisitorAvatarUrl(rawDataUrl);
+      };
+      img.src = rawDataUrl;
+    };
+    reader.readAsDataURL(file);
+  };
 
   const overallRatingValue =
     reviewsList.length > 0
@@ -112,7 +150,7 @@ export default function MediaBlogsPage({
       location: visitorLocation.trim() || "India",
       model: visitorModel || "VOLMO VISTA",
       config: visitorConfig.trim() || "60V Smart Battery Pack",
-      avatarUrl: "",
+      avatarUrl: visitorAvatarUrl || "",
       rating: Number(visitorRating) || 5,
       highlightText: cleanHighlight,
       text: cleanText,
@@ -129,6 +167,7 @@ export default function MediaBlogsPage({
     setVisitorRating(5);
     setVisitorHighlight("");
     setVisitorText("");
+    setVisitorAvatarUrl("");
     setIsReviewFormOpen(false);
     setReviewSuccessMsg(
       "Thank you! Your review has been published live and saved to the cloud server in real time."
@@ -804,29 +843,72 @@ export default function MediaBlogsPage({
                   </button>
                 </div>
 
-                {/* Interactive Star Selector */}
-                <div className="space-y-2">
-                  <label className="block text-xs font-bold text-slate-700 uppercase font-mono">
-                    Your Overall Rating *
-                  </label>
-                  <div className="flex items-center gap-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        type="button"
-                        onClick={() => setVisitorRating(star)}
-                        className={`p-2 rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
-                          visitorRating >= star
-                            ? "bg-amber-50 border-amber-300 text-amber-500 scale-105"
-                            : "bg-slate-50 border-slate-200 text-slate-300 hover:text-amber-300"
-                        }`}
-                      >
-                        <Star size={22} fill={visitorRating >= star ? "currentColor" : "none"} />
-                      </button>
-                    ))}
-                    <span className="ml-2 text-xs font-mono font-bold text-slate-700">
-                      {visitorRating} / 5 Stars
-                    </span>
+                {/* Interactive Star Selector & Reviewer DP Photo Upload */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-700 uppercase font-mono">
+                      Your Overall Rating *
+                    </label>
+                    <div className="flex items-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setVisitorRating(star)}
+                          className={`p-2 rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
+                            visitorRating >= star
+                              ? "bg-amber-50 border-amber-300 text-amber-500 scale-105"
+                              : "bg-white border-slate-200 text-slate-300 hover:text-amber-300"
+                          }`}
+                        >
+                          <Star size={22} fill={visitorRating >= star ? "currentColor" : "none"} />
+                        </button>
+                      ))}
+                      <span className="ml-2 text-xs font-mono font-bold text-slate-700">
+                        {visitorRating} / 5 Stars
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Reviewer DP Photo Upload */}
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-700 uppercase font-mono">
+                      Your Profile Photo / DP (Optional)
+                    </label>
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden border-2 border-white shadow-md">
+                        {visitorAvatarUrl ? (
+                          <img
+                            src={visitorAvatarUrl}
+                            alt="Reviewer DP Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <User size={20} className="text-slate-400" />
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <label className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-bold text-xs cursor-pointer transition-all inline-flex items-center gap-1.5 shadow-2xs">
+                          <ImageIcon size={14} className="text-emerald-600" />
+                          <span>{visitorAvatarUrl ? "Change Photo" : "Upload Photo"}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleAvatarFileUpload}
+                            className="hidden"
+                          />
+                        </label>
+                        {visitorAvatarUrl && (
+                          <button
+                            type="button"
+                            onClick={() => setVisitorAvatarUrl("")}
+                            className="px-2.5 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -953,9 +1035,9 @@ export default function MediaBlogsPage({
           )}
         </AnimatePresence>
 
-        {/* Reviews Grid */}
+        {/* Reviews Grid (Newest 3 shown upfront, expandable via Show All button) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reviewsList.map((rev: any, idx) => {
+          {(showAllReviews ? reviewsList : reviewsList.slice(0, 3)).map((rev: any, idx) => {
             const starCount = Math.min(5, Math.max(1, Math.round(Number(rev.rating) || 5)));
             const bodyText = rev.text || rev.content || "";
             const headline = rev.highlightText || "";
@@ -998,7 +1080,7 @@ export default function MediaBlogsPage({
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                  <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden border border-slate-200">
                     {rev.avatarUrl ? (
                       <img
                         src={rev.avatarUrl}
@@ -1025,6 +1107,29 @@ export default function MediaBlogsPage({
             );
           })}
         </div>
+
+        {/* Show All / Show Fewer Reviews Button */}
+        {reviewsList.length > 3 && (
+          <div className="flex justify-center pt-2">
+            <button
+              type="button"
+              onClick={() => setShowAllReviews((prev) => !prev)}
+              className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-900 text-slate-800 hover:text-white border border-slate-300 hover:border-slate-900 font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer inline-flex items-center gap-2"
+            >
+              <span>
+                {showAllReviews
+                  ? "Show Fewer Reviews"
+                  : `Show All Reviews (${reviewsList.length})`}
+              </span>
+              <ArrowRight
+                size={14}
+                className={`transition-transform duration-300 ${
+                  showAllReviews ? "-rotate-90" : "rotate-90"
+                }`}
+              />
+            </button>
+          </div>
+        )}
       </section>
 
       {/* ========================================================== */}
