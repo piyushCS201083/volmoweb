@@ -25,9 +25,11 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
     updateBrandingConfig,
     testimonialsData,
     updateSingleTestimonial,
+    batteryChargerPageConfig,
+    updateBatteryChargerPageConfig,
   } = useSiteConfig();
 
-  const [activeCategory, setActiveCategory] = useState<"all" | "cover" | "fleet" | "concept" | "branding" | "reviews">("all");
+  const [activeCategory, setActiveCategory] = useState<"all" | "cover" | "fleet" | "concept" | "branding" | "batteries" | "reviews">("all");
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -56,6 +58,7 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
             { id: "fleet", label: `Scooters (${modelsData.length})` },
             { id: "concept", label: "Pulse Concept" },
             { id: "branding", label: "Brand Logo" },
+            { id: "batteries", label: "Batteries & Chargers" },
             { id: "reviews", label: "Rider Avatars" },
           ].map((cat) => (
             <button
@@ -254,7 +257,90 @@ export default function PhotosCMS({ onShowToast }: PhotosCMSProps) {
           </div>
         )}
 
-        {/* 5. RIDER TESTIMONIAL AVATARS */}
+        {/* 5. BATTERIES & CHARGERS SHOWCASE PHOTOS */}
+        {(activeCategory === "all" || activeCategory === "batteries") && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <Sparkles size={15} className="text-orange-400" />
+                Batteries &amp; Chargers Showcase Photos
+              </h4>
+              <span className="text-xs text-slate-500 font-mono">
+                3 Key Media Cards
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Card 1: Lithium-Ion Smart Series (60V 24Ah) */}
+              <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-900">
+                  <span className="font-bold text-xs text-orange-400 uppercase font-mono">
+                    Lithium-Ion (60V 24Ah)
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono">Sunset Card 1</span>
+                </div>
+                <ImageUploader
+                  label="60V 24Ah Showcase Photo"
+                  value={
+                    batteryChargerPageConfig?.lithiumBanner1Image ||
+                    "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg"
+                  }
+                  onChange={(newVal) => {
+                    updateBatteryChargerPageConfig({ lithiumBanner1Image: newVal });
+                    onShowToast("Updated 60V 24Ah Lithium showcase photo!");
+                  }}
+                  helperText="Upload image or pick 60V 24Ah sunset preset"
+                />
+              </div>
+
+              {/* Card 2: Volmo LFP Long-Range (60V 45Ah) */}
+              <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-900">
+                  <span className="font-bold text-xs text-cyan-400 uppercase font-mono">
+                    LFP Long-Range (60V 45Ah)
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono">Sunset Card 2</span>
+                </div>
+                <ImageUploader
+                  label="60V 45Ah Showcase Photo"
+                  value={
+                    batteryChargerPageConfig?.lithiumBanner2Image ||
+                    "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg"
+                  }
+                  onChange={(newVal) => {
+                    updateBatteryChargerPageConfig({ lithiumBanner2Image: newVal });
+                    onShowToast("Updated 60V 45Ah LFP showcase photo!");
+                  }}
+                  helperText="Upload image or pick 60V 45Ah tall sunset preset"
+                />
+              </div>
+
+              {/* Card 3: German Tech Smart Charger */}
+              <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between pb-1 border-b border-slate-900">
+                  <span className="font-bold text-xs text-cyan-400 uppercase font-mono">
+                    German Tech Charger
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-mono">Telemetry Banner</span>
+                </div>
+                <ImageUploader
+                  label="Smart Charger Showcase Photo"
+                  value={
+                    batteryChargerPageConfig?.chargerSpotlightImage ||
+                    "/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+                  }
+                  onChange={(newVal) => {
+                    updateBatteryChargerPageConfig({ chargerSpotlightImage: newVal });
+                    onShowToast("Updated German Tech Smart Charger photo!");
+                  }}
+                  helperText="Upload image or pick German tech charger preset"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 6. RIDER TESTIMONIAL AVATARS */}
         {(activeCategory === "all" || activeCategory === "reviews") && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">

@@ -550,8 +550,8 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-900">
                 <img
-                  src="/src/assets/images/volmo_lithium_battery_1790255491526.jpg"
-                  alt="Volmo Original Lithium Battery Pack with Handle"
+                  src={cfg.lithiumBanner1Image || "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg"}
+                  alt="Volmo 60V 24Ah Lithium-Ion Smart Series Battery Pack"
                   referrerPolicy="no-referrer"
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
                 />
@@ -568,8 +568,8 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
 
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-900">
                 <img
-                  src="/src/assets/images/volmo_lfp_battery_1790257174523.jpg"
-                  alt="Volmo LFP Prismatic High Capacity Battery"
+                  src={cfg.lithiumBanner2Image || "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg"}
+                  alt="Volmo 60V 45Ah LFP High Capacity Battery Pack"
                   referrerPolicy="no-referrer"
                   className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
                 />
@@ -875,7 +875,7 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
                 <div className="lg:col-span-4">
                   <div className="rounded-xl overflow-hidden border border-slate-700 shadow-xl bg-slate-950">
                     <img
-                      src="/src/assets/images/volmo_smart_charger_1790255476376.jpg"
+                      src={cfg.chargerSpotlightImage || "/src/assets/images/volmo_smart_charger_1790255476376.jpg"}
                       alt="Volmo Smart German Technology Charger"
                       referrerPolicy="no-referrer"
                       className="w-full h-48 sm:h-52 object-cover"

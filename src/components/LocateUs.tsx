@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   MapPin,
@@ -24,6 +24,27 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useSiteConfig } from "../SiteConfigContext";
+import { DEFAULT_CORPORATE_LOCATIONS, DEFAULT_SHOWROOMS } from "../data";
+
+const getIconComponent = (iconName?: string) => {
+  switch (iconName) {
+    case "Factory":
+      return Factory;
+    case "Store":
+      return Store;
+    case "Navigation":
+      return Navigation;
+    case "MapPin":
+      return MapPin;
+    case "Globe":
+      return Globe;
+    case "Sparkles":
+      return Sparkles;
+    case "Building2":
+    default:
+      return Building2;
+  }
+};
 
 interface Showroom {
   id: string;
@@ -262,10 +283,11 @@ function generateAllShowrooms(): Showroom[] {
 
 export interface LocateUsProps {
   onDealershipClick?: () => void;
+  onOpenAdmin?: (tab?: string) => void;
 }
 
-export default function LocateUs({ onDealershipClick }: LocateUsProps) {
-  const { contactInfo, siteSections, showroomsData } = useSiteConfig();
+export default function LocateUs({ onDealershipClick, onOpenAdmin }: LocateUsProps) {
+  const { contactInfo, siteSections, showroomsData, locateUsPageConfig, corporateLocationsData } = useSiteConfig();
 
   // Active selected location for interactive Google Map
   const [activeLocationId, setActiveLocationId] = useState<string>("head-office");
@@ -277,68 +299,30 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
   const [filterStatus, setFilterStatus] = useState<string>("All Status");
 
   // Official primary corporate locations with exact GPS links & embed targets
-  const corporateLocations = useMemo(
-    () => [
-      {
-        id: "head-office",
-        title: siteSections?.hqTitle || "Volmo Corporate Head Office",
-        type: "Company Head Office",
-        tag: "Corporate & Registered Office",
-        address:
-          contactInfo.headOfficeAddress ||
-          "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006",
-        phone: contactInfo.phone || "7880008401",
-        email: contactInfo.email || "sales@volmoelectrical.com",
-        hours: siteSections?.hqHours || "Monday - Saturday: 10:00 AM - 07:00 PM",
-        mapsUrl: "https://maps.app.goo.gl/ay94JjuHWHfiF6tb9?g_st=iw",
-        // Direct coordinates query for accurate map embed centered on Morar Baradari
-        mapEmbedUrl:
-          "https://maps.google.com/maps?q=Shivhare%20Colony%20Singhpur%20Road%20Baradari%20Choraha%20Morar%20Gwalior%20Madhya%20Pradesh%20474006&t=&z=16&ie=UTF8&iwloc=&output=embed",
-        icon: Building2,
-        accent: "from-blue-600 to-indigo-600",
-        badgeBg: "bg-blue-50 text-blue-700 border-blue-200",
-      },
-      {
-        id: "manufacturing-plant",
-        title: siteSections?.plantTitle || "Volmo EV Manufacturing Plant",
-        type: "Manufacturing Plant",
-        tag: "Assembly & Battery Lab",
-        address:
-          contactInfo.factoryAddress ||
-          "Behind Arogyadhaam Hospital, City Center, Gwalior, Madhya Pradesh - 474011",
-        phone: contactInfo.phone || "7880008401",
-        email: contactInfo.email || "sales@volmoelectrical.com",
-        hours: siteSections?.plantHours || "Monday - Saturday: 09:00 AM - 07:00 PM",
-        mapsUrl: "https://maps.google.com/?q=26.202997,78.184883",
-        // Exact GPS coordinates query embed
-        mapEmbedUrl:
-          "https://maps.google.com/maps?q=26.202997,78.184883&t=&z=17&ie=UTF8&iwloc=&output=embed",
-        icon: Factory,
-        accent: "from-orange-600 to-amber-600",
-        badgeBg: "bg-orange-50 text-orange-700 border-orange-200",
-      },
-      {
-        id: "company-showroom",
-        title: "Volmo Company Operated Showroom",
-        type: "Company Operated Showroom",
-        tag: "Official Retail & Test Rides",
-        address:
-          "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
-        phone: "7880008401",
-        email: contactInfo.email || "sales@volmoelectrical.com",
-        hours: "Monday - Sunday: 10:00 AM - 08:30 PM",
-        mapsUrl:
-          "https://www.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en",
-        // Exact GPS coordinates query embed
-        mapEmbedUrl:
-          "https://maps.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en&t=&ie=UTF8&iwloc=&output=embed",
-        icon: Store,
-        accent: "from-emerald-600 to-teal-600",
-        badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200",
-      },
-    ],
-    [contactInfo, siteSections]
-  );
+  const corporateLocations = useMemo(() => {
+    const list =
+      corporateLocationsData && corporateLocationsData.length > 0
+        ? corporateLocationsData
+        : DEFAULT_CORPORATE_LOCATIONS;
+
+    return list.map((loc) => ({
+      ...loc,
+      icon: getIconComponent(loc.iconName),
+      accent: loc.accent || "from-blue-600 to-indigo-600",
+      badgeBg: loc.badgeBg || "bg-blue-50 text-blue-700 border-blue-200",
+      shortPill: loc.shortPill || (loc.id === "head-office" ? "HQ" : loc.id === "manufacturing-plant" ? "Plant" : "Showroom"),
+    }));
+  }, [corporateLocationsData]);
+
+  // Ensure active location id is always valid if list changes
+  useEffect(() => {
+    if (corporateLocations.length > 0) {
+      const exists = corporateLocations.some((loc) => loc.id === activeLocationId);
+      if (!exists) {
+        setActiveLocationId(corporateLocations[0].id);
+      }
+    }
+  }, [corporateLocations, activeLocationId]);
 
   const activeLocation =
     corporateLocations.find((loc) => loc.id === activeLocationId) || corporateLocations[0];
@@ -349,22 +333,18 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Compile full dealership directory, prioritizing any custom added in Admin
+  // Compile full dealership directory using showroomsData as the source of truth
   const allDealerships = useMemo(() => {
-    const base = generateAllShowrooms();
-    if (!showroomsData || showroomsData.length === 0) return base;
-    const customList: Showroom[] = showroomsData.map((s) => ({
+    const list = Array.isArray(showroomsData) ? showroomsData : DEFAULT_SHOWROOMS;
+    return list.map((s) => ({
       id: s.id,
       name: s.name,
       city: s.city,
       state: s.state,
       address: s.address,
       phone: s.phone,
-      status: s.status as "Active" | "Expanding" | "Service Hub",
+      status: (s.status as "Active" | "Expanding" | "Service Hub") || "Active",
     }));
-    const existingIds = new Set(customList.map((c) => c.id));
-    const filteredBase = base.filter((b) => !existingIds.has(b.id));
-    return [...customList, ...filteredBase];
   }, [showroomsData]);
 
   // Compute stats dynamically
@@ -408,15 +388,14 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
           <div className="text-left space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-mono font-bold uppercase tracking-wider">
               <MapPin size={13} className="text-orange-600" />
-              <span>Volmo Electrical Private Limited &middot; Official Locations</span>
+              <span>{locateUsPageConfig?.heroBadge || "Volmo Electrical Private Limited · Official Locations"}</span>
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-sans">
-              Contact Us
+              {locateUsPageConfig?.heroTitle || "Contact Us"}
             </h1>
             <p className="text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">
-              Find our Corporate Head Office, EV Manufacturing Plant, and Company Operated Showroom
-              in Gwalior, Madhya Pradesh. Use the live interactive map on the right to navigate
-              directly to all our official facilities.
+              {locateUsPageConfig?.heroSubtitle ||
+                "Find our Corporate Head Office, EV Manufacturing Plant, and Company Operated Showroom in Gwalior, Madhya Pradesh. Use the live interactive map on the right to navigate directly to all our official facilities."}
             </p>
           </div>
 
@@ -612,11 +591,12 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-[10px] font-mono font-bold uppercase text-slate-500">
-                          {loc.id === "head-office"
-                            ? "HQ"
-                            : loc.id === "manufacturing-plant"
-                            ? "Plant"
-                            : "Showroom"}
+                          {loc.shortPill ||
+                            (loc.id === "head-office"
+                              ? "HQ"
+                              : loc.id === "manufacturing-plant"
+                              ? "Plant"
+                              : "Showroom")}
                         </span>
                         <a
                           href={loc.mapsUrl}
@@ -661,11 +641,12 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                             : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                         }`}
                       >
-                        {loc.id === "head-office"
-                          ? "HQ"
-                          : loc.id === "manufacturing-plant"
-                          ? "Plant"
-                          : "Showroom"}
+                        {loc.shortPill ||
+                          (loc.id === "head-office"
+                            ? "HQ"
+                            : loc.id === "manufacturing-plant"
+                            ? "Plant"
+                            : "Showroom")}
                       </button>
                     ))}
                   </div>
@@ -716,13 +697,14 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="text-xs font-mono uppercase bg-slate-200/60 text-slate-755 border border-slate-300 px-3.5 py-1.5 rounded-full font-bold inline-flex items-center gap-1.5">
               <Globe size={13} className="text-slate-650" />
-              <span>{siteSections?.locatorBadge || "Pan-India EV Retail Network"}</span>
+              <span>{locateUsPageConfig?.locatorBadge || siteSections?.locatorBadge || "Pan-India EV Retail Network"}</span>
             </span>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-tight font-sans">
-              {siteSections?.locatorHeading || "Find Volmo Showrooms Near You"}
+              {locateUsPageConfig?.locatorHeading || siteSections?.locatorHeading || "Find Volmo Showrooms Near You"}
             </h2>
             <p className="text-slate-600 text-sm font-normal font-sans max-w-xl mx-auto">
-              {siteSections?.locatorSubtitle ||
+              {locateUsPageConfig?.locatorSubtitle ||
+                siteSections?.locatorSubtitle ||
                 "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!"}
             </p>
           </div>
@@ -731,34 +713,34 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
             <div className="bg-white border border-slate-200 p-4 rounded-2xl text-center flex flex-col justify-center shadow-xs">
               <span className="text-2xl sm:text-3xl font-black text-slate-800 font-mono">
-                {stats.total}+
+                {locateUsPageConfig?.stat1Override ? locateUsPageConfig.stat1Override : `${stats.total}+`}
               </span>
               <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">
-                Active Dealerships
+                {locateUsPageConfig?.stat1Label || "Active Dealerships"}
               </span>
             </div>
             <div className="bg-white border border-slate-200 p-4 rounded-2xl text-center flex flex-col justify-center shadow-xs">
               <span className="text-2xl sm:text-3xl font-black text-slate-800 font-mono">
-                {stats.activeStates}
+                {locateUsPageConfig?.stat2Override ? locateUsPageConfig.stat2Override : stats.activeStates}
               </span>
               <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">
-                States Covered
+                {locateUsPageConfig?.stat2Label || "States Covered"}
               </span>
             </div>
             <div className="bg-white border border-slate-200 p-4 rounded-2xl text-center flex flex-col justify-center shadow-xs">
               <span className="text-2xl sm:text-3xl font-black text-slate-700 font-mono">
-                {stats.activeShowrooms}
+                {locateUsPageConfig?.stat3Override ? locateUsPageConfig.stat3Override : stats.activeShowrooms}
               </span>
               <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">
-                Ready Showrooms
+                {locateUsPageConfig?.stat3Label || "Ready Showrooms"}
               </span>
             </div>
             <div className="bg-white border border-slate-200 p-4 rounded-2xl text-center flex flex-col justify-center shadow-xs">
               <span className="text-2xl sm:text-3xl font-black text-slate-650 font-mono">
-                {stats.expanding}
+                {locateUsPageConfig?.stat4Override ? locateUsPageConfig.stat4Override : stats.expanding}
               </span>
               <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1">
-                Coming Up Soon
+                {locateUsPageConfig?.stat4Label || "Coming Up Soon"}
               </span>
             </div>
           </div>
@@ -775,7 +757,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by city, zipcode, showroom name..."
+                  placeholder={locateUsPageConfig?.searchPlaceholder || "Search by city, zipcode, showroom name..."}
                   className="w-full bg-slate-50 border border-slate-200 text-slate-800 pl-10 pr-4 py-3 rounded-xl text-xs sm:text-sm font-sans focus:outline-none focus:border-slate-400 focus:bg-white transition-colors"
                 />
               </div>
@@ -790,7 +772,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                   }}
                   className="w-full bg-slate-50 border border-slate-200 text-slate-800 px-4 py-3 rounded-xl text-xs sm:text-sm font-sans focus:outline-none focus:border-slate-400 focus:bg-white transition-colors cursor-pointer"
                 >
-                  <option value="All States">All 29 States &amp; UTs</option>
+                  <option value="All States">{locateUsPageConfig?.allStatesLabel || "All 29 States & UTs"}</option>
                   {ALL_STATES.map((state) => (
                     <option key={state} value={state}>
                       {state}
@@ -806,10 +788,10 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                   onChange={(e) => setFilterStatus(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 text-slate-800 px-4 py-3 rounded-xl text-xs sm:text-sm font-sans focus:outline-none focus:border-slate-400 focus:bg-white transition-colors cursor-pointer"
                 >
-                  <option value="All Status">All Outlets &amp; Service Hubs</option>
-                  <option value="Active">Active Operational</option>
-                  <option value="Service Hub">Service &amp; Spares Hub</option>
-                  <option value="Expanding">Expanding Soon</option>
+                  <option value="All Status">{locateUsPageConfig?.allStatusLabel || "All Outlets & Service Hubs"}</option>
+                  <option value="Active">{locateUsPageConfig?.activeStatusLabel || "Active Operational"}</option>
+                  <option value="Service Hub">{locateUsPageConfig?.serviceHubStatusLabel || "Service & Spares Hub"}</option>
+                  <option value="Expanding">{locateUsPageConfig?.expandingStatusLabel || "Expanding Soon"}</option>
                 </select>
               </div>
             </div>
@@ -817,7 +799,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
             {/* Total Results Count Bar */}
             <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500 font-medium">
               <span>
-                Showing <strong>{filteredDealerships.length}</strong> outlets across India
+                Showing <strong>{filteredDealerships.length}</strong> {locateUsPageConfig?.resultsCountSuffix || "outlets across India"}
               </span>
               {(selectedState !== "All States" ||
                 filterStatus !== "All Status" ||
@@ -831,7 +813,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                   }}
                   className="text-orange-600 font-bold hover:underline cursor-pointer"
                 >
-                  Clear Filters
+                  {locateUsPageConfig?.clearFiltersText || "Clear Filters"}
                 </button>
               )}
             </div>
@@ -839,7 +821,9 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
             {/* Showrooms Grid Results */}
             {filteredDealerships.length === 0 ? (
               <div className="py-12 text-center space-y-3">
-                <p className="text-slate-600 text-sm">No dealerships found matching your search.</p>
+                <p className="text-slate-600 text-sm">
+                  {locateUsPageConfig?.emptyStateMessage || "No dealerships found matching your search."}
+                </p>
                 <button
                   type="button"
                   onClick={() => {
@@ -849,7 +833,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                   }}
                   className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold cursor-pointer"
                 >
-                  Reset Locator Form
+                  {locateUsPageConfig?.resetButtonText || "Reset Locator Form"}
                 </button>
               </div>
             ) : (
@@ -903,7 +887,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                           className="text-slate-600 hover:text-slate-900 font-mono flex items-center gap-1 font-semibold"
                         >
                           <Phone size={11} className="text-slate-400" />
-                          <span>+91 {showroom.phone}</span>
+                          <span>{locateUsPageConfig?.phoneLabelPrefix || "+91"} {showroom.phone}</span>
                         </a>
 
                         <a
@@ -914,7 +898,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                           rel="noopener noreferrer"
                           className="text-slate-700 hover:underline font-bold text-[10px] uppercase tracking-wide flex items-center gap-1 cursor-pointer"
                         >
-                          <span>Get Route</span>
+                          <span>{locateUsPageConfig?.getRouteButtonText || "Get Route"}</span>
                           <ArrowRight size={10} />
                         </a>
                       </div>
@@ -930,39 +914,39 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
             <div className="space-y-4 text-left">
               <div className="inline-flex items-center gap-1.5 bg-slate-100 border border-slate-200 text-slate-700 text-[10px] font-bold font-mono uppercase px-3 py-1.5 rounded-lg">
                 <Sparkles size={11} className="text-orange-600" />
-                <span>FRANCHISE INITIATIVES OPEN</span>
+                <span>{locateUsPageConfig?.franchiseBadge || "FRANCHISE INITIATIVES OPEN"}</span>
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
-                Start Your Volmo Franchise in Your Hometown City Today
+                {locateUsPageConfig?.franchiseHeading || "Start Your Volmo Franchise in Your Hometown City Today"}
               </h3>
 
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                Indian green energy transition is picking up pace rapidly. Introduce zero-registration,
-                zero-license premium commuters to students and families in your state, backed by solid
-                marketing support, premium replacement inventories, and solid margins.
+                {locateUsPageConfig?.franchiseDescription ||
+                  "Indian green energy transition is picking up pace rapidly. Introduce zero-registration, zero-license premium commuters to students and families in your state, backed by solid marketing support, premium replacement inventories, and solid margins."}
               </p>
             </div>
 
             <div className="bg-slate-50 border border-slate-200 p-6 rounded-2xl relative space-y-4 text-left">
               <h4 className="text-xs font-mono uppercase text-slate-500 tracking-wider flex items-center gap-1.5 border-b border-slate-200 pb-2">
                 <span className="w-2 h-2 rounded-full bg-slate-600 animate-pulse" />
-                <span>Investment Benefits Overview</span>
+                <span>{locateUsPageConfig?.franchiseCardTitle || "Investment Benefits Overview"}</span>
               </h4>
 
               <div className="space-y-2.5 text-xs text-slate-700">
-                <div className="flex items-center gap-2">
-                  <CheckCircle size={14} className="text-emerald-600" />
-                  <span>Zero Franchise Entry Fee for first partners in new states</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle size={14} className="text-emerald-600" />
-                  <span>Direct 100% genuine spare support from Gwalior Plant</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle size={14} className="text-emerald-600" />
-                  <span>Integrated digital leads funnel directly sent to you</span>
-                </div>
+                {(locateUsPageConfig?.franchiseBenefits && locateUsPageConfig.franchiseBenefits.length > 0
+                  ? locateUsPageConfig.franchiseBenefits
+                  : [
+                      "Zero Franchise Entry Fee for first partners in new states",
+                      "Direct 100% genuine spare support from Gwalior Plant",
+                      "Integrated digital leads funnel directly sent to you",
+                    ]
+                ).map((benefit, bIdx) => (
+                  <div key={bIdx} className="flex items-center gap-2">
+                    <CheckCircle size={14} className="text-emerald-600 flex-shrink-0" />
+                    <span>{benefit}</span>
+                  </div>
+                ))}
               </div>
 
               <div className="pt-2">
@@ -971,7 +955,7 @@ export default function LocateUs({ onDealershipClick }: LocateUsProps) {
                   onClick={onDealershipClick}
                   className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all cursor-pointer text-xs uppercase tracking-wider block text-center shadow-md"
                 >
-                  Apply for Dealership
+                  {locateUsPageConfig?.franchiseButtonText || "Apply for Dealership"}
                 </button>
               </div>
             </div>

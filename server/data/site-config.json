@@ -13,25 +13,26 @@
         {
           "name": "Glossy White",
           "hex": "#FFFFFF",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791052028/volmo_assets/j_png.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459878/volmo_assets/volmo_vista_electric_scooter_at_sunset__1__png.png"
         },
         {
           "name": "Tech Grey",
           "hex": "#52525B",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791052064/volmo_assets/whatsapp_image_2026-09-23_at_7_16_35_pm__1__jpeg.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png"
         },
         {
           "name": "Midnight Black",
           "hex": "#18181B",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791052082/volmo_assets/whatsapp_image_2026-09-23_at_7_16_37_pm_jpeg.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397101/volmo_assets/volmo_vista_sunset_showcase__2__png.png"
         },
         {
           "name": "Matcha green",
-          "hex": "#b1dd8b"
+          "hex": "#b1dd8b",
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459908/volmo_assets/chatgpt_image_oct_8__2026__03_52_33_pm_png.png"
         }
       ],
-      "image": "/src/assets/images/volmo_vista_1780058817114.png",
-      "basePriceEstimate": "₹59,999",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png",
+      "basePriceEstimate": "₹40,000",
       "featured": true,
       "frontBrake": "Hydraulic Disc Brake (Right-Hand Lever)",
       "rearBrake": "Mechanical Expanded Drum Brake (Left-Hand Lever)",
@@ -57,21 +58,21 @@
         {
           "name": "Cherry Red",
           "hex": "#DC2626",
-          "image": "/src/assets/images/volmo_glider_1780058835594.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459696/volmo_assets/volmo_glider_at_golden_hour_png.png"
         },
         {
           "name": "Apple Green",
           "hex": "#22C55E",
-          "image": "/src/assets/images/glider_apple_green_1790182589580.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459683/volmo_assets/volmo_glider_at_sunset__1__png.png"
         },
         {
           "name": "Ocean Blue",
           "hex": "#2563EB",
-          "image": "/src/assets/images/glider_ocean_blue_1790182609366.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459723/volmo_assets/volmo_glider_at_sunset_png.png"
         }
       ],
-      "image": "/src/assets/images/volmo_glider_1780058835594.png",
-      "basePriceEstimate": "₹63,999",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459683/volmo_assets/volmo_glider_at_sunset__1__png.png",
+      "basePriceEstimate": "₹43,000",
       "featured": false,
       "frontBrake": "Ventilated Wave Disc Brake (Right-Hand Lever)",
       "rearBrake": "Premium Spring Drum Brake with High Durability Liners",
@@ -95,33 +96,33 @@
       "isRtoFree": true,
       "colors": [
         {
-          "name": "Royal Blue",
-          "hex": "#1D4ED8",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791223896/volmo_assets/chatgpt_image_oct_5__2026__11_41_07_pm_png.png"
-        },
-        {
-          "name": "Crimson Red",
-          "hex": "#B91C1C",
-          "image": "/src/assets/images/classic_crimson_red_1790182628879.jpg"
-        },
-        {
-          "name": "Charcoal Grey",
-          "hex": "#4B5563",
-          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791048267/volmo_assets/chatgpt_image_sep_25__2026__07_07_58_pm_png.png"
-        },
-        {
           "name": "Sleek Black",
           "hex": "#0F172A",
-          "image": "/src/assets/images/classic_sleek_black_1790182659642.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791223896/volmo_assets/chatgpt_image_oct_5__2026__11_41_07_pm_png.png"
         },
         {
           "name": "Pearl White",
           "hex": "#F8FAFC",
-          "image": "/src/assets/images/classic_pearl_white_1790182643917.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344598/volmo_assets/volmo_classic_electric_scooter_at_sunset_png.png"
+        },
+        {
+          "name": "Charcoal grey",
+          "hex": "#5f5e5d",
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png"
+        },
+        {
+          "name": "crimson red",
+          "hex": "#a30505",
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344246/volmo_assets/chatgpt_image_oct_7__2026__09_01_46_am_png.png"
+        },
+        {
+          "name": "Royal blue",
+          "hex": "#001eff",
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344838/volmo_assets/chatgpt_image_oct_7__2026__09_12_33_am_png.png"
         }
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791223896/volmo_assets/chatgpt_image_oct_5__2026__11_41_07_pm_png.png",
-      "basePriceEstimate": "₹69,999",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png",
+      "basePriceEstimate": "₹54,000",
       "featured": true,
       "frontBrake": "Large Diameter Hydraulic Disc Brake",
       "rearBrake": "Heavy-Duty Expanded Shoe Drum Brake",
@@ -147,21 +148,21 @@
         {
           "name": "Cream Beige",
           "hex": "#F5F5DC",
-          "image": "/src/assets/images/volmo_phantom_1780058868036.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459768/volmo_assets/volmo_phantom__sunset_scooter_showcase_png.png"
         },
         {
           "name": "Apple Green",
           "hex": "#16A34A",
-          "image": "/src/assets/images/phantom_apple_green_1790182691216.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459784/volmo_assets/volmo_phantom_at_sunset_png.png"
         },
         {
           "name": "Steel Blue",
           "hex": "#4682B4",
-          "image": "/src/assets/images/phantom_steel_blue_1790182675033.jpg"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459794/volmo_assets/volmo_phantom_at_sunset__1__png.png"
         }
       ],
-      "image": "/src/assets/images/volmo_phantom_1780058868036.png",
-      "basePriceEstimate": "₹76,999",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459768/volmo_assets/volmo_phantom__sunset_scooter_showcase_png.png",
+      "basePriceEstimate": "₹58,000",
       "featured": true,
       "frontBrake": "Signature Dual Piston Hydraulic Disc Brake",
       "rearBrake": "Synchronized Compound Drum Brake with Combi-Brake System (CBS)",
@@ -187,26 +188,26 @@
         {
           "name": "Cyber Black",
           "hex": "#0F172A",
-          "image": "/src/assets/images/volmo_pulse_1780058885037.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397139/volmo_assets/volmo_pulse_at_golden_hour_png.png"
         },
         {
           "name": "Neon Cyan",
           "hex": "#06B6D4",
-          "image": "/src/assets/images/volmo_pulse_premium_1780068389740.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397155/volmo_assets/volmo_pulse_at_sunset__1__png.png"
         },
         {
           "name": "Matte Grey",
           "hex": "#475569",
-          "image": "/src/assets/images/volmo_pulse_1780058885037.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397228/volmo_assets/volmo_pulse_at_sunset_png.png"
         },
         {
           "name": "Flash Red",
           "hex": "#DC2626",
-          "image": "/src/assets/images/volmo_pulse_premium_1780068389740.png"
+          "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397213/volmo_assets/volmo_pulse_at_sunset__2__png.png"
         }
       ],
-      "image": "/src/assets/images/volmo_pulse_1780058885037.png",
-      "basePriceEstimate": "₹76,999",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png",
+      "basePriceEstimate": "₹60,000",
       "featured": true,
       "frontBrake": "Signature Dual Piston Hydraulic Disc Brake",
       "rearBrake": "Synchronized Compound Drum Brake with Combi-Brake System (CBS)",
@@ -252,10 +253,10 @@
   "pulse": {
     "id": "pulse",
     "name": "VOLMO PULSE",
-    "tagline": "The High-Torque Cyber Sport - Performance & Agility",
-    "image": "/src/assets/images/volmo_pulse_premium_1780068389740.png",
-    "description": "Now available across our showrooms! Engineered with a 1200W peak motor, dual-piston disc brakes, aerodynamic sport frame, and intelligent LED lighting architecture. Get ready for unmatched acceleration and 100% RTO-free riding.",
-    "isReleased": true
+    "tagline": "The Cyberpunk Revolution. Coming Soon.",
+    "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397139/volmo_assets/volmo_pulse_at_golden_hour_png.png",
+    "description": "Specifications are strictly top secret. Engineered for the next generation of extreme electric mobility with a custom aerodynamic frame, sleek integrated LED architecture, and intelligent underglow technology. Get ready for unmatched acceleration and peak performance.",
+    "isReleased": false
   },
   "features": [
     {
@@ -365,7 +366,215 @@
       "text": "As a doctor, quietness and eco-friendliness are high priorities for me. The Glider fits right in for my commute to the clinic. The regenerative braking feel is very natural and returns a visible charge on the console telemetry display. Great build quality!"
     }
   ],
-  "showrooms": [],
+  "showrooms": [
+    {
+      "id": "mp-flagship",
+      "name": "Volmo Company Operated Showroom (Flagship)",
+      "city": "Gwalior",
+      "state": "Madhya Pradesh",
+      "address": "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "mp-1",
+      "name": "Volmo Gwalior Smart EV Fleet Flagship",
+      "city": "Gwalior",
+      "state": "Madhya Pradesh",
+      "address": "Opposite Arogyadhaam Hospital, City Center, Gwalior - 474011",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "mp-2",
+      "name": "Volmo Indore Cyber Electric",
+      "city": "Indore",
+      "state": "Madhya Pradesh",
+      "address": "G-11, Royal Gold Building, YN Road, Vijay Nagar, Indore - 452001",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "mp-3",
+      "name": "Volmo Bhopal Eco-Wheels",
+      "city": "Bhopal",
+      "state": "Madhya Pradesh",
+      "address": "Plot 42, Commercial Zone, MP Nagar Zone II, Bhopal - 462011",
+      "phone": "7554902182",
+      "status": "Service Hub"
+    },
+    {
+      "id": "mp-4",
+      "name": "Volmo Jabalpur Mobility",
+      "city": "Jabalpur",
+      "state": "Madhya Pradesh",
+      "address": "Civic Center, Napier Town, Jabalpur - 482001",
+      "phone": "7612409811",
+      "status": "Active"
+    },
+    {
+      "id": "up-1",
+      "name": "Volmo Lucknow Nawabi Smart-Drive",
+      "city": "Lucknow",
+      "state": "Uttar Pradesh",
+      "address": "Ground Floor, Baradari Complex, Hazratganj, Lucknow - 226001",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "up-2",
+      "name": "Volmo Noida Tech-Hub EV",
+      "city": "Noida",
+      "state": "Uttar Pradesh",
+      "address": "Commercial Market Square, Sector 62, Noida - 201301",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "up-3",
+      "name": "Volmo Agra Heritage EV Hub",
+      "city": "Agra",
+      "state": "Uttar Pradesh",
+      "address": "Shop 14, Sanjay Place Commercial Complex, Agra - 282002",
+      "phone": "9837102941",
+      "status": "Active"
+    },
+    {
+      "id": "up-4",
+      "name": "Volmo Kanpur Industrial Greenway",
+      "city": "Kanpur",
+      "state": "Uttar Pradesh",
+      "address": "Opposite Hallet, Swaroop Nagar, Kanpur - 208002",
+      "phone": "7880008401",
+      "status": "Service Hub"
+    },
+    {
+      "id": "up-5",
+      "name": "Volmo Varanasi Sacred Wheels",
+      "city": "Varanasi",
+      "state": "Uttar Pradesh",
+      "address": "Near Ravidas Gate, Lanka Road, Varanasi - 221005",
+      "phone": "9111333151",
+      "status": "Expanding"
+    },
+    {
+      "id": "up-6",
+      "name": "Volmo Jhansi Bundelkhand Point",
+      "city": "Jhansi",
+      "state": "Uttar Pradesh",
+      "address": "Elite Crossing, Civil Lines, Jhansi - 284001",
+      "phone": "9450012891",
+      "status": "Active"
+    },
+    {
+      "id": "dl-1",
+      "name": "Volmo India Delhi Central Flagship",
+      "city": "New Delhi",
+      "state": "Delhi NCR",
+      "address": "Radial Road 4, Inner Circle, Connaught Place, New Delhi - 110001",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "dl-2",
+      "name": "Volmo Dwarka Green Spark",
+      "city": "Dwarka",
+      "state": "Delhi NCR",
+      "address": "Main Sector 10 Metro Plaza, Dwarka, New Delhi - 110075",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "dl-3",
+      "name": "Volmo Delhi NCR Experience Center",
+      "city": "Noida",
+      "state": "Delhi NCR",
+      "address": "Sector 18 Metro Station Arcade, Noida, Delhi NCR - 201301",
+      "phone": "9811002345",
+      "status": "Active"
+    },
+    {
+      "id": "mh-1",
+      "name": "Volmo Mumbai Metro Electric Hub",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "address": "Link Road, Near Infinity Mall, Andheri West, Mumbai - 400053",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "mh-2",
+      "name": "Volmo Pune Tech Pulse",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "address": "FC Road Central, Shivajinagar, Pune - 411005",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "rj-1",
+      "name": "Volmo Jaipur Royal Sun-Drive",
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "address": "A-Block, Vaishali Tower, Vaishali Nagar, Jaipur - 302021",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "rj-2",
+      "name": "Volmo Udaipur Lakes Ride Point",
+      "city": "Udaipur",
+      "state": "Rajasthan",
+      "address": "Shastri Circle, Main Sector 4, Jodhpur Bypass, Udaipur - 313001",
+      "phone": "7880008401",
+      "status": "Active"
+    },
+    {
+      "id": "rj-3",
+      "name": "Volmo Jaipur Pink City EV",
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "address": "Tonk Road, Near Gopalpura Bypass, Jaipur - 302018",
+      "phone": "9414008761",
+      "status": "Active"
+    },
+    {
+      "id": "gj-1",
+      "name": "Volmo Ahmedabad Sabarmati Wheels",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "address": "GF, Heritage Square, C.G. Road, Ahmedabad - 380009",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "ka-1",
+      "name": "Volmo Bengaluru High-Tech Arena",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "address": "Sector 3 HSR Layout Ground-floor, Bengaluru - 560102",
+      "phone": "9111333151",
+      "status": "Active"
+    },
+    {
+      "id": "pb-1",
+      "name": "Volmo Ludhiana GT Road Center",
+      "city": "Ludhiana",
+      "state": "Punjab",
+      "address": "Ferozepur Road, Near Aggar Nagar, Ludhiana - 141012",
+      "phone": "7880008401",
+      "status": "Expanding"
+    },
+    {
+      "id": "hr-1",
+      "name": "Volmo Gurugram Cyber Hub Arena",
+      "city": "Gurugram",
+      "state": "Haryana",
+      "address": "Golf Course Extension Road, Sector 56, Gurugram - 122011",
+      "phone": "9111333151",
+      "status": "Active"
+    }
+  ],
   "faqs": [
     {
       "id": 1,
@@ -627,7 +836,7 @@
         "Reinforced heavy-duty ABS case resistant to harsh road vibrations and shocks",
         "Engineered specifically for Volmo Vista & Glider low-speed urban commuters"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462140/volmo_assets/chatgpt_image_sep_29__2026__04_15_42_pm_png.png"
     },
     {
       "id": "volmo-graphene-60v",
@@ -671,7 +880,7 @@
         "Pairs natively with Volmo 60V German Technology smart fast charger",
         "Standard equipment on Volmo Classic & Phantom Graphene editions"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462140/volmo_assets/chatgpt_image_sep_29__2026__04_15_42_pm_png.png"
     },
     {
       "id": "volmo-graphene-72v",
@@ -715,7 +924,7 @@
         "Engineered for heavy-duty commercial riders and dual-passenger comfort",
         "Fully compatible with Volmo 72V 3A German semiconductor fast chargers"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462140/volmo_assets/chatgpt_image_sep_29__2026__04_15_42_pm_png.png"
     }
   ],
   "lithiumBatteries": [
@@ -764,7 +973,7 @@
         "Shock-resistant metal casing with ergonomic top handle for indoor charging",
         "Over 2,000+ deep discharge cycles with over 80% health retention"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517744/volmo_assets/volmo_lithium_battery_sunset_showcase__2__png.png"
     },
     {
       "id": "lithium-60v-30ah",
@@ -811,7 +1020,7 @@
         "Rugged powder-coated steel casing with shock absorption brackets",
         "Zero maintenance and high continuous discharge rate"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517762/volmo_assets/volmo_lithium_battery_at_sunset_png.png"
     },
     {
       "id": "lithium-60v-36ah",
@@ -858,7 +1067,7 @@
         "Certified Make in India & AIS-156 Phase 2 thermal safety compliant",
         "Rapid recharge capability with Volmo German Tech 6A chargers"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517780/volmo_assets/volmo_lithium_battery_at_golden_hour_png.png"
     },
     {
       "id": "lithium-60v-45ah",
@@ -905,7 +1114,7 @@
         "Heavy-duty laser-welded busbars for zero vibration resistance loss",
         "Pairs seamlessly with Volmo 60V 6A High-Power fast chargers"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517809/volmo_assets/volmo_lithium_battery_sunset_showcase_png.png"
     },
     {
       "id": "lithium-ultra-36kw",
@@ -952,7 +1161,7 @@
         "Dual thermal sensors per cell module with automated fan ventilation",
         "Compatible with high-amp fast charging infrastructure"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517811/volmo_assets/volmo_lithium_battery_sunset_showcase__1__png.png"
     },
     {
       "id": "lithium-mega-43kw",
@@ -999,7 +1208,7 @@
         "Reinforced heavy-duty aluminum structural case with anti-shock dampers",
         "Optimized for 72V 6A commercial fast chargers"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517809/volmo_assets/volmo_lithium_battery_sunset_showcase_png.png"
     }
   ],
   "chargers": [
@@ -1048,7 +1257,7 @@
         "6-Point Protection: Overvoltage, overheat, short circuit, flame-retardant casing, auto shutdown, temp chip",
         "Domestic 3-pin AC plug with rugged heavy-duty copper wiring"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462293/volmo_assets/chatgpt_image_sep_23__2026__05_02_20_pm_png.png"
     },
     {
       "id": "lead-acid-charger-60v-3a",
@@ -1095,7 +1304,7 @@
         "Flame-retardant shell with automatic full-charge cutoff",
         "High surge suppression for unstable rural power grids"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791518477/volmo_assets/volmo_smart_charger_in_neon_light_png.png"
     },
     {
       "id": "lead-acid-charger-72v-3a",
@@ -1142,7 +1351,7 @@
         "Thermal cutoff sensor shuts down power if ambient temperature exceeds safety limits",
         "Heavy-duty output cable with high-current Anderson / 3-pin connector"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791518477/volmo_assets/volmo_smart_charger_in_neon_light_png.png"
     },
     {
       "id": "lithium-charger-48v-6a",
@@ -1189,7 +1398,7 @@
         "Soft-start pre-charge prevents inrush sparks and preserves cell chemistry",
         "Flame-retardant casing with intelligent active temperature control fan"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791518517/volmo_assets/volmo_charger_at_sunset_png.png"
     },
     {
       "id": "lithium-charger-60v-6a",
@@ -1236,7 +1445,7 @@
         "Built-in temperature compensation chip automatically scales output in high heat",
         "Heavy-gauge insulated copper wiring with high-grade lock-in DC plug"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791518517/volmo_assets/volmo_charger_at_sunset_png.png"
     },
     {
       "id": "lithium-charger-72v-6a",
@@ -1283,7 +1492,7 @@
         "Zero battery back-feed protection prevents drainage when disconnected",
         "Overcurrent, overvoltage, short circuit, and flame-retardant safety envelope"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791518517/volmo_assets/volmo_charger_at_sunset_png.png"
     },
     {
       "id": "lfp-charger-69v-cutoff",
@@ -1331,7 +1540,7 @@
         "New generation pulse conditioning tuned for Lithium Iron Phosphate crystal structure",
         "Full 6-Point Protection: Temp chip, auto cutoff, flame-retardant shell, overvoltage, short-circuit, overheat"
       ],
-      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg"
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462293/volmo_assets/chatgpt_image_sep_23__2026__05_02_20_pm_png.png"
     }
   ],
   "accessoriesPage": {
@@ -1394,21 +1603,21 @@
     "grapheneSectionSubtitle": "Volmo vehicles are powered with original Volmo manufactured Lead-Acid Graphene batteries engineered with top-notch quality and long durable life. Infused with graphene nano-sheets that prevent active material shedding and provide 1 Year Hassle-Free Warranty.",
     "grapheneSpotlightTitle": "Engineered with Top-Notch Quality & Long Durable Life",
     "grapheneSpotlightSubtitle": "Unlike conventional lead-acid packs that degrade quickly under tropical heat, Volmo's Graphene additive forms a microscopic conductive web across the tubular positive and negative plates. This delivers faster charge absorption, cold weather starting torque, and zero maintenance.",
-    "grapheneSpotlightImage": "/src/assets/images/volmo_graphene_battery_1790257155245.jpg",
+    "grapheneSpotlightImage": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462140/volmo_assets/chatgpt_image_sep_29__2026__04_15_42_pm_png.png",
     "grapheneSpotlightBadge": "1 Year Hassle-Free Warranty",
     "lithiumSectionBadge": "High-Density Energy Storage",
     "lithiumSectionTitle": "Lithium-Ion & LFP High-Performance Batteries",
     "lithiumSectionSubtitle": "Engineered with original Volmo Grade-A cells, multi-tier intelligent Battery Management Systems (BMS), and backed by a comprehensive 3 Years Long Official Warranty. Available from 1.4 kW up to 4.3 kW high-capacity configurations delivering up to 180 km range per charge.",
     "lithiumSpotlightTitle": "Premium Performance with 3 Years Long Official Warranty",
     "lithiumSpotlightSubtitle": "Original Volmo manufactured Lithium-Ion (NMC) and Lithium Iron Phosphate (LFP) power packs are engineered for extreme thermal endurance, high cycle life, and lightweight handling. Each pack features real-time cell balancing, short-circuit cutoffs, and IP67 weather-sealed aluminum casings.",
-    "lithiumSpotlightImage": "/src/assets/images/volmo_lithium_battery_1790255491526.jpg",
+    "lithiumSpotlightImage": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517762/volmo_assets/volmo_lithium_battery_at_sunset_png.png",
     "lithiumSpotlightBadge": "3 Years Long Official Warranty",
     "chargerSectionBadge": "Intelligent Charging Systems",
     "chargerSectionTitle": "Volmo Branded German Technology Smart Fast Chargers",
     "chargerSectionSubtitle": "Equipped with advanced German microcontroller technology, our smart fast chargers incorporate high-tech semiconductors with exceptionally long service life. Fully compatible with both Lead-Acid Graphene and Lithium/LFP arrays, backed by 1 Year Hassle-Free Warranty.",
     "chargerSpotlightTitle": "German Microcontroller Technology & Pulse Repair",
     "chargerSpotlightSubtitle": "Engineered with precision German semiconductor ICs, Volmo smart chargers feature dynamic multi-stage constant current, constant voltage, and trickle floating algorithms. High-efficiency cooling fins ensure cool operation even during hot summer charging cycles.",
-    "chargerSpotlightImage": "/src/assets/images/volmo_smart_charger_1790255476376.jpg",
+    "chargerSpotlightImage": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791462293/volmo_assets/chatgpt_image_sep_23__2026__05_02_20_pm_png.png",
     "chargerSpotlightBadge": "1 Year Hassle-Free Warranty · German Tech",
     "consultationBadge": "Custom Engineering Support",
     "consultationTitle": "Need Custom Energy or Battery Configuration?",
@@ -1416,18 +1625,6 @@
     "consultationButtonText": "Talk To Power Engineer"
   },
   "mediaArticles": [
-    {
-      "id": "news-1",
-      "category": "Press Release",
-      "title": "Volmo Electric Crosses 10,000+ Zero-Emission Scooters on Indian Roads",
-      "summary": "Rapid adoption driven by sub-10-paise per km operating cost and 100% CMVR RTO-free certification across Rajasthan, Gujarat, and neighboring states.",
-      "content": "Volmo Electrical Private Limited today announced a major milestone with over 10,000 certified zero-emission electric two-wheelers delivered to urban commuters, students, and fleet delivery partners. Built specifically for demanding Indian road conditions, Volmo scooters feature high-ground clearance, cold-rolled tubular chassis, and deep-cycle battery tech that slashes commuter fuel costs by over 95%.",
-      "date": "September 2026",
-      "author": "Volmo Corporate Communications",
-      "readTime": "3 min read",
-      "image": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=80",
-      "tag": "Milestone"
-    },
     {
       "id": "news-2",
       "category": "Tech Blog",
@@ -1443,13 +1640,13 @@
     {
       "id": "news-3",
       "category": "Event",
-      "title": "Clean Mobility Conclave 2026: Volmo Unveils High-Torque Phantom Series",
+      "title": "Clean Mobility Conclave 2026: Volmo Unveils High-Torque Pulse Series",
       "summary": "Industry leaders and mobility experts gather as Volmo demonstrates steep gradient climbing capability without requiring motorcycle licensing.",
       "content": "At the 2026 Green Mobility Expo, Volmo presented the Phantom model featuring custom-wound BLDC stator coils optimized for immediate low-end torque. Designed to conquer steep urban flyovers and heavy pillion loads effortlessly, the Phantom maintains the strict 25 km/h CMVR non-RTO regulatory threshold while offering class-leading throttle responsiveness.",
       "date": "July 2026",
       "author": "Product Strategy Desk",
       "readTime": "4 min read",
-      "image": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1000&q=80",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png",
       "tag": "Product Launch"
     },
     {
@@ -1461,7 +1658,7 @@
       "date": "June 2026",
       "author": "Market Research Unit",
       "readTime": "3 min read",
-      "image": "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1000&q=80",
+      "image": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png",
       "tag": "Economics"
     }
   ],
@@ -1501,28 +1698,13 @@
   ],
   "companyVideos": [
     {
-      "id": "video-1",
-      "title": "Inside the Volmo Factory: Frame Rigidity & Waterproof Testing",
-      "description": "Take an exclusive tour of our assembly lines, IP67 waterproof motor chamber tests, and quality assurance checkpoints.",
-      "duration": "4:15 mins",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80",
+      "id": "video-1791519543459",
+      "title": "Volmo Electric Walkaround & Feature Spotlight",
+      "description": "volmo pulse Exclusive deep-dive tour of our high-torque BLDC powertrain and smart digital cockpit.",
+      "duration": "11 sec",
+      "thumbnailUrl": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png",
+      "videoUrl": "https://youtube.com/shorts/Jb0Y8bRnN44?feature=share",
       "category": "Engineering"
-    },
-    {
-      "id": "video-2",
-      "title": "Volmo Phantom: Real-World 18° Flyover Gradient Test",
-      "description": "Watch the high-torque Volmo Phantom climb demanding steep flyovers with a 150kg dual rider load effortlessly.",
-      "duration": "2:45 mins",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=80",
-      "category": "Road Test"
-    },
-    {
-      "id": "video-3",
-      "title": "Complete Scooter Walkaround: Volmo Glider Comfort Cruiser",
-      "description": "Explore the generous footboard, under-seat storage, hydraulic suspension, and cockpit telemetry of the Glider series.",
-      "duration": "3:30 mins",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1000&q=80",
-      "category": "Walkaround"
     }
   ],
   "careerOpenings": [
@@ -1530,7 +1712,7 @@
       "id": "job-1",
       "title": "EV Assembly & Quality Control Engineer",
       "department": "Manufacturing & Production",
-      "location": "Jaipur Plant, Rajasthan",
+      "location": "gwalior Plant, madhya pradesh",
       "type": "Full-Time",
       "experience": "2-5 Years",
       "summary": "Lead line assembly quality verification, wiring harness torque inspections, and final dynamometer dyno testing for electric two-wheelers.",
@@ -1551,7 +1733,7 @@
       "id": "job-2",
       "title": "Lithium Battery & Smart BMS Quality Analyst",
       "department": "Battery R&D & Cell Tech",
-      "location": "Jaipur, Rajasthan",
+      "location": "gwalior , madhya pradesh",
       "type": "Full-Time",
       "experience": "3-6 Years",
       "summary": "Oversee automated battery cell grading, spot welding integrity, Smart BMS firmware calibration, and thermal runaway prevention protocols.",
@@ -1572,7 +1754,7 @@
       "id": "job-3",
       "title": "Area Sales Manager - Dealership Network",
       "department": "Channel Sales & Expansion",
-      "location": "Rajasthan & Regional Territories",
+      "location": "madhya pradesh",
       "type": "Full-Time",
       "experience": "4-8 Years",
       "summary": "Drive dealer recruitment, franchise onboarding, sales targets, and dealer relationship management across high-growth tier-2 and tier-3 markets.",
@@ -1588,66 +1770,6 @@
         "Achieve monthly retail and wholesale dispatch milestones across regional territories."
       ],
       "badge": "Fast Track"
-    },
-    {
-      "id": "job-4",
-      "title": "Senior EV Embedded Firmware Engineer",
-      "department": "Electronics & Telemetry",
-      "location": "Jaipur / Hybrid",
-      "type": "Full-Time",
-      "experience": "3-5 Years",
-      "summary": "Architect digital speedo telemetry, CAN/UART communications between BMS and BLDC motor controllers, and IoT diagnostic interfaces.",
-      "keySkills": [
-        "Embedded C/C++",
-        "CAN / UART",
-        "BLDC Controllers",
-        "IoT Telemetry"
-      ],
-      "responsibilities": [
-        "Develop and test microcontroller firmware for digital cockpit displays and telemetry.",
-        "Tune throttle mapping curves for smooth acceleration and regenerative deceleration.",
-        "Implement over-the-air (OTA) update protocols for connected scooter series."
-      ]
-    },
-    {
-      "id": "job-5",
-      "title": "Customer Support & After-Sales Coordinator",
-      "department": "Customer Experience",
-      "location": "Jaipur Head Office",
-      "type": "Full-Time",
-      "experience": "1-3 Years",
-      "summary": "Manage customer inquiries, warranty claim verifications, spare parts dispatch tracking, and prompt service assistance.",
-      "keySkills": [
-        "Customer Support",
-        "CRM Management",
-        "Warranty Handling",
-        "Hinglish / English"
-      ],
-      "responsibilities": [
-        "Handle inbound customer calls and WhatsApp inquiries with high empathy and technical accuracy.",
-        "Coordinate warranty battery replacements and spare parts dispatches to dealerships.",
-        "Maintain high First Contact Resolution (FCR) and 5-star customer satisfaction scores."
-      ]
-    },
-    {
-      "id": "job-6",
-      "title": "Digital Marketing & Community Executive",
-      "department": "Brand & Marketing",
-      "location": "Jaipur Head Office",
-      "type": "Full-Time",
-      "experience": "2-4 Years",
-      "summary": "Manage digital advertising campaigns, social media storytelling, influencer ride tests, and localized lead generation campaigns.",
-      "keySkills": [
-        "Meta & Google Ads",
-        "Content Creation",
-        "SEO & Copywriting",
-        "Social Media"
-      ],
-      "responsibilities": [
-        "Create engaging video shorts, customer testimonial reels, and educational EV graphics.",
-        "Execute hyper-local lead generation ads for dealership inquiries and scooter test rides.",
-        "Manage the Volmo online community and advocate for green emission-free commuting."
-      ]
     }
   ],
   "mediaBlogsPage": {
@@ -1666,5 +1788,93 @@
     "careersBadge": "Career Openings at Volmo",
     "careersTitle": "Shape the Future of Green Urban Transit",
     "careersSubtitle": "Join our fast-growing engineering, manufacturing, battery technology, and sales leadership teams headquartered in Rajasthan."
-  }
+  },
+  "locateUsPage": {
+    "heroBadge": "Volmo Electrical Private Limited · Official Locations",
+    "heroTitle": "Contact Us",
+    "heroSubtitle": "Find our Corporate Head Office, EV Manufacturing Plant, and Company Operated Showroom in Gwalior, Madhya Pradesh. Use the live interactive map on the right to navigate directly to all our official facilities.",
+    "locatorBadge": "Pan-India EV Retail Network",
+    "locatorHeading": "Find Volmo Showrooms Near You",
+    "locatorSubtitle": "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!",
+    "stat1Label": "Active Dealerships",
+    "stat1Override": "",
+    "stat2Label": "States Covered",
+    "stat2Override": "",
+    "stat3Label": "Ready Showrooms",
+    "stat3Override": "",
+    "stat4Label": "Coming Up Soon",
+    "stat4Override": "",
+    "searchPlaceholder": "Search by city, zipcode, showroom name...",
+    "allStatesLabel": "All 29 States & UTs",
+    "allStatusLabel": "All Outlets & Service Hubs",
+    "activeStatusLabel": "Active Operational",
+    "serviceHubStatusLabel": "Service & Spares Hub",
+    "expandingStatusLabel": "Expanding Soon",
+    "resultsCountSuffix": "outlets across India",
+    "clearFiltersText": "Clear Filters",
+    "emptyStateMessage": "No dealerships found matching your search.",
+    "resetButtonText": "Reset Locator Form",
+    "getRouteButtonText": "Get Route",
+    "phoneLabelPrefix": "+91",
+    "franchiseBadge": "FRANCHISE INITIATIVES OPEN",
+    "franchiseHeading": "Start Your Volmo Franchise in Your Hometown City Today",
+    "franchiseDescription": "Indian green energy transition is picking up pace rapidly. Introduce zero-registration, zero-license premium commuters to students and families in your state, backed by solid marketing support, premium replacement inventories, and solid margins.",
+    "franchiseCardTitle": "Investment Benefits Overview",
+    "franchiseBenefits": [
+      "Zero Franchise Entry Fee for first partners in new states",
+      "Direct 100% genuine spare support from Gwalior Plant",
+      "Integrated digital leads funnel directly sent to you"
+    ],
+    "franchiseButtonText": "Apply for Dealership"
+  },
+  "corporateLocations": [
+    {
+      "id": "head-office",
+      "title": "Volmo Corporate Head Office",
+      "type": "Company Head Office",
+      "tag": "Corporate & Registered Office",
+      "shortPill": "HQ",
+      "address": "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006",
+      "phone": "7880008401",
+      "email": "sales@volmoelectrical.com",
+      "hours": "Monday - Saturday: 10:00 AM - 07:00 PM",
+      "mapsUrl": "https://maps.app.goo.gl/ay94JjuHWHfiF6tb9?g_st=iw",
+      "mapEmbedUrl": "https://maps.google.com/maps?q=Shivhare%20Colony%20Singhpur%20Road%20Baradari%20Choraha%20Morar%20Gwalior%20Madhya%20Pradesh%20474006&t=&z=16&ie=UTF8&iwloc=&output=embed",
+      "iconName": "Building2",
+      "accent": "from-blue-600 to-indigo-600",
+      "badgeBg": "bg-blue-50 text-blue-700 border-blue-200"
+    },
+    {
+      "id": "manufacturing-plant",
+      "title": "Volmo EV Manufacturing Plant",
+      "type": "Manufacturing Plant",
+      "tag": "Assembly & Battery Lab",
+      "shortPill": "Plant",
+      "address": "Behind Arogyadhaam Hospital, City Center, Gwalior, Madhya Pradesh - 474011",
+      "phone": "7880008401",
+      "email": "sales@volmoelectrical.com",
+      "hours": "Monday - Saturday: 09:00 AM - 07:00 PM",
+      "mapsUrl": "https://maps.google.com/?q=26.202997,78.184883",
+      "mapEmbedUrl": "https://maps.google.com/maps?q=26.202997,78.184883&t=&z=17&ie=UTF8&iwloc=&output=embed",
+      "iconName": "Factory",
+      "accent": "from-orange-600 to-amber-600",
+      "badgeBg": "bg-orange-50 text-orange-700 border-orange-200"
+    },
+    {
+      "id": "company-showroom",
+      "title": "Volmo Company Operated Showroom",
+      "type": "Company Operated Showroom",
+      "tag": "Official Retail & Test Rides",
+      "shortPill": "Showroom",
+      "address": "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
+      "phone": "7880008401",
+      "email": "sales@volmoelectrical.com",
+      "hours": "Monday - Sunday: 10:00 AM - 08:30 PM",
+      "mapsUrl": "https://www.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en",
+      "mapEmbedUrl": "https://maps.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en&t=&ie=UTF8&iwloc=&output=embed",
+      "iconName": "Store",
+      "accent": "from-emerald-600 to-teal-600",
+      "badgeBg": "bg-emerald-50 text-emerald-700 border-emerald-200"
+    }
+  ]
 }

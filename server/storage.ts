@@ -23,6 +23,8 @@ import {
   CHARGER_MODELS,
   DEFAULT_ACCESSORIES_PAGE_CONFIG,
   DEFAULT_BATTERY_CHARGER_PAGE_CONFIG,
+  DEFAULT_LOCATE_US_PAGE_CONFIG,
+  DEFAULT_CORPORATE_LOCATIONS,
 } from "../src/data";
 import { PriceInquiry, DealershipApp } from "../src/types";
 import {
@@ -145,6 +147,8 @@ export const getDefaultSiteConfig = () => ({
   chargers: CHARGER_MODELS,
   accessoriesPage: DEFAULT_ACCESSORIES_PAGE_CONFIG,
   batteryChargerPage: DEFAULT_BATTERY_CHARGER_PAGE_CONFIG,
+  locateUsPage: DEFAULT_LOCATE_US_PAGE_CONFIG,
+  corporateLocations: DEFAULT_CORPORATE_LOCATIONS,
 });
 
 class StorageService {

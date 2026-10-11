@@ -10,7 +10,9 @@ import {
   LithiumLfpBatteryModel,
   ChargerModelItem,
   AccessoriesPageConfig,
-  BatteryChargerPageConfig
+  BatteryChargerPageConfig,
+  CorporateLocationItem,
+  LocateUsPageConfig
 } from "./types";
 
 export const MODELS_DATA: ModelSpec[] = [
@@ -389,10 +391,105 @@ export interface ShowroomItem {
   status: "Active" | "Expanding" | "Service Hub";
 }
 
+export const DEFAULT_CORPORATE_LOCATIONS: CorporateLocationItem[] = [
+  {
+    id: "head-office",
+    title: "Volmo Corporate Head Office",
+    type: "Company Head Office",
+    tag: "Corporate & Registered Office",
+    shortPill: "HQ",
+    address: "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006",
+    phone: "7880008401",
+    email: "sales@volmoelectrical.com",
+    hours: "Monday - Saturday: 10:00 AM - 07:00 PM",
+    mapsUrl: "https://maps.app.goo.gl/ay94JjuHWHfiF6tb9?g_st=iw",
+    mapEmbedUrl: "https://maps.google.com/maps?q=Shivhare%20Colony%20Singhpur%20Road%20Baradari%20Choraha%20Morar%20Gwalior%20Madhya%20Pradesh%20474006&t=&z=16&ie=UTF8&iwloc=&output=embed",
+    iconName: "Building2",
+    accent: "from-blue-600 to-indigo-600",
+    badgeBg: "bg-blue-50 text-blue-700 border-blue-200"
+  },
+  {
+    id: "manufacturing-plant",
+    title: "Volmo EV Manufacturing Plant",
+    type: "Manufacturing Plant",
+    tag: "Assembly & Battery Lab",
+    shortPill: "Plant",
+    address: "Behind Arogyadhaam Hospital, City Center, Gwalior, Madhya Pradesh - 474011",
+    phone: "7880008401",
+    email: "sales@volmoelectrical.com",
+    hours: "Monday - Saturday: 09:00 AM - 07:00 PM",
+    mapsUrl: "https://maps.google.com/?q=26.202997,78.184883",
+    mapEmbedUrl: "https://maps.google.com/maps?q=26.202997,78.184883&t=&z=17&ie=UTF8&iwloc=&output=embed",
+    iconName: "Factory",
+    accent: "from-orange-600 to-amber-600",
+    badgeBg: "bg-orange-50 text-orange-700 border-orange-200"
+  },
+  {
+    id: "company-showroom",
+    title: "Volmo Company Operated Showroom",
+    type: "Company Operated Showroom",
+    tag: "Official Retail & Test Rides",
+    shortPill: "Showroom",
+    address: "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
+    phone: "7880008401",
+    email: "sales@volmoelectrical.com",
+    hours: "Monday - Sunday: 10:00 AM - 08:30 PM",
+    mapsUrl: "https://www.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en",
+    mapEmbedUrl: "https://maps.google.com/maps?q=26.19314193725586,78.17198944091797&z=17&hl=en&t=&ie=UTF8&iwloc=&output=embed",
+    iconName: "Store",
+    accent: "from-emerald-600 to-teal-600",
+    badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200"
+  }
+];
+
+export const DEFAULT_LOCATE_US_PAGE_CONFIG: LocateUsPageConfig = {
+  heroBadge: "Volmo Electrical Private Limited · Official Locations",
+  heroTitle: "Contact Us",
+  heroSubtitle: "Find our Corporate Head Office, EV Manufacturing Plant, and Company Operated Showroom in Gwalior, Madhya Pradesh. Use the live interactive map on the right to navigate directly to all our official facilities.",
+
+  locatorBadge: "Pan-India EV Retail Network",
+  locatorHeading: "Find Volmo Showrooms Near You",
+  locatorSubtitle: "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!",
+
+  stat1Label: "Active Dealerships",
+  stat1Override: "",
+  stat2Label: "States Covered",
+  stat2Override: "",
+  stat3Label: "Ready Showrooms",
+  stat3Override: "",
+  stat4Label: "Coming Up Soon",
+  stat4Override: "",
+
+  searchPlaceholder: "Search by city, zipcode, showroom name...",
+  allStatesLabel: "All 29 States & UTs",
+  allStatusLabel: "All Outlets & Service Hubs",
+  activeStatusLabel: "Active Operational",
+  serviceHubStatusLabel: "Service & Spares Hub",
+  expandingStatusLabel: "Expanding Soon",
+  resultsCountSuffix: "outlets across India",
+  clearFiltersText: "Clear Filters",
+  emptyStateMessage: "No dealerships found matching your search.",
+  resetButtonText: "Reset Locator Form",
+  getRouteButtonText: "Get Route",
+  phoneLabelPrefix: "+91",
+
+  franchiseBadge: "FRANCHISE INITIATIVES OPEN",
+  franchiseHeading: "Start Your Volmo Franchise in Your Hometown City Today",
+  franchiseDescription: "Indian green energy transition is picking up pace rapidly. Introduce zero-registration, zero-license premium commuters to students and families in your state, backed by solid marketing support, premium replacement inventories, and solid margins.",
+  franchiseCardTitle: "Investment Benefits Overview",
+  franchiseBenefits: [
+    "Zero Franchise Entry Fee for first partners in new states",
+    "Direct 100% genuine spare support from Gwalior Plant",
+    "Integrated digital leads funnel directly sent to you"
+  ],
+  franchiseButtonText: "Apply for Dealership"
+};
+
 export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
+  // Madhya Pradesh (Home Base)
   {
     id: "mp-flagship",
-    name: "Volmo Company Operated Showroom",
+    name: "Volmo Company Operated Showroom (Flagship)",
     city: "Gwalior",
     state: "Madhya Pradesh",
     address: "In front of Heera bhumiya, chandravadni naka main road, lashkar, gwalior, (m.p)",
@@ -424,7 +521,7 @@ export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
     state: "Madhya Pradesh",
     address: "Plot 42, Commercial Zone, MP Nagar Zone II, Bhopal - 462011",
     phone: "7554902182",
-    status: "Active",
+    status: "Service Hub",
   },
   {
     id: "mp-4",
@@ -435,8 +532,28 @@ export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
     phone: "7612409811",
     status: "Active",
   },
+
+  // Uttar Pradesh
   {
     id: "up-1",
+    name: "Volmo Lucknow Nawabi Smart-Drive",
+    city: "Lucknow",
+    state: "Uttar Pradesh",
+    address: "Ground Floor, Baradari Complex, Hazratganj, Lucknow - 226001",
+    phone: "7880008401",
+    status: "Active",
+  },
+  {
+    id: "up-2",
+    name: "Volmo Noida Tech-Hub EV",
+    city: "Noida",
+    state: "Uttar Pradesh",
+    address: "Commercial Market Square, Sector 62, Noida - 201301",
+    phone: "9111333151",
+    status: "Active",
+  },
+  {
+    id: "up-3",
     name: "Volmo Agra Heritage EV Hub",
     city: "Agra",
     state: "Uttar Pradesh",
@@ -445,7 +562,25 @@ export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
     status: "Active",
   },
   {
-    id: "up-2",
+    id: "up-4",
+    name: "Volmo Kanpur Industrial Greenway",
+    city: "Kanpur",
+    state: "Uttar Pradesh",
+    address: "Opposite Hallet, Swaroop Nagar, Kanpur - 208002",
+    phone: "7880008401",
+    status: "Service Hub",
+  },
+  {
+    id: "up-5",
+    name: "Volmo Varanasi Sacred Wheels",
+    city: "Varanasi",
+    state: "Uttar Pradesh",
+    address: "Near Ravidas Gate, Lanka Road, Varanasi - 221005",
+    phone: "9111333151",
+    status: "Expanding",
+  },
+  {
+    id: "up-6",
     name: "Volmo Jhansi Bundelkhand Point",
     city: "Jhansi",
     state: "Uttar Pradesh",
@@ -453,22 +588,126 @@ export const DEFAULT_SHOWROOMS: ShowroomItem[] = [
     phone: "9450012891",
     status: "Active",
   },
+
+  // Delhi NCR
   {
     id: "dl-1",
+    name: "Volmo India Delhi Central Flagship",
+    city: "New Delhi",
+    state: "Delhi NCR",
+    address: "Radial Road 4, Inner Circle, Connaught Place, New Delhi - 110001",
+    phone: "9111333151",
+    status: "Active",
+  },
+  {
+    id: "dl-2",
+    name: "Volmo Dwarka Green Spark",
+    city: "Dwarka",
+    state: "Delhi NCR",
+    address: "Main Sector 10 Metro Plaza, Dwarka, New Delhi - 110075",
+    phone: "7880008401",
+    status: "Active",
+  },
+  {
+    id: "dl-3",
     name: "Volmo Delhi NCR Experience Center",
-    city: "Delhi NCR",
+    city: "Noida",
     state: "Delhi NCR",
     address: "Sector 18 Metro Station Arcade, Noida, Delhi NCR - 201301",
     phone: "9811002345",
     status: "Active",
   },
+
+  // Maharashtra
+  {
+    id: "mh-1",
+    name: "Volmo Mumbai Metro Electric Hub",
+    city: "Mumbai",
+    state: "Maharashtra",
+    address: "Link Road, Near Infinity Mall, Andheri West, Mumbai - 400053",
+    phone: "7880008401",
+    status: "Active",
+  },
+  {
+    id: "mh-2",
+    name: "Volmo Pune Tech Pulse",
+    city: "Pune",
+    state: "Maharashtra",
+    address: "FC Road Central, Shivajinagar, Pune - 411005",
+    phone: "9111333151",
+    status: "Active",
+  },
+
+  // Rajasthan
   {
     id: "rj-1",
+    name: "Volmo Jaipur Royal Sun-Drive",
+    city: "Jaipur",
+    state: "Rajasthan",
+    address: "A-Block, Vaishali Tower, Vaishali Nagar, Jaipur - 302021",
+    phone: "9111333151",
+    status: "Active",
+  },
+  {
+    id: "rj-2",
+    name: "Volmo Udaipur Lakes Ride Point",
+    city: "Udaipur",
+    state: "Rajasthan",
+    address: "Shastri Circle, Main Sector 4, Jodhpur Bypass, Udaipur - 313001",
+    phone: "7880008401",
+    status: "Active",
+  },
+  {
+    id: "rj-3",
     name: "Volmo Jaipur Pink City EV",
     city: "Jaipur",
     state: "Rajasthan",
     address: "Tonk Road, Near Gopalpura Bypass, Jaipur - 302018",
     phone: "9414008761",
+    status: "Active",
+  },
+
+  // Gujarat
+  {
+    id: "gj-1",
+    name: "Volmo Ahmedabad Sabarmati Wheels",
+    city: "Ahmedabad",
+    state: "Gujarat",
+    address: "GF, Heritage Square, C.G. Road, Ahmedabad - 380009",
+    phone: "9111333151",
+    status: "Active",
+  },
+
+  // Karnataka
+  {
+    id: "ka-1",
+    name: "Volmo Bengaluru High-Tech Arena",
+    city: "Bangalore",
+    state: "Karnataka",
+    address: "Sector 3 HSR Layout Ground-floor, Bengaluru - 560102",
+    phone: "9111333151",
+    status: "Active",
+  },
+
+  // Punjab
+  {
+    id: "pb-1",
+    name: "Volmo Ludhiana GT Road Center",
+    city: "Ludhiana",
+    state: "Punjab",
+    address: "Ferozepur Road, Near Aggar Nagar, Ludhiana - 141012",
+    phone: "7880008401",
+    status: "Expanding",
+  },
+
+  // Haryana
+  {
+    id: "hr-1",
+    name: "Volmo Gurugram Cyber Hub Arena",
+    city: "Gurugram",
+    state: "Haryana",
+    address: "Golf Course Extension Road, Sector 56, Gurugram - 122011",
+    phone: "9111333151",
     status: "Active",
   },
 ];
@@ -656,6 +895,8 @@ export const PRESET_MEDIA_ASSETS = [
   { label: "Volmo High-Grade Steel Guard Frame Set", url: "/src/assets/images/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
   { label: "Volmo Certified Helmets & Merch", url: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
   { label: "Volmo Lead-Acid Graphene Battery", url: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
+  { label: "Volmo 60V 24Ah Lithium Sunset Showcase", url: "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg", category: "Batteries" },
+  { label: "Volmo 60V 45Ah LFP Tall Sunset Showcase", url: "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg", category: "Batteries" },
   { label: "Volmo Lithium Smart Energy Pack", url: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg", category: "Batteries" },
   { label: "Volmo LFP Prismatic Energy Pack", url: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg", category: "Batteries" },
   { label: "Volmo German Tech Smart Fast Charger", url: "/src/assets/images/volmo_smart_charger_1790255476376.jpg", category: "Chargers" },
@@ -1304,8 +1545,10 @@ export const DEFAULT_BATTERY_CHARGER_PAGE_CONFIG: BatteryChargerPageConfig = {
   lithiumSectionSubtitle: "Engineered with original Volmo Grade-A cells, multi-tier intelligent Battery Management Systems (BMS), and backed by a comprehensive 3 Years Long Official Warranty. Available from 1.4 kW up to 4.3 kW high-capacity configurations delivering up to 180 km range per charge.",
   lithiumSpotlightTitle: "Premium Performance with 3 Years Long Official Warranty",
   lithiumSpotlightSubtitle: "Original Volmo manufactured Lithium-Ion (NMC) and Lithium Iron Phosphate (LFP) power packs are engineered for extreme thermal endurance, high cycle life, and lightweight handling. Each pack features real-time cell balancing, short-circuit cutoffs, and IP67 weather-sealed aluminum casings.",
-  lithiumSpotlightImage: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg",
+  lithiumSpotlightImage: "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg",
   lithiumSpotlightBadge: "3 Years Long Official Warranty",
+  lithiumBanner1Image: "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg",
+  lithiumBanner2Image: "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg",
 
   chargerSectionBadge: "Intelligent Charging Systems",
   chargerSectionTitle: "Volmo Branded German Technology Smart Fast Chargers",

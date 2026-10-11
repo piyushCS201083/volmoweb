@@ -167,10 +167,17 @@ export default function App() {
     const handleOpenDealer = () => setIsDealerOpen(true);
     window.addEventListener("open-dealership-modal", handleOpenDealer);
 
+    const handleOpenAdminPortal = (e: any) => {
+      if (e?.detail?.tab) setAdminInitialTab(e.detail.tab);
+      setIsAdminOpen(true);
+    };
+    window.addEventListener("open-admin-portal", handleOpenAdminPortal);
+
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("open-dealership-modal", handleOpenDealer);
+      window.removeEventListener("open-admin-portal", handleOpenAdminPortal);
     };
   }, []);
 
@@ -470,7 +477,13 @@ export default function App() {
           )}
 
           {activePage === "locator" && (
-            <LocateUs onDealershipClick={() => setIsDealerOpen(true)} />
+            <LocateUs
+              onDealershipClick={() => setIsDealerOpen(true)}
+              onOpenAdmin={(tab) => {
+                if (tab) setAdminInitialTab(tab as any);
+                setIsAdminOpen(true);
+              }}
+            />
           )}
         </motion.main>
       </AnimatePresence>

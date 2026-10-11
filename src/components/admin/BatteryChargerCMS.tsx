@@ -942,6 +942,51 @@ export default function BatteryChargerCMS({ onShowToast }: BatteryChargerCMSProp
               />
             </div>
 
+            {/* Visual Photo Banners (Selector 1 & Selector 2) */}
+            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-850 space-y-4">
+              <div className="flex items-center gap-2">
+                <Sparkles size={14} className="text-orange-400" />
+                <h5 className="text-xs font-bold text-orange-400 font-mono uppercase tracking-wider">
+                  Lithium Section Two-Card Showcase Photo Banners
+                </h5>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Customize the high-impact photo cards shown at the top of the Lithium &amp; LFP battery section.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2 p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-orange-400 uppercase font-mono">
+                      Card 1: Lithium-Ion Smart Series (60V 24Ah)
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">Portable Handle</span>
+                  </div>
+                  <ImageUploader
+                    label="Card 1 Banner Image"
+                    value={pageForm.lithiumBanner1Image || "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg"}
+                    onChange={(url) => setPageForm({ ...pageForm, lithiumBanner1Image: url })}
+                    helperText="Upload custom image or choose 60V 24Ah sunset showcase preset"
+                  />
+                </div>
+
+                <div className="space-y-2 p-3 bg-slate-950 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-cyan-400 uppercase font-mono">
+                      Card 2: Volmo LFP Long-Range &amp; Commercial (60V 45Ah)
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-mono">Prismatic Cells</span>
+                  </div>
+                  <ImageUploader
+                    label="Card 2 Banner Image"
+                    value={pageForm.lithiumBanner2Image || "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg"}
+                    onChange={(url) => setPageForm({ ...pageForm, lithiumBanner2Image: url })}
+                    helperText="Upload custom image or choose 60V 45Ah LFP tall sunset showcase preset"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Spotlight Banner */}
             <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-850 space-y-4">
               <h5 className="text-xs font-bold text-orange-400 font-mono uppercase tracking-wider">

@@ -24,6 +24,8 @@ import {
   CompanyVideo,
   CareerOpening,
   MediaBlogsPageConfig,
+  CorporateLocationItem,
+  LocateUsPageConfig,
 } from "./types";
 import {
   MODELS_DATA,
@@ -42,6 +44,8 @@ import {
   CHARGER_MODELS,
   DEFAULT_ACCESSORIES_PAGE_CONFIG,
   DEFAULT_BATTERY_CHARGER_PAGE_CONFIG,
+  DEFAULT_CORPORATE_LOCATIONS,
+  DEFAULT_LOCATE_US_PAGE_CONFIG,
   HeroConfig,
   TestimonialItem,
   FAQItem,
@@ -101,6 +105,8 @@ interface SiteConfigContextType {
   companyVideosData: CompanyVideo[];
   careerOpeningsData: CareerOpening[];
   mediaBlogsPageConfig: MediaBlogsPageConfig;
+  locateUsPageConfig: LocateUsPageConfig;
+  corporateLocationsData: CorporateLocationItem[];
 
   // Actions
   updateModelSpec: (id: string, updatedSpec: Partial<ModelSpec>) => void;
@@ -128,6 +134,13 @@ interface SiteConfigContextType {
   updateAccessoriesPageConfig: (updated: Partial<AccessoriesPageConfig>) => void;
   updateBatteryChargerPageConfig: (updated: Partial<BatteryChargerPageConfig>) => void;
   updateMediaBlogsPageConfig: (updated: Partial<MediaBlogsPageConfig>) => void;
+  updateLocateUsPageConfig: (updated: Partial<LocateUsPageConfig>) => void;
+
+  // Corporate Locations Actions
+  updateCorporateLocations: (items: CorporateLocationItem[]) => void;
+  updateSingleCorporateLocation: (id: string, item: Partial<CorporateLocationItem>) => void;
+  addCorporateLocation: (item: CorporateLocationItem) => void;
+  deleteCorporateLocation: (id: string) => void;
 
   // Media Articles Actions
   updateMediaArticles: (items: MediaArticle[]) => void;
@@ -240,6 +253,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   const [companyVideosData, setCompanyVideosData] = useState<CompanyVideo[]>(() => safeLoadArray("volmo_company_videos", COMPANY_VIDEOS));
   const [careerOpeningsData, setCareerOpeningsData] = useState<CareerOpening[]>(() => safeLoadArray("volmo_career_openings", CAREER_OPENINGS));
   const [mediaBlogsPageConfig, setMediaBlogsPageConfig] = useState<MediaBlogsPageConfig>(() => safeLoadObject("volmo_mediablogs_page", DEFAULT_MEDIA_BLOGS_PAGE_CONFIG));
+  const [locateUsPageConfig, setLocateUsPageConfig] = useState<LocateUsPageConfig>(() => safeLoadObject("volmo_locate_us_page_config", DEFAULT_LOCATE_US_PAGE_CONFIG));
+  const [corporateLocationsData, setCorporateLocationsData] = useState<CorporateLocationItem[]>(() => safeLoadArray("volmo_corporate_locations", DEFAULT_CORPORATE_LOCATIONS));
 
   // Load from local storage or static defaults
   useEffect(() => {
@@ -265,6 +280,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       const storedVideos = localStorage.getItem("volmo_company_videos");
       const storedCareers = localStorage.getItem("volmo_career_openings");
       const storedMediaPage = localStorage.getItem("volmo_mediablogs_page");
+      const storedLocateUsPage = localStorage.getItem("volmo_locate_us_page_config");
+      const storedCorporateLocations = localStorage.getItem("volmo_corporate_locations");
 
       if (storedModels) {
         const parsed: ModelSpec[] = JSON.parse(storedModels);
@@ -360,6 +377,12 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
 
       if (storedMediaPage) setMediaBlogsPageConfig(safeLoadObject("volmo_mediablogs_page", DEFAULT_MEDIA_BLOGS_PAGE_CONFIG));
       else setMediaBlogsPageConfig(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
+
+      if (storedLocateUsPage) setLocateUsPageConfig(safeLoadObject("volmo_locate_us_page_config", DEFAULT_LOCATE_US_PAGE_CONFIG));
+      else setLocateUsPageConfig(DEFAULT_LOCATE_US_PAGE_CONFIG);
+
+      if (storedCorporateLocations) setCorporateLocationsData(safeLoadArray("volmo_corporate_locations", DEFAULT_CORPORATE_LOCATIONS));
+      else setCorporateLocationsData(DEFAULT_CORPORATE_LOCATIONS);
     } catch (e) {
       console.error("Failed to load custom site configuration, using defaults", e);
       setModelsData(MODELS_DATA);
@@ -383,6 +406,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       setCompanyVideosData(COMPANY_VIDEOS);
       setCareerOpeningsData(CAREER_OPENINGS);
       setMediaBlogsPageConfig(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
+      setLocateUsPageConfig(DEFAULT_LOCATE_US_PAGE_CONFIG);
+      setCorporateLocationsData(DEFAULT_CORPORATE_LOCATIONS);
     }
 
     // 1. Asynchronous Cross-Device Cloud Firestore Load: Fetch permanently stored configuration
@@ -480,6 +505,14 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
             setMediaBlogsPageConfig({ ...DEFAULT_MEDIA_BLOGS_PAGE_CONFIG, ...cloudConfig.mediaBlogsPage });
             localStorage.setItem("volmo_mediablogs_page", JSON.stringify(cloudConfig.mediaBlogsPage));
           }
+          if (cloudConfig.locateUsPage && typeof cloudConfig.locateUsPage === "object") {
+            setLocateUsPageConfig({ ...DEFAULT_LOCATE_US_PAGE_CONFIG, ...cloudConfig.locateUsPage });
+            localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(cloudConfig.locateUsPage));
+          }
+          if (Array.isArray(cloudConfig.corporateLocations) && cloudConfig.corporateLocations.length > 0) {
+            setCorporateLocationsData(cloudConfig.corporateLocations);
+            localStorage.setItem("volmo_corporate_locations", JSON.stringify(cloudConfig.corporateLocations));
+          }
         } else {
           // Seed initial defaults into Cloud Firestore if empty
           saveSiteConfigToCloud("models", safeLoadArray("volmo_custom_models", MODELS_DATA)).catch(() => {});
@@ -489,6 +522,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
           saveSiteConfigToCloud("hero", safeLoadObject("volmo_custom_hero", DEFAULT_HERO_CONFIG)).catch(() => {});
           saveSiteConfigToCloud("branding", safeLoadObject("volmo_custom_branding", DEFAULT_BRANDING)).catch(() => {});
           saveSiteConfigToCloud("sections", safeLoadObject("volmo_custom_site_sections", DEFAULT_SITE_SECTIONS)).catch(() => {});
+          saveSiteConfigToCloud("locateUsPage", safeLoadObject("volmo_locate_us_page_config", DEFAULT_LOCATE_US_PAGE_CONFIG)).catch(() => {});
+          saveSiteConfigToCloud("corporateLocations", safeLoadArray("volmo_corporate_locations", DEFAULT_CORPORATE_LOCATIONS)).catch(() => {});
         }
       })
       .catch((err) => {
@@ -561,6 +596,12 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       } else if (section === "mediaBlogsPage") {
         setMediaBlogsPageConfig(data);
         localStorage.setItem("volmo_mediablogs_page", JSON.stringify(data));
+      } else if (section === "locateUsPage") {
+        setLocateUsPageConfig(data);
+        localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(data));
+      } else if (section === "corporateLocations") {
+        setCorporateLocationsData(data);
+        localStorage.setItem("volmo_corporate_locations", JSON.stringify(data));
       }
     });
 
@@ -571,6 +612,21 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         if (serverConfig?.models) {
           const allModels = ensureAllFleetModels(serverConfig.models);
           setModelsData((prev) => (prev.length ? ensureAllFleetModels(prev) : allModels));
+        }
+        if (Array.isArray(serverConfig?.showrooms) && serverConfig.showrooms.length > 0) {
+          setShowroomsData(serverConfig.showrooms);
+          localStorage.setItem("volmo_custom_showrooms", JSON.stringify(serverConfig.showrooms));
+        }
+        if (serverConfig?.locateUsPage && typeof serverConfig.locateUsPage === "object") {
+          setLocateUsPageConfig((prev) => {
+            const merged = { ...DEFAULT_LOCATE_US_PAGE_CONFIG, ...prev, ...serverConfig.locateUsPage };
+            localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(merged));
+            return merged;
+          });
+        }
+        if (Array.isArray(serverConfig?.corporateLocations) && serverConfig.corporateLocations.length > 0) {
+          setCorporateLocationsData(serverConfig.corporateLocations);
+          localStorage.setItem("volmo_corporate_locations", JSON.stringify(serverConfig.corporateLocations));
         }
       })
       .catch((err) => {
@@ -941,6 +997,48 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     });
   };
 
+  const updateLocateUsPageConfig = (updated: Partial<LocateUsPageConfig>) => {
+    setLocateUsPageConfig((prev) => {
+      const next = { ...prev, ...updated };
+      localStorage.setItem("volmo_locate_us_page_config", JSON.stringify(next));
+      syncSectionToBackend("locateUsPage", next);
+      return next;
+    });
+  };
+
+  const updateCorporateLocations = (items: CorporateLocationItem[]) => {
+    setCorporateLocationsData(items);
+    localStorage.setItem("volmo_corporate_locations", JSON.stringify(items));
+    syncSectionToBackend("corporateLocations", items);
+  };
+
+  const updateSingleCorporateLocation = (id: string, item: Partial<CorporateLocationItem>) => {
+    setCorporateLocationsData((prev) => {
+      const updated = prev.map((c) => (c.id === id ? { ...c, ...item } : c));
+      localStorage.setItem("volmo_corporate_locations", JSON.stringify(updated));
+      syncSectionToBackend("corporateLocations", updated);
+      return updated;
+    });
+  };
+
+  const addCorporateLocation = (item: CorporateLocationItem) => {
+    setCorporateLocationsData((prev) => {
+      const updated = [item, ...prev];
+      localStorage.setItem("volmo_corporate_locations", JSON.stringify(updated));
+      syncSectionToBackend("corporateLocations", updated);
+      return updated;
+    });
+  };
+
+  const deleteCorporateLocation = (id: string) => {
+    setCorporateLocationsData((prev) => {
+      const updated = prev.filter((c) => c.id !== id);
+      localStorage.setItem("volmo_corporate_locations", JSON.stringify(updated));
+      syncSectionToBackend("corporateLocations", updated);
+      return updated;
+    });
+  };
+
   // Media Articles Actions
   const updateMediaArticles = (items: MediaArticle[]) => {
     setMediaArticlesData(items);
@@ -1099,6 +1197,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     localStorage.removeItem("volmo_company_videos");
     localStorage.removeItem("volmo_career_openings");
     localStorage.removeItem("volmo_mediablogs_page");
+    localStorage.removeItem("volmo_locate_us_page_config");
+    localStorage.removeItem("volmo_corporate_locations");
 
     setModelsData(MODELS_DATA);
     setPulseData(PULSE_DATA);
@@ -1121,6 +1221,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     setCompanyVideosData(COMPANY_VIDEOS);
     setCareerOpeningsData(CAREER_OPENINGS);
     setMediaBlogsPageConfig(DEFAULT_MEDIA_BLOGS_PAGE_CONFIG);
+    setLocateUsPageConfig(DEFAULT_LOCATE_US_PAGE_CONFIG);
+    setCorporateLocationsData(DEFAULT_CORPORATE_LOCATIONS);
 
     // Sync defaults to Cloud Firestore
     saveSiteConfigToCloud("models", MODELS_DATA).catch(() => {});
@@ -1139,6 +1241,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     saveSiteConfigToCloud("chargers", CHARGER_MODELS).catch(() => {});
     saveSiteConfigToCloud("accessoriesPage", DEFAULT_ACCESSORIES_PAGE_CONFIG).catch(() => {});
     saveSiteConfigToCloud("batteryChargerPage", DEFAULT_BATTERY_CHARGER_PAGE_CONFIG).catch(() => {});
+    saveSiteConfigToCloud("locateUsPage", DEFAULT_LOCATE_US_PAGE_CONFIG).catch(() => {});
+    saveSiteConfigToCloud("corporateLocations", DEFAULT_CORPORATE_LOCATIONS).catch(() => {});
 
     api.config.resetConfig().catch((err) => {
       console.warn("[Volmo] Failed to reset backend configuration:", err.message);
@@ -1169,6 +1273,8 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         companyVideosData,
         careerOpeningsData,
         mediaBlogsPageConfig,
+        locateUsPageConfig,
+        corporateLocationsData,
 
         updateModelSpec,
         addModelSpec,
@@ -1195,6 +1301,12 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         updateAccessoriesPageConfig,
         updateBatteryChargerPageConfig,
         updateMediaBlogsPageConfig,
+        updateLocateUsPageConfig,
+
+        updateCorporateLocations,
+        updateSingleCorporateLocation,
+        addCorporateLocation,
+        deleteCorporateLocation,
 
         updateMediaArticles,
         updateSingleMediaArticle,

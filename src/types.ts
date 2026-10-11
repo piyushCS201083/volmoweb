@@ -169,6 +169,73 @@ export interface ChargerModelItem {
   badge: string;
 }
 
+export interface CorporateLocationItem {
+  id: string;
+  title: string;
+  type: string;
+  tag: string;
+  shortPill: string;
+  address: string;
+  phone: string;
+  email: string;
+  hours: string;
+  mapsUrl: string;
+  mapEmbedUrl: string;
+  iconName?: string;
+  accent?: string;
+  badgeBg?: string;
+}
+
+export interface ShowroomItem {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  address: string;
+  phone: string;
+  status: "Active" | "Expanding" | "Service Hub";
+}
+
+export interface LocateUsPageConfig {
+  heroBadge: string;
+  heroTitle: string;
+  heroSubtitle: string;
+
+  locatorBadge: string;
+  locatorHeading: string;
+  locatorSubtitle: string;
+
+  stat1Label: string;
+  stat1Override?: string;
+  stat2Label: string;
+  stat2Override?: string;
+  stat3Label: string;
+  stat3Override?: string;
+  stat4Label: string;
+  stat4Override?: string;
+
+  // Search & Filter Console (Dealership Hubs section)
+  searchPlaceholder?: string;
+  allStatesLabel?: string;
+  allStatusLabel?: string;
+  activeStatusLabel?: string;
+  serviceHubStatusLabel?: string;
+  expandingStatusLabel?: string;
+  resultsCountSuffix?: string;
+  clearFiltersText?: string;
+  emptyStateMessage?: string;
+  resetButtonText?: string;
+  getRouteButtonText?: string;
+  phoneLabelPrefix?: string;
+
+  franchiseBadge: string;
+  franchiseHeading: string;
+  franchiseDescription: string;
+  franchiseCardTitle: string;
+  franchiseBenefits: string[];
+  franchiseButtonText: string;
+}
+
 export interface AccessoriesPageConfig {
   heroBadge: string;
   heroTitlePart1: string;
@@ -210,6 +277,8 @@ export interface BatteryChargerPageConfig {
   lithiumSpotlightSubtitle: string;
   lithiumSpotlightImage: string;
   lithiumSpotlightBadge: string;
+  lithiumBanner1Image?: string;
+  lithiumBanner2Image?: string;
   // Section 3: Chargers
   chargerSectionBadge: string;
   chargerSectionTitle: string;

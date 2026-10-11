@@ -64,6 +64,7 @@ import BatteryChargerCMS from "./admin/BatteryChargerCMS";
 import MediaBlogsCMS from "./admin/MediaBlogsCMS";
 import SaveDataModal from "./admin/SaveDataModal";
 import CloudDatabaseCMS from "./admin/CloudDatabaseCMS";
+import LocateUsCMS from "./admin/LocateUsCMS";
 
 // Pre-packaged high-res scooter assets for 1-click selection
 const PRESET_ASSETS = [
@@ -383,6 +384,8 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     accessoriesPageConfig,
     batteryChargerPageConfig,
     mediaBlogsPageConfig,
+    locateUsPageConfig,
+    corporateLocationsData,
     updateSiteSections,
     addModelSpec,
     deleteModelSpec,
@@ -418,6 +421,8 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     companyVideos: companyVideosData,
     careerOpenings: careerOpeningsData,
     mediaBlogsPage: mediaBlogsPageConfig,
+    locateUsPage: locateUsPageConfig,
+    corporateLocations: corporateLocationsData,
   };
 
   // Authentication State & Founder Security Question Gate
@@ -456,6 +461,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
     | "accessories"
     | "battery-charger"
     | "media-blogs"
+    | "locate-us"
     | "pulse"
     | "features"
     | "testimonials"
@@ -1273,6 +1279,7 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
                     { id: "accessories", label: `Accessories CMS (${accessoriesData.length})`, icon: ShieldCheck, badge: "Catalog" },
                     { id: "battery-charger", label: `Battery & Charger CMS (${leadAcidBatteriesData.length + lithiumBatteriesData.length + chargersData.length})`, icon: Zap, badge: "Power" },
                     { id: "media-blogs", label: `Media & Blogs CMS (${mediaArticlesData.length + companyPhotosData.length + companyVideosData.length + careerOpeningsData.length})`, icon: Newspaper, badge: "Live" },
+                    { id: "locate-us", label: `📍 Locate Us CMS (${corporateLocationsData.length + showroomsData.length})`, icon: MapPin, badge: "Master" },
                     { id: "pulse", label: "Pulse Concept CMS", icon: Sparkles },
                     { id: "features", label: "Highlight Features CMS", icon: ShieldCheck },
                     { id: "testimonials", label: `Rider Reviews (${testimonialsData.length})`, icon: MessageSquare },
@@ -3129,6 +3136,9 @@ export default function AdminPortal({ isOpen, onClose, initialTab }: AdminPortal
 
                 {/* Tab: Rider Reviews CMS */}
                 {activeTab === "testimonials" && <TestimonialsCMS onShowToast={showToast} />}
+
+                {/* Tab: Locate Us Page & Facilities CMS */}
+                {activeTab === "locate-us" && <LocateUsCMS onShowToast={showToast} />}
 
                 {/* Tab: Dealership Showrooms CMS */}
                 {activeTab === "showrooms" && <ShowroomsCMS onShowToast={showToast} />}
