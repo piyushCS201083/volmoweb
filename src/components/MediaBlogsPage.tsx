@@ -1035,8 +1035,15 @@ export default function MediaBlogsPage({
           )}
         </AnimatePresence>
 
-        {/* Reviews Grid (Newest 3 shown upfront, expandable via Show All button) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Reviews Grid (Newest 3 shown upfront, scrollable & auto-scrolls down when Show All is clicked) */}
+        <div
+          id="rider-reviews-scroll-box"
+          className={`grid grid-cols-1 md:grid-cols-3 gap-6 transition-all duration-500 ${
+            showAllReviews
+              ? "max-h-[580px] overflow-y-auto pr-2 scroll-smooth"
+              : ""
+          }`}
+        >
           {(showAllReviews ? reviewsList : reviewsList.slice(0, 3)).map((rev: any, idx) => {
             const starCount = Math.min(5, Math.max(1, Math.round(Number(rev.rating) || 5)));
             const bodyText = rev.text || rev.content || "";
@@ -1047,6 +1054,7 @@ export default function MediaBlogsPage({
             return (
               <div
                 key={rev.id || idx}
+                id={idx === 3 ? "fourth-rider-review-card" : undefined}
                 className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col justify-between space-y-4 hover:shadow-lg hover:border-emerald-500/30 transition-all text-left"
               >
                 <div className="space-y-3">
@@ -1113,7 +1121,27 @@ export default function MediaBlogsPage({
           <div className="flex justify-center pt-2">
             <button
               type="button"
-              onClick={() => setShowAllReviews((prev) => !prev)}
+              onClick={() => {
+                const nextState = !showAllReviews;
+                setShowAllReviews(nextState);
+                if (nextState) {
+                  setTimeout(() => {
+                    const scrollBox = document.getElementById("rider-reviews-scroll-box");
+                    const fourthCard = document.getElementById("fourth-rider-review-card");
+                    if (scrollBox) {
+                      scrollBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                      scrollBox.scrollBy({ top: 240, behavior: "smooth" });
+                    } else if (fourthCard) {
+                      fourthCard.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                  }, 120);
+                } else {
+                  const sectionEl = document.getElementById("rider-reviews");
+                  if (sectionEl) {
+                    sectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }
+                }
+              }}
               className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-900 text-slate-800 hover:text-white border border-slate-300 hover:border-slate-900 font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer inline-flex items-center gap-2"
             >
               <span>
