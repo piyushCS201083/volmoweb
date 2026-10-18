@@ -508,7 +508,7 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
                             exit={{ opacity: 0.4, scale: 0.96 }}
                             transition={{ duration: 0.25, ease: "easeOut" }}
                             src={activePhoto}
-                            alt={`Volmo ${model.name} in ${config.selectedColor}`}
+                            alt={`Volmo ${model.name} Electric Scooter in ${config.selectedColor} - RTO-Free Electric Two-Wheeler by Volmo Electrical`}
                             referrerPolicy="no-referrer"
                             className="max-h-[220px] sm:max-h-[300px] w-auto object-contain select-none group-hover:scale-105 transition-transform duration-500 relative z-0"
                           />
@@ -1115,7 +1115,7 @@ export default function Models({ onEnquireClick, selectedModelId = null, onSelec
             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950 z-10" />
             <img
               src={pulseData.image}
-              alt="Volmo Pulse Project"
+              alt="Volmo Pulse Cyber Sport Electric Scooter - High Performance Electric Two-Wheeler by Volmo Electrical"
               referrerPolicy="no-referrer"
               className="max-h-[200px] sm:max-h-[280px] w-auto object-contain select-none group-hover:scale-110 duration-700 transition-transform relative z-0"
             />

@@ -257,18 +257,18 @@ export interface HeroConfig {
 }
 
 export const DEFAULT_HERO_CONFIG: HeroConfig = {
-  badgeText: "No Registration · No License Required",
-  headlinePart1: "Sustainably Engineered.",
-  headlinePart2: "Effortlessly Electric.",
-  description: "Crafting advanced electric two-wheelers that combine intelligent technology, premium comfort, and sustainable mobility for the roads of tomorrow.",
+  badgeText: "100% CMVR RTO-Free · No Registration · No License Required",
+  headlinePart1: "Volmo Electrical.",
+  headlinePart2: "India's Smart Electric Scooters.",
+  description: "Volmo Electrical crafts premium, RTO-free electric two-wheelers engineered for Indian roads. Experience our 5 high-efficiency Volmo electric scooter models—Phantom, Glider, Classic, Pulse, and Vista—with long-range Lithium LFP batteries, German sine-wave controllers, and high-margin electric scooter dealership opportunities.",
   coverPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
-  floatingTag: "Volmo Professional Series",
+  floatingTag: "Volmo Electric Two-Wheeler Fleet",
   ctaPrimaryText: "Explore EV Fleet",
   ctaSecondaryText: "Apply For Dealership",
   trustBadge1Title: "German Sine Wave Controller",
   trustBadge1Subtitle: "Ultra-quiet, responsive hub motor control",
-  trustBadge2Title: "3-Year Warranty Cover",
-  trustBadge2Subtitle: "Comprehensive peace-of-mind security",
+  trustBadge2Title: "3-Year Battery Warranty",
+  trustBadge2Subtitle: "Smart BMS protection for Indian roads",
 };
 
 export interface TestimonialItem {
@@ -847,19 +847,19 @@ export interface SiteSectionsConfig {
 export const DEFAULT_SITE_SECTIONS: SiteSectionsConfig = {
   heroScrollText: "Scroll to Discover",
 
-  fleetBadge: "India's Leading RTO-Free Fleet",
-  fleetHeading: "Choose Your Volmo Ride",
-  fleetSubtitle: "Zero registration. Zero license requirements. Zero road tax. Choose from our 5 premier models: Vista, Glider, Classic, Phantom, and the all-new Volmo Pulse. Customize exactly to your required budget and range.",
+  fleetBadge: "India's Leading RTO-Free Electric Two-Wheelers",
+  fleetHeading: "Volmo Electric Scooter Fleet",
+  fleetSubtitle: "Zero RTO registration, zero driving license requirement, and zero road tax under CMVR regulations. Choose from our 5 premier Volmo electric scooter models: Phantom, Glider, Classic, Pulse, and Vista. Customize your range with high-density Graphene or Lithium LFP battery packs.",
 
-  pulseBadge: "New Arrival Spotlight",
+  pulseBadge: "Volmo Electric Two-Wheeler Spotlight",
   pulseSecretCode: "Official Volmo Sport Flagship",
   pulseCustomerCount: "2,400+ Riders",
   pulseCustomerText: "Booked test rides and deliveries across India.",
   pulseButtonText: "Explore Volmo Pulse",
 
-  featuresBadge: "High-Performance Standards",
-  featuresHeading: "Next-Gen Features. Fully Integrated.",
-  featuresSubtitle: "Every Volmo electric scooter is equipped with premium security, utility, and safety features at no additional cost. Ready to conquer Indian city streets.",
+  featuresBadge: "High-Performance EV Standards",
+  featuresHeading: "Next-Gen Features. Built for Indian Roads.",
+  featuresSubtitle: "Every Volmo electric scooter is equipped with smart anti-theft security, regenerative braking, digital LCD telemetry, and reverse drive assist for effortless electric two-wheeler commuting.",
 
   sineBadge: "Full Bumper Protection Guarantee",
   sineHeading: "Advanced Sine Wave Intelligence & Bumper 1-Year Warranty",
@@ -874,9 +874,9 @@ export const DEFAULT_SITE_SECTIONS: SiteSectionsConfig = {
   testimonialsHeading: "Hear from Volmo Riders",
   testimonialsSubtitle: "Discover why EV owners in Gwalior prefer our RTO-free intelligent electric scooters for daily transit. Real people, genuine savings, pure electric power.",
 
-  locatorBadge: "Pan-India EV Retail Network",
-  locatorHeading: "Find Volmo Showrooms Near You",
-  locatorSubtitle: "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!",
+  locatorBadge: "Pan-India Electric Scooter Showroom Network",
+  locatorHeading: "Find Volmo Showrooms & Dealerships",
+  locatorSubtitle: "Explore active Volmo Electrical authorized dealerships and service centers across India, or apply for an exclusive electric scooter dealership franchise in your city.",
   plantTitle: "Volmo EV Manufacturing Plant",
   plantType: "Factory & assembly line",
   plantHours: "Monday - Saturday: 09:00 AM - 07:00 PM",

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage -->
+  <url>
+    <loc>https://www.volmoelectrical.com/</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_hero_banner_1780063638602.png</image:loc>
+      <image:title>Volmo Electrical - Electric Two-Wheelers in India</image:title>
+    </image:image>
+  </url>
+
+  <!-- Fleet / Models Overview -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=models</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Product Model: Volmo Phantom -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=models&amp;model=phantom</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_phantom_1780058868036.png</image:loc>
+      <image:title>Volmo Phantom Electric Scooter</image:title>
+    </image:image>
+  </url>
+
+  <!-- Product Model: Volmo Glider -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=models&amp;model=glider</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_glider_1780058835594.png</image:loc>
+      <image:title>Volmo Glider Electric Scooter</image:title>
+    </image:image>
+  </url>
+
+  <!-- Product Model: Volmo Classic -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=models&amp;model=classic</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_classic_1780058851300.png</image:loc>
+      <image:title>Volmo Classic Electric Scooter</image:title>
+    </image:image>
+  </url>
+
+  <!-- Product Model: Volmo Pulse -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=models&amp;model=pulse</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_pulse_premium_1780068389740.png</image:loc>
+      <image:title>Volmo Pulse Electric Scooter</image:title>
+    </image:image>
+  </url>
+
+  <!-- Product Model: Volmo Vista -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=models&amp;model=vista</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_vista_1780058817114.png</image:loc>
+      <image:title>Volmo Vista Electric Scooter</image:title>
+    </image:image>
+  </url>
+
+  <!-- Battery & Charger Systems -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=battery-charger</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.volmoelectrical.com/src/assets/images/volmo_lithium_sunset_1791521360520.jpg</image:loc>
+      <image:title>Volmo Lithium-Ion and LFP Battery Systems</image:title>
+    </image:image>
+  </url>
+
+  <!-- Accessories & Gear -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=accessories</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Dealership & Showrooms Locator -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=locator</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- EV Technology & CMVR FAQs -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=technology</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Media, News & Blogs -->
+  <url>
+    <loc>https://www.volmoelectrical.com/?page=media-blogs</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

@@ -72,7 +72,10 @@ async function startServer() {
         req.originalUrl.startsWith("/src/assets/images") ||
         req.originalUrl.startsWith("/assets/images") ||
         req.originalUrl.startsWith("/images") ||
-        req.originalUrl.startsWith("/assets/")
+        req.originalUrl.startsWith("/assets/") ||
+        req.path === "/robots.txt" ||
+        req.path === "/sitemap.xml" ||
+        (req.path.startsWith("/google") && req.path.endsWith(".html"))
       ) {
         return next();
       }
@@ -102,7 +105,10 @@ async function startServer() {
         req.originalUrl.startsWith("/assets/images") ||
         req.originalUrl.startsWith("/images") ||
         req.originalUrl.startsWith("/@") ||
-        req.originalUrl.startsWith("/node_modules")
+        req.originalUrl.startsWith("/node_modules") ||
+        req.path === "/robots.txt" ||
+        req.path === "/sitemap.xml" ||
+        (req.path.startsWith("/google") && req.path.endsWith(".html"))
       ) {
         return next();
       }

@@ -26,6 +26,7 @@ import WhatsAppChatModal from "./components/WhatsAppChatModal";
 import VolmoShutterIntro from "./components/VolmoShutterIntro";
 import { BatteryType } from "./types";
 import { ShieldAlert, CheckCircle, Zap, Calculator, ArrowRight } from "lucide-react";
+import { applyPageSeo, getSeoForRoute } from "./utils/seo";
 
 export default function App() {
   // Showroom shutter intro animation state (plays once per session so refreshes load directly)
@@ -70,9 +71,48 @@ export default function App() {
     setIsWhatsAppOpen(true);
   };
 
-  // Active page sub-routing state
-  const [activePage, setActivePage] = useState<string>("home");
-  const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
+  // Active page sub-routing state with URL search query persistence
+  const [activePage, setActivePage] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get("page");
+      if (
+        page &&
+        ["home", "models", "accessories", "battery-charger", "technology", "locator", "media-blogs", "reviews"].includes(page)
+      ) {
+        return page;
+      }
+    }
+    return "home";
+  });
+
+  const [selectedModelId, setSelectedModelId] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("model");
+    }
+    return null;
+  });
+
+  // Synchronize browser URL history back/forward button events
+  React.useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get("page") || "home";
+      const model = params.get("model");
+      setActivePage(page);
+      setSelectedModelId(model);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Dynamically update document title, description, and canonical link
+  React.useEffect(() => {
+    const seo = getSeoForRoute(activePage, selectedModelId);
+    applyPageSeo(seo);
+  }, [activePage, selectedModelId]);
 
   // Quick Contact Modal state & prefill
   const [quickContactInitialTopic, setQuickContactInitialTopic] = useState<string>("Pricing & Quotation");
@@ -91,7 +131,22 @@ export default function App() {
     if (pageId === "models") {
       setSelectedModelId(null);
     }
+    if (typeof window !== "undefined") {
+      const newUrl = pageId === "home" ? window.location.pathname : `?page=${encodeURIComponent(pageId)}`;
+      window.history.pushState(null, "", newUrl);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSelectModel = (modelId: string | null) => {
+    setSelectedModelId(modelId);
+    if (typeof window !== "undefined") {
+      if (modelId) {
+        window.history.pushState(null, "", `?page=models&model=${encodeURIComponent(modelId)}`);
+      } else if (activePage === "models") {
+        window.history.pushState(null, "", `?page=models`);
+      }
+    }
   };
 
   // Prefill state for the price inquiry modal
@@ -147,6 +202,9 @@ export default function App() {
   const handleSelectModelFromFooter = (modelId: string) => {
     setActivePage("models");
     setSelectedModelId(modelId);
+    if (typeof window !== "undefined") {
+      window.history.pushState(null, "", `?page=models&model=${encodeURIComponent(modelId)}`);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -333,15 +391,15 @@ export default function App() {
               <section className="py-24 bg-white border-b border-slate-200 relative overflow-hidden text-center">
                 <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-[350px] h-[350px] bg-orange-600/5 rounded-full blur-[100px] pointer-events-none" />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 space-y-12">
-                  <div className="max-w-2xl mx-auto space-y-4">
+                  <div className="max-w-3xl mx-auto space-y-4">
                     <span className="text-xs uppercase font-extrabold text-orange-600 font-mono tracking-widest">
-                      Engineering Smart Mobility
+                      Volmo Electrical Mobility Hub
                     </span>
                     <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-tight font-sans">
-                      Select Your Destination
+                      Explore Volmo Electric Scooters, Power Systems &amp; Dealership Network
                     </h2>
-                    <p className="text-slate-600 text-sm font-normal leading-relaxed max-w-xl mx-auto">
-                      Avoid RTO registration queues, road taxes, and high petroleum costs. Click any of our interactive hubs below to discover our multi-tier layouts.
+                    <p className="text-slate-600 text-sm font-normal leading-relaxed max-w-2xl mx-auto">
+                      Experience zero-emission urban travel with 100% CMVR RTO-free electric two-wheelers. Discover our five signature Volmo electric scooter models—Phantom, Glider, Classic, Pulse, and Vista—or partner with Volmo Electrical through an authorized electric scooter dealership.
                     </p>
                   </div>
 
@@ -351,10 +409,10 @@ export default function App() {
                       className="bg-slate-50 border border-slate-200 hover:border-orange-500/40 hover:bg-white p-6 rounded-3xl text-left cursor-pointer transition-all duration-300 group flex flex-col justify-between min-h-[220px] shadow-xs hover:shadow-md"
                     >
                       <div className="space-y-3">
-                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">01 &middot; Fleet</span>
-                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Our Electric Fleet</h3>
+                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">01 &middot; Electric Fleet</span>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Volmo Electric Scooter Fleet</h3>
                         <p className="text-xs text-slate-500 font-normal leading-relaxed">
-                          View all customizable smart scooters, toggle premium color schemes, and request quotes.
+                          Discover Phantom, Glider, Classic, Pulse, and Vista. Toggle custom colors, configure battery packs, and get instant price quotes.
                         </p>
                       </div>
                       <span className="text-xs text-orange-600 font-bold tracking-wider inline-flex items-center gap-1 mt-6 group-hover:translate-x-1.5 transition-transform">
@@ -367,10 +425,10 @@ export default function App() {
                       className="bg-slate-50 border border-slate-200 hover:border-orange-500/40 hover:bg-white p-6 rounded-3xl text-left cursor-pointer transition-all duration-300 group flex flex-col justify-between min-h-[220px] shadow-xs hover:shadow-md"
                     >
                       <div className="space-y-3">
-                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">02 &middot; Protection</span>
-                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Accessories &amp; Gear</h3>
+                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">02 &middot; Protection &amp; Gear</span>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Accessories &amp; Safety Gear</h3>
                         <p className="text-xs text-slate-500 font-normal leading-relaxed">
-                          Volmo manufactured high-grade steel frame sets, ISI certified helmets, and lifestyle gear.
+                          Factory-engineered reinforced steel frame guards, ISI-certified safety helmets, and lifestyle gear for Volmo electric scooters.
                         </p>
                       </div>
                       <span className="text-xs text-orange-600 font-bold tracking-wider inline-flex items-center gap-1 mt-6 group-hover:translate-x-1.5 transition-transform">
@@ -384,9 +442,9 @@ export default function App() {
                     >
                       <div className="space-y-3">
                         <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">03 &middot; Power Systems</span>
-                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Battery &amp; Charger</h3>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">EV Battery &amp; Smart Chargers</h3>
                         <p className="text-xs text-slate-500 font-normal leading-relaxed">
-                          Original Graphene (1 Yr), Lithium/LFP 1.4-4.3 kW (3 Yrs), and German fast chargers.
+                          Original Graphene batteries (1-Yr Warranty), Lithium-Ion / LFP packs up to 72V 60Ah (3-Yr Warranty), and German CCCV smart chargers.
                         </p>
                       </div>
                       <span className="text-xs text-orange-600 font-bold tracking-wider inline-flex items-center gap-1 mt-6 group-hover:translate-x-1.5 transition-transform">
@@ -399,10 +457,10 @@ export default function App() {
                       className="bg-slate-50 border border-slate-200 hover:border-orange-500/40 hover:bg-white p-6 rounded-3xl text-left cursor-pointer transition-all duration-300 group flex flex-col justify-between min-h-[220px] shadow-xs hover:shadow-md"
                     >
                       <div className="space-y-3">
-                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">04 &middot; Tech &amp; FAQs</span>
-                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Engineering Specs</h3>
+                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">04 &middot; Tech &amp; Regulations</span>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">EV Engineering &amp; CMVR FAQs</h3>
                         <p className="text-xs text-slate-500 font-normal leading-relaxed">
-                          German Sine-Wave controller chips, 3-Year advanced warranties, and CMVR guidelines.
+                          Learn about German Sine-Wave controllers, 15–20 paise/km running costs, and CMVR RTO-free electric two-wheeler exemptions in India.
                         </p>
                       </div>
                       <span className="text-xs text-orange-600 font-bold tracking-wider inline-flex items-center gap-1 mt-6 group-hover:translate-x-1.5 transition-transform">
@@ -415,10 +473,10 @@ export default function App() {
                       className="bg-slate-50 border border-slate-200 hover:border-orange-500/40 hover:bg-white p-6 rounded-3xl text-left cursor-pointer transition-all duration-300 group flex flex-col justify-between min-h-[220px] shadow-xs hover:shadow-md"
                     >
                       <div className="space-y-3">
-                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">05 &middot; Franchise</span>
-                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Locate Store</h3>
+                        <span className="text-xs font-mono text-orange-600 font-bold uppercase tracking-wider">05 &middot; Franchise Network</span>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors">Showrooms &amp; Dealerships</h3>
                         <p className="text-xs text-slate-500 font-normal leading-relaxed">
-                          Physical active dealerships covering all 29 states in India with over 100+ on-ground outlets.
+                          Locate authorized Volmo Electrical retail outlets and service centers across India, or apply for an exclusive electric scooter dealership.
                         </p>
                       </div>
                       <span className="text-xs text-orange-600 font-bold tracking-wider inline-flex items-center gap-1 mt-6 group-hover:translate-x-1.5 transition-transform">
@@ -435,7 +493,7 @@ export default function App() {
             <Models 
               onEnquireClick={handleEnquireClick} 
               selectedModelId={selectedModelId}
-              onSelectModelId={setSelectedModelId}
+              onSelectModelId={handleSelectModel}
               onNavigateToAccessories={() => handlePageChange("accessories")}
             />
           )}

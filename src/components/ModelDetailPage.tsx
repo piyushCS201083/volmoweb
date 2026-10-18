@@ -273,7 +273,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
                         exit={{ opacity: 0.5, scale: 0.98 }}
                         transition={{ duration: 0.25 }}
                         src={selectedColor.image || getModelActivePhoto(model, selectedColor.name)}
-                        alt={`Volmo ${model.name} in ${selectedColor.name}`}
+                        alt={`Volmo ${model.name} Electric Scooter in ${selectedColor.name} - RTO-Free Electric Two-Wheeler by Volmo Electrical`}
                         style={{ filter: selectedColor.image || getModelActivePhoto(model, selectedColor.name) !== model.image ? "none" : filterStyle }}
                         referrerPolicy="no-referrer"
                         className="max-h-[250px] sm:max-h-[340px] w-auto object-contain select-none transition-all duration-300 transform group-hover:scale-105"
@@ -326,7 +326,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
                       <div className="relative w-full max-h-[300px] flex items-center justify-center p-2">
                         <img
                           src={model.frontImage}
-                          alt={`${model.name} Front View`}
+                          alt={`Volmo ${model.name} Electric Scooter Front LED Projector Headlamp View`}
                           referrerPolicy="no-referrer"
                           className="max-h-[260px] w-auto object-contain rounded-2xl shadow-sm"
                         />
@@ -428,7 +428,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
                       <div className="relative w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 p-2 flex items-center justify-center min-h-[220px]">
                         <img
                           src={model.dashboardImage}
-                          alt={`${model.name} Cockpit View`}
+                          alt={`Volmo ${model.name} Electric Scooter Digital LCD Cockpit Instrument Cluster`}
                           referrerPolicy="no-referrer"
                           className="max-h-[260px] w-full object-contain rounded-xl"
                         />
@@ -643,7 +643,7 @@ export default function ModelDetailPage({ model, onBackClick, onEnquireClick }: 
                       <div className="relative w-full max-h-[300px] flex items-center justify-center p-2">
                         <img
                           src={model.chassisImage}
-                          alt={`${model.name} Chassis View`}
+                          alt={`Volmo ${model.name} Electric Scooter Reinforced Tubular Steel Chassis & BLDC Drivetrain`}
                           referrerPolicy="no-referrer"
                           className="max-h-[260px] w-auto object-contain rounded-2xl shadow-sm"
                         />

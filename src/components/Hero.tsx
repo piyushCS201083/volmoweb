@@ -208,7 +208,7 @@ export default function Hero({
                 <motion.img
                   key={currentSlide.id}
                   src={currentSlide.image}
-                  alt={currentSlide.name}
+                  alt={`${currentSlide.name} - Volmo Electrical RTO-Free Electric Scooter in India`}
                   referrerPolicy="no-referrer"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}

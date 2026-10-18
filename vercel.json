@@ -30,7 +30,7 @@
       "destination": "https://volmoweb-2.onrender.com/api/$1"
     },
     {
-      "source": "/((?!assets/|src/assets/|uploads/|volmo_logo\\.png).*)",
+      "source": "/((?!assets/|src/assets/|uploads/|volmo_logo\\.png|robots\\.txt|sitemap\\.xml|google[a-z0-9_\\-]+\\.html).*)",
       "destination": "/index.html"
     }
   ]

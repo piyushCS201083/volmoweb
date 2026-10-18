@@ -25,7 +25,7 @@ export default function Logo({ className = "", size = "md" }: LogoProps) {
     <div className={`flex items-center select-none ${heightClass} ${className}`}>
       <img
         src={volmoLogoPng}
-        alt="Volmo Electric Logo"
+        alt="Volmo Electrical - Electric Two-Wheelers in India"
         referrerPolicy="no-referrer"
         className="h-full w-auto object-contain max-w-[280px]"
       />
