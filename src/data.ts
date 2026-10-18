@@ -443,13 +443,13 @@ export const DEFAULT_CORPORATE_LOCATIONS: CorporateLocationItem[] = [
 ];
 
 export const DEFAULT_LOCATE_US_PAGE_CONFIG: LocateUsPageConfig = {
-  heroBadge: "Volmo Electrical Private Limited · Official Locations",
-  heroTitle: "Contact Us",
-  heroSubtitle: "Find our Corporate Head Office, EV Manufacturing Plant, and Company Operated Showroom in Gwalior, Madhya Pradesh. Use the live interactive map on the right to navigate directly to all our official facilities.",
+  heroBadge: "Volmo Electrical Private Limited · Official EV Locations",
+  heroTitle: "Volmo Electrical Showrooms & Dealership Network",
+  heroSubtitle: "Locate our Corporate Head Office, EV Manufacturing Plant, and Company Showrooms in Gwalior, Madhya Pradesh, along with authorized electric scooter dealerships across India. Enquire to apply for an electric two-wheeler dealership in your territory.",
 
-  locatorBadge: "Pan-India EV Retail Network",
-  locatorHeading: "Find Volmo Showrooms Near You",
-  locatorSubtitle: "Operational footprint covering all 29 states of India with rapid on-ground franchise inclusions. Type your city, search state-wise, or enquire to apply for a fresh dealership lock!",
+  locatorBadge: "Pan-India Electric Two-Wheeler Network",
+  locatorHeading: "Find Volmo Electric Scooter Dealerships Near You",
+  locatorSubtitle: "Explore our nationwide operational footprint of active Volmo electric scooter dealerships and authorized service centers across Indian states, or apply for an exclusive franchise opportunity.",
 
   stat1Label: "Active Dealerships",
   stat1Override: "",

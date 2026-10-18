@@ -15,23 +15,23 @@ export const CANONICAL_BASE = "https://www.volmoelectrical.com";
 export const PRODUCT_SEO_DATA: Record<string, { title: string; description: string }> = {
   phantom: {
     title: "Volmo Phantom | High-Torque Sport Electric Scooter | Volmo Electrical",
-    description: "Volmo Phantom: Aggressive sport styling, twin LED headlamps, high-torque BLDC motor tuned for steep flyovers, dual disc brakes, and 100% CMVR RTO-free exemption in India.",
+    description: "Volmo Phantom: Aggressive sport electric scooter by Volmo Electrical. Features high-torque BLDC motor tuned for steep flyovers, twin LED headlamps, dual disc brakes, and CMVR RTO-free exemption in India.",
   },
   glider: {
     title: "Volmo Glider | Aerodynamic Comfort Electric Scooter | Volmo Electrical",
-    description: "Volmo Glider: Extended wheelbase comfort cruiser with dual hydraulic rear suspension, contoured dual-density seat, and smooth acceleration for daily family commuting.",
+    description: "Volmo Glider: Extended wheelbase comfort electric scooter by Volmo Electrical. Equipped with dual hydraulic rear suspension, contoured dual-density seat, and smooth zero-emission electric mobility.",
   },
   classic: {
     title: "Volmo Classic | Timeless Vintage Electric Scooter | Volmo Electrical",
-    description: "Volmo Classic: Retro aesthetic with chrome accents, reinforced tubular chassis, generous footboard, front storage, and zero-emission electric mobility.",
+    description: "Volmo Classic: Retro vintage electric scooter by Volmo Electrical. Featuring chrome accents, reinforced tubular chassis, generous footboard, front storage, and efficient urban commuting.",
   },
   pulse: {
     title: "Volmo Pulse | Cyber Sport Performance Electric Scooter | Volmo Electrical",
-    description: "Volmo Pulse: Agile young-adult electric scooter with bold dual-tone colorways, 1200W peak motor, USB mobile charging, and instant throttle response.",
+    description: "Volmo Pulse: High-performance cyber sport electric scooter by Volmo Electrical. Features 1200W peak motor, bold dual-tone colorways, USB mobile charging, and agile city handling.",
   },
   vista: {
     title: "Volmo Vista | Lightweight Swift City Commuter | Volmo Electrical",
-    description: "Volmo Vista: Lightweight aerodynamic city commuter with nimble handling, dual front storage pockets, LED headlamp, and 60-80 km real-world range.",
+    description: "Volmo Vista: Lightweight aerodynamic city commuter electric scooter by Volmo Electrical. Nimble handling, dual front storage pockets, LED headlamp, and 60-80 km real-world range.",
   },
 };
 
@@ -39,19 +39,19 @@ export const PAGE_SEO_DATA: Record<string, { title: string; description: string;
   home: {
     title: "Volmo Electrical | Electric Two-Wheelers in India",
     description:
-      "Discover Volmo Electrical's premium, RTO-free electric scooters in India including Phantom, Glider, Classic, Pulse & Vista. Explore long-range batteries and dealership opportunities.",
+      "Explore Volmo Electrical's electric two-wheelers, including Phantom, Glider, Classic, Pulse and Vista. Discover our models and enquire about dealership opportunities.",
     path: "/",
   },
   models: {
-    title: "Volmo Electric Scooters Fleet | RTO-Free Electric Two-Wheelers",
+    title: "Volmo Electric Scooter Models | Electric Two-Wheelers by Volmo Electrical",
     description:
-      "Explore Volmo Electrical's CMVR RTO-free electric scooter lineup: Phantom, Glider, Classic, Pulse, and Vista with custom Graphene & Lithium LFP battery options.",
+      "Explore Volmo Electrical's complete electric scooter models: Phantom, Glider, Classic, Pulse, and Vista. RTO-free electric two-wheelers with custom Graphene & Lithium LFP battery options.",
     path: "/?page=models",
   },
   "battery-charger": {
     title: "EV Batteries & Smart Chargers | Volmo Electrical Power Systems",
     description:
-      "High-density Lead-Acid Graphene (1-Year Warranty) and Lithium-Ion LFP battery packs up to 72V 60Ah with German-technology 69.0V CCCV smart chargers.",
+      "High-density Lead-Acid Graphene and Lithium-Ion LFP battery packs up to 72V 60Ah with German-technology 69.0V CCCV smart chargers by Volmo Electrical.",
     path: "/?page=battery-charger",
   },
   accessories: {
@@ -63,19 +63,19 @@ export const PAGE_SEO_DATA: Record<string, { title: string; description: string;
   locator: {
     title: "Volmo Dealership Locator | Electric Scooter Showrooms in India",
     description:
-      "Find authorized Volmo Electrical showrooms, dealerships, and authorized service centers across Madhya Pradesh, Uttar Pradesh, and nationwide.",
+      "Find authorized Volmo Electrical electric scooter showrooms, dealerships, and service centers across India, or enquire about opening an electric scooter dealership franchise.",
     path: "/?page=locator",
   },
   technology: {
-    title: "EV Technology & FAQs | CMVR RTO-Free Guidelines | Volmo Electrical",
+    title: "EV Technology & FAQs | Electric Two-Wheeler Company in India | Volmo Electrical",
     description:
-      "Learn about CMVR regulations, German Sine-Wave controllers, 15-20 paise/km running costs, and maintenance-free electric scooter engineering.",
+      "Learn about Volmo Electrical EV technology, German Sine-Wave controllers, 15-20 paise/km running costs, and CMVR RTO-free guidelines for electric two-wheelers in India.",
     path: "/?page=technology",
   },
   "media-blogs": {
     title: "Media, News & Updates | Volmo Electrical Private Limited",
     description:
-      "Latest corporate news, media releases, customer reviews, career openings, and sustainability milestones from Volmo Electrical.",
+      "Latest corporate updates, media coverage, customer reviews, and sustainability milestones from Volmo Electrical, premier EV manufacturer in India.",
     path: "/?page=media-blogs",
   },
 };
