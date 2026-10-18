@@ -51,8 +51,9 @@ async function startServer() {
   const isStandaloneBackend = process.env.STANDALONE_BACKEND === "true";
   const distPath = path.resolve(__dirname, "dist");
   const distIndexPath = path.resolve(distPath, "index.html");
+  const isProduction = process.env.NODE_ENV === "production" || (!hasTsx && process.env.NODE_ENV !== "development");
 
-  if (!isStandaloneBackend && fs.existsSync(distIndexPath)) {
+  if (!isStandaloneBackend && isProduction && fs.existsSync(distIndexPath)) {
     // Serve compiled static bundle from dist/ for ultra-fast, robust delivery without HMR or middleware WebSocket conflicts
     const express = await import("express");
     app.use(
