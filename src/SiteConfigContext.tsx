@@ -29,6 +29,7 @@ import {
 } from "./types";
 import {
   MODELS_DATA,
+  COLOR_PHOTO_MAP,
   PULSE_DATA,
   COMMON_FEATURES,
   CONTACT_INFO,

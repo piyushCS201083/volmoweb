@@ -26,12 +26,13 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Standard Warranty (Motor, Controller, Converter, Charger)",
     isRtoFree: true,
     colors: [
-      { name: "Glossy White", hex: "#FFFFFF", image: "/src/assets/images/volmo_vista_1780058817114.png" },
-      { name: "Tech Grey", hex: "#52525B", image: "/src/assets/images/vista_tech_grey_1790182554836.jpg" },
-      { name: "Midnight Black", hex: "#18181B", image: "/src/assets/images/vista_midnight_black_1790182569741.jpg" }
+      { name: "Glossy White", hex: "#FFFFFF", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459878/volmo_assets/volmo_vista_electric_scooter_at_sunset__1__png.png" },
+      { name: "Tech Grey", hex: "#52525B", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png" },
+      { name: "Midnight Black", hex: "#18181B", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397101/volmo_assets/volmo_vista_sunset_showcase__2__png.png" },
+      { name: "Matcha Green", hex: "#B1DD8B", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459908/volmo_assets/chatgpt_image_oct_8__2026__03_52_33_pm_png.png" }
     ],
-    image: "/src/assets/images/volmo_vista_1780058817114.png",
-    basePriceEstimate: "₹59,999",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png",
+    basePriceEstimate: "₹41,999",
     featured: true,
     frontBrake: "Hydraulic Disc Brake (Right-Hand Lever)",
     rearBrake: "Mechanical Expanded Drum Brake (Left-Hand Lever)",
@@ -54,12 +55,12 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Standard Warranty (Motor, Controller, Converter, Charger)",
     isRtoFree: true,
     colors: [
-      { name: "Cherry Red", hex: "#DC2626", image: "/src/assets/images/volmo_glider_1780058835594.png" },
-      { name: "Apple Green", hex: "#22C55E", image: "/src/assets/images/glider_apple_green_1790182589580.jpg" },
-      { name: "Ocean Blue", hex: "#2563EB", image: "/src/assets/images/glider_ocean_blue_1790182609366.jpg" }
+      { name: "Cherry Red", hex: "#DC2626", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459696/volmo_assets/volmo_glider_at_golden_hour_png.png" },
+      { name: "Apple Green", hex: "#22C55E", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459683/volmo_assets/volmo_glider_at_sunset__1__png.png" },
+      { name: "Ocean Blue", hex: "#2563EB", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459723/volmo_assets/volmo_glider_at_sunset_png.png" }
     ],
-    image: "/src/assets/images/volmo_glider_1780058835594.png",
-    basePriceEstimate: "₹63,999",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459683/volmo_assets/volmo_glider_at_sunset__1__png.png",
+    basePriceEstimate: "₹44,999",
     featured: false,
     frontBrake: "Ventilated Wave Disc Brake (Right-Hand Lever)",
     rearBrake: "Premium Spring Drum Brake with High Durability Liners",
@@ -82,14 +83,14 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Direct Replacement Warranty on Key Electronics",
     isRtoFree: true,
     colors: [
-      { name: "Royal Blue", hex: "#1D4ED8", image: "/src/assets/images/volmo_classic_1780058851300.png" },
-      { name: "Crimson Red", hex: "#B91C1C", image: "/src/assets/images/classic_crimson_red_1790182628879.jpg" },
-      { name: "Charcoal Grey", hex: "#4B5563", image: "/src/assets/images/classic_sleek_black_1790182659642.jpg" },
-      { name: "Sleek Black", hex: "#0F172A", image: "/src/assets/images/classic_sleek_black_1790182659642.jpg" },
-      { name: "Pearl White", hex: "#F8FAFC", image: "/src/assets/images/classic_pearl_white_1790182643917.jpg" }
+      { name: "Sleek Black", hex: "#0F172A", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791223896/volmo_assets/chatgpt_image_oct_5__2026__11_41_07_pm_png.png" },
+      { name: "Pearl White", hex: "#F8FAFC", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344598/volmo_assets/volmo_classic_electric_scooter_at_sunset_png.png" },
+      { name: "Charcoal Grey", hex: "#5F5E5D", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png" },
+      { name: "Crimson Red", hex: "#A30505", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344246/volmo_assets/chatgpt_image_oct_7__2026__09_01_46_am_png.png" },
+      { name: "Royal Blue", hex: "#001EFF", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791707391/volmo_assets/classic__1__png.png" }
     ],
-    image: "/src/assets/images/volmo_classic_1780058851300.png",
-    basePriceEstimate: "₹69,999",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png",
+    basePriceEstimate: "₹53,999",
     featured: true,
     frontBrake: "Large Diameter Hydraulic Disc Brake",
     rearBrake: "Heavy-Duty Expanded Shoe Drum Brake",
@@ -112,12 +113,12 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Fully Integrated Direct Replacement Warranty",
     isRtoFree: true,
     colors: [
-      { name: "Cream Beige", hex: "#F5F5DC", image: "/src/assets/images/volmo_phantom_1780058868036.png" },
-      { name: "Apple Green", hex: "#16A34A", image: "/src/assets/images/phantom_apple_green_1790182691216.jpg" },
-      { name: "Steel Blue", hex: "#4682B4", image: "/src/assets/images/phantom_steel_blue_1790182675033.jpg" }
+      { name: "Cream Beige", hex: "#F5F5DC", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459768/volmo_assets/volmo_phantom__sunset_scooter_showcase_png.png" },
+      { name: "Apple Green", hex: "#16A34A", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459784/volmo_assets/volmo_phantom_at_sunset_png.png" },
+      { name: "Steel Blue", hex: "#4682B4", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459794/volmo_assets/volmo_phantom_at_sunset__1__png.png" }
     ],
-    image: "/src/assets/images/volmo_phantom_1780058868036.png",
-    basePriceEstimate: "₹76,999",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459768/volmo_assets/volmo_phantom__sunset_scooter_showcase_png.png",
+    basePriceEstimate: "₹57,999",
     featured: true,
     frontBrake: "Signature Dual Piston Hydraulic Disc Brake",
     rearBrake: "Synchronized Compound Drum Brake with Combi-Brake System (CBS)",
@@ -140,13 +141,13 @@ export const MODELS_DATA: ModelSpec[] = [
     warranty: "1 Year Fully Integrated Direct Replacement Warranty",
     isRtoFree: true,
     colors: [
-      { name: "Cyber Black", hex: "#0F172A", image: "/src/assets/images/volmo_pulse_1780058885037.png" },
-      { name: "Neon Cyan", hex: "#06B6D4", image: "/src/assets/images/volmo_pulse_premium_1780068389740.png" },
-      { name: "Matte Grey", hex: "#475569", image: "/src/assets/images/volmo_pulse_1780058885037.png" },
-      { name: "Flash Red", hex: "#DC2626", image: "/src/assets/images/volmo_pulse_premium_1780068389740.png" }
+      { name: "Cyber Black", hex: "#0F172A", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397139/volmo_assets/volmo_pulse_at_golden_hour_png.png" },
+      { name: "Matte Grey", hex: "#475569", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397155/volmo_assets/volmo_pulse_at_sunset__1__png.png" },
+      { name: "Sand Cream", hex: "#EADE90", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397228/volmo_assets/volmo_pulse_at_sunset_png.png" },
+      { name: "Violet Purple", hex: "#B089D7", image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397213/volmo_assets/volmo_pulse_at_sunset__2__png.png" }
     ],
-    image: "/src/assets/images/volmo_pulse_1780058885037.png",
-    basePriceEstimate: "₹76,999",
+    image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png",
+    basePriceEstimate: "₹56,999",
     featured: true,
     frontBrake: "Signature Dual Piston Hydraulic Disc Brake",
     rearBrake: "Synchronized Compound Drum Brake with Combi-Brake System (CBS)",
@@ -165,15 +166,15 @@ export const MODELS_DATA: ModelSpec[] = [
     assistEngine: "3km/h Reverse Drive parking assist toggle with smart acoustic buzzer",
     sideAngleLabel: "Aerodynamic Sport Profile",
     sideAngleDesc: "Aggressive posture, reinforced dual cradle chassis, and contoured sport dual seat.",
-    sideImage: "/src/assets/images/volmo_pulse_1780058885037.png",
+    sideImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026883/volmo_assets/volmo_pulse_1780058885037.jpg",
     frontAngleLabel: "Twin Aerodynamic Headlamp",
     frontAngleDesc: "Twin high-luminance LED matrix projectors with daytime running signature lights.",
-    frontImage: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+    frontImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026889/volmo_assets/volmo_pulse_premium_1780068389740.jpg",
     frontTitle: "Signature Twin Projector Matrix",
     frontDescription: "High-beam penetration spanning 45+ meters of night road visibility with zero battery drain.",
     dashboardAngleLabel: "High-Contrast Digital Cockpit",
     dashboardAngleDesc: "Wide LED instrument cluster showing speed, battery status, trip odometer, and ride modes.",
-    dashboardImage: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+    dashboardImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026889/volmo_assets/volmo_pulse_premium_1780068389740.jpg",
     dashboardTitle: "Next-Gen Digital Cockpit",
     dashboardSubtitle: "Real-time battery SOC, dynamic speedometer, and active fault diagnostic telemetry.",
     dashboardOdometer: "00142 km",
@@ -181,7 +182,7 @@ export const MODELS_DATA: ModelSpec[] = [
     dashboardMaxSpeed: 60,
     chassisAngleLabel: "Reinforced Heavy-Duty Chassis",
     chassisAngleDesc: "Robotic MIG-welded steel frame built for dual riders and tough Indian road conditions.",
-    chassisImage: "/src/assets/images/volmo_steel_frame_1790255503151.jpg",
+    chassisImage: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg",
     chassisBadge: "Class-Leading Frame Strength",
     frontSuspension: "Heavy-Duty Telescopic Front Hydraulic Fork (31mm inner tube)",
     rearSuspension: "Dual Spring-Loaded Hydraulic Shock Absorbers with 5-Step Preload Adjustment",
@@ -194,7 +195,7 @@ export const PULSE_DATA = {
   id: "pulse",
   name: "VOLMO PULSE",
   tagline: "The High-Torque Cyber Sport - Performance & Agility",
-  image: "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+  image: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png",
   description: "Now available across our showrooms! Engineered with a 1200W peak motor, dual-piston disc brakes, aerodynamic sport frame, and intelligent LED lighting architecture. Get ready for unmatched acceleration and 100% RTO-free riding.",
   isReleased: true
 };
@@ -261,7 +262,7 @@ export const DEFAULT_HERO_CONFIG: HeroConfig = {
   headlinePart1: "Volmo Electrical.",
   headlinePart2: "India's Smart Electric Scooters.",
   description: "Volmo Electrical crafts premium, RTO-free electric two-wheelers engineered for Indian roads. Experience our 5 high-efficiency Volmo electric scooter models—Phantom, Glider, Classic, Pulse, and Vista—with long-range Lithium LFP batteries, German sine-wave controllers, and high-margin electric scooter dealership opportunities.",
-  coverPhoto: "/src/assets/images/volmo_hero_banner_1780063638602.png",
+  coverPhoto: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791051202/volmo_assets/untitled_design_png.png",
   floatingTag: "Volmo Electric Two-Wheeler Fleet",
   ctaPrimaryText: "Explore EV Fleet",
   ctaSecondaryText: "Apply For Dealership",
@@ -931,61 +932,73 @@ export const ALL_STATES = [
 ];
 
 export const PRESET_MEDIA_ASSETS = [
-  { label: "Hero Cover Banner (Cyberpunk Street)", url: "/src/assets/images/volmo_hero_banner_1780063638602.png", category: "Cover / Banners" },
-  { label: "Volmo Vista (Pearl White / Tech Silver)", url: "/src/assets/images/volmo_vista_1780058817114.png", category: "Fleet Models" },
-  { label: "Volmo Vista (Tech Grey Metallic)", url: "/src/assets/images/vista_tech_grey_1790182554836.jpg", category: "Fleet Models" },
-  { label: "Volmo Vista (Midnight Black)", url: "/src/assets/images/vista_midnight_black_1790182569741.jpg", category: "Fleet Models" },
-  { label: "Volmo Glider (Cherry Red)", url: "/src/assets/images/volmo_glider_1780058835594.png", category: "Fleet Models" },
-  { label: "Volmo Glider (Apple Green)", url: "/src/assets/images/glider_apple_green_1790182589580.jpg", category: "Fleet Models" },
-  { label: "Volmo Glider (Ocean Blue)", url: "/src/assets/images/glider_ocean_blue_1790182609366.jpg", category: "Fleet Models" },
-  { label: "Volmo Classic (Royal Blue)", url: "/src/assets/images/volmo_classic_1780058851300.png", category: "Fleet Models" },
-  { label: "Volmo Classic (Crimson Red)", url: "/src/assets/images/classic_crimson_red_1790182628879.jpg", category: "Fleet Models" },
-  { label: "Volmo Classic (Pearl White)", url: "/src/assets/images/classic_pearl_white_1790182643917.jpg", category: "Fleet Models" },
-  { label: "Volmo Classic (Sleek Black)", url: "/src/assets/images/classic_sleek_black_1790182659642.jpg", category: "Fleet Models" },
-  { label: "Volmo Phantom (Cream Beige)", url: "/src/assets/images/volmo_phantom_1780058868036.png", category: "Fleet Models" },
-  { label: "Volmo Phantom (Steel Blue)", url: "/src/assets/images/phantom_steel_blue_1790182675033.jpg", category: "Fleet Models" },
-  { label: "Volmo Phantom (Apple Green)", url: "/src/assets/images/phantom_apple_green_1790182691216.jpg", category: "Fleet Models" },
-  { label: "Volmo Pulse (Cyber Black)", url: "/src/assets/images/volmo_pulse_1780058885037.png", category: "Fleet Models" },
-  { label: "Volmo Pulse (Neon Cyan)", url: "/src/assets/images/volmo_pulse_premium_1780068389740.png", category: "Fleet Models" },
-  { label: "Volmo High-Grade Steel Guard Frame Set", url: "/src/assets/images/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
-  { label: "Volmo Certified Helmets & Merch", url: "/src/assets/images/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
-  { label: "Volmo Lead-Acid Graphene Battery", url: "/src/assets/images/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
-  { label: "Volmo 60V 24Ah Lithium Sunset Showcase", url: "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg", category: "Batteries" },
-  { label: "Volmo 60V 45Ah LFP Tall Sunset Showcase", url: "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg", category: "Batteries" },
-  { label: "Volmo Lithium Smart Energy Pack", url: "/src/assets/images/volmo_lithium_battery_1790255491526.jpg", category: "Batteries" },
-  { label: "Volmo LFP Prismatic Energy Pack", url: "/src/assets/images/volmo_lfp_battery_1790257174523.jpg", category: "Batteries" },
-  { label: "Volmo German Tech Smart Fast Charger", url: "/src/assets/images/volmo_smart_charger_1790255476376.jpg", category: "Chargers" },
-  { label: "Volmo German Tech Charger Lineup", url: "/src/assets/images/volmo_charger_lineup_1790257193664.jpg", category: "Chargers" },
+  { label: "Hero Cover Banner (Cyberpunk Street)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026852/volmo_assets/volmo_hero_banner_1780063638602.jpg", category: "Cover / Banners" },
+  { label: "Volmo Vista (Glossy White)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459878/volmo_assets/volmo_vista_electric_scooter_at_sunset__1__png.png", category: "Fleet Models" },
+  { label: "Volmo Vista (Tech Grey Metallic)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png", category: "Fleet Models" },
+  { label: "Volmo Vista (Midnight Black)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397101/volmo_assets/volmo_vista_sunset_showcase__2__png.png", category: "Fleet Models" },
+  { label: "Volmo Vista (Matcha Green)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459908/volmo_assets/chatgpt_image_oct_8__2026__03_52_33_pm_png.png", category: "Fleet Models" },
+  { label: "Volmo Glider (Cherry Red)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459696/volmo_assets/volmo_glider_at_golden_hour_png.png", category: "Fleet Models" },
+  { label: "Volmo Glider (Apple Green)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459683/volmo_assets/volmo_glider_at_sunset__1__png.png", category: "Fleet Models" },
+  { label: "Volmo Glider (Ocean Blue)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459723/volmo_assets/volmo_glider_at_sunset_png.png", category: "Fleet Models" },
+  { label: "Volmo Classic (Royal Blue)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791707391/volmo_assets/classic__1__png.png", category: "Fleet Models" },
+  { label: "Volmo Classic (Crimson Red)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344246/volmo_assets/chatgpt_image_oct_7__2026__09_01_46_am_png.png", category: "Fleet Models" },
+  { label: "Volmo Classic (Pearl White)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344598/volmo_assets/volmo_classic_electric_scooter_at_sunset_png.png", category: "Fleet Models" },
+  { label: "Volmo Classic (Charcoal Grey)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png", category: "Fleet Models" },
+  { label: "Volmo Classic (Sleek Black)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791223896/volmo_assets/chatgpt_image_oct_5__2026__11_41_07_pm_png.png", category: "Fleet Models" },
+  { label: "Volmo Phantom (Cream Beige)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459768/volmo_assets/volmo_phantom__sunset_scooter_showcase_png.png", category: "Fleet Models" },
+  { label: "Volmo Phantom (Steel Blue)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459794/volmo_assets/volmo_phantom_at_sunset__1__png.png", category: "Fleet Models" },
+  { label: "Volmo Phantom (Apple Green)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459784/volmo_assets/volmo_phantom_at_sunset_png.png", category: "Fleet Models" },
+  { label: "Volmo Pulse (Main Showcase)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397124/volmo_assets/volmo_pulse_scooter_at_golden_hour_png.png", category: "Fleet Models" },
+  { label: "Volmo Pulse (Cyber Black)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397139/volmo_assets/volmo_pulse_at_golden_hour_png.png", category: "Fleet Models" },
+  { label: "Volmo Pulse (Matte Grey)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397155/volmo_assets/volmo_pulse_at_sunset__1__png.png", category: "Fleet Models" },
+  { label: "Volmo Pulse (Sand Cream)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397228/volmo_assets/volmo_pulse_at_sunset_png.png", category: "Fleet Models" },
+  { label: "Volmo Pulse (Violet Purple)", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397213/volmo_assets/volmo_pulse_at_sunset__2__png.png", category: "Fleet Models" },
+  { label: "Volmo High-Grade Steel Guard Frame Set", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026904/volmo_assets/volmo_steel_frame_1790255503151.jpg", category: "Accessories" },
+  { label: "Volmo Certified Helmets & Merch", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026846/volmo_assets/volmo_helmet_merch_1790255531049.jpg", category: "Accessories" },
+  { label: "Volmo Lead-Acid Graphene Battery", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026844/volmo_assets/volmo_graphene_battery_1790257155245.jpg", category: "Batteries" },
+  { label: "Volmo 60V 24Ah Lithium Sunset Showcase", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791521360520/volmo_assets/volmo_lithium_sunset_1791521360520.jpg", category: "Batteries" },
+  { label: "Volmo 60V 45Ah LFP Tall Sunset Showcase", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791521393610/volmo_assets/volmo_lfp_sunset_1791521393610.jpg", category: "Batteries" },
+  { label: "Volmo Lithium Smart Energy Pack", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026865/volmo_assets/volmo_lithium_battery_1790255491526.jpg", category: "Batteries" },
+  { label: "Volmo LFP Prismatic Energy Pack", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026858/volmo_assets/volmo_lfp_battery_1790257174523.jpg", category: "Batteries" },
+  { label: "Volmo German Tech Smart Fast Charger", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026896/volmo_assets/volmo_smart_charger_1790255476376.jpg", category: "Chargers" },
+  { label: "Volmo German Tech Charger Lineup", url: "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791026838/volmo_assets/volmo_charger_lineup_1790257193664.jpg", category: "Chargers" },
 ];
 
 export const COLOR_PHOTO_MAP: Record<string, Record<string, string>> = {
   vista: {
-    "Glossy White": "/src/assets/images/volmo_vista_1780058817114.png",
-    "Tech Grey": "/src/assets/images/vista_tech_grey_1790182554836.jpg",
-    "Midnight Black": "/src/assets/images/vista_midnight_black_1790182569741.jpg",
+    "Glossy White": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459878/volmo_assets/volmo_vista_electric_scooter_at_sunset__1__png.png",
+    "Tech Grey": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png",
+    "Midnight Black": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397101/volmo_assets/volmo_vista_sunset_showcase__2__png.png",
+    "Matcha Green": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459908/volmo_assets/chatgpt_image_oct_8__2026__03_52_33_pm_png.png",
+    "Matcha green": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459908/volmo_assets/chatgpt_image_oct_8__2026__03_52_33_pm_png.png",
   },
   glider: {
-    "Cherry Red": "/src/assets/images/volmo_glider_1780058835594.png",
-    "Apple Green": "/src/assets/images/glider_apple_green_1790182589580.jpg",
-    "Ocean Blue": "/src/assets/images/glider_ocean_blue_1790182609366.jpg",
+    "Cherry Red": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459696/volmo_assets/volmo_glider_at_golden_hour_png.png",
+    "Apple Green": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459683/volmo_assets/volmo_glider_at_sunset__1__png.png",
+    "Ocean Blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459723/volmo_assets/volmo_glider_at_sunset_png.png",
   },
   classic: {
-    "Royal Blue": "/src/assets/images/volmo_classic_1780058851300.png",
-    "Crimson Red": "/src/assets/images/classic_crimson_red_1790182628879.jpg",
-    "Charcoal Grey": "/src/assets/images/classic_sleek_black_1790182659642.jpg",
-    "Sleek Black": "/src/assets/images/classic_sleek_black_1790182659642.jpg",
-    "Pearl White": "/src/assets/images/classic_pearl_white_1790182643917.jpg",
+    "Sleek Black": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791223896/volmo_assets/chatgpt_image_oct_5__2026__11_41_07_pm_png.png",
+    "Pearl White": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344598/volmo_assets/volmo_classic_electric_scooter_at_sunset_png.png",
+    "Charcoal Grey": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png",
+    "Charcoal grey": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791461353/volmo_assets/classic_png.png",
+    "Crimson Red": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344246/volmo_assets/chatgpt_image_oct_7__2026__09_01_46_am_png.png",
+    "crimson red": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791344246/volmo_assets/chatgpt_image_oct_7__2026__09_01_46_am_png.png",
+    "Royal Blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791707391/volmo_assets/classic__1__png.png",
+    "Royal blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791707391/volmo_assets/classic__1__png.png",
   },
   phantom: {
-    "Cream Beige": "/src/assets/images/volmo_phantom_1780058868036.png",
-    "Apple Green": "/src/assets/images/phantom_apple_green_1790182691216.jpg",
-    "Steel Blue": "/src/assets/images/phantom_steel_blue_1790182675033.jpg",
+    "Cream Beige": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459768/volmo_assets/volmo_phantom__sunset_scooter_showcase_png.png",
+    "Apple Green": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459784/volmo_assets/volmo_phantom_at_sunset_png.png",
+    "Steel Blue": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791459794/volmo_assets/volmo_phantom_at_sunset__1__png.png",
   },
   pulse: {
-    "Cyber Black": "/src/assets/images/volmo_pulse_1780058885037.png",
-    "Neon Cyan": "/src/assets/images/volmo_pulse_premium_1780068389740.png",
-    "Matte Grey": "/src/assets/images/volmo_pulse_1780058885037.png",
-    "Flash Red": "/src/assets/images/volmo_pulse_premium_1780068389740.png",
+    "Cyber Black": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397139/volmo_assets/volmo_pulse_at_golden_hour_png.png",
+    "Matte Grey": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397155/volmo_assets/volmo_pulse_at_sunset__1__png.png",
+    "Sand Cream": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397228/volmo_assets/volmo_pulse_at_sunset_png.png",
+    "sand Cream": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397228/volmo_assets/volmo_pulse_at_sunset_png.png",
+    "Violet Purple": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397213/volmo_assets/volmo_pulse_at_sunset__2__png.png",
+    "violet purple": "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397213/volmo_assets/volmo_pulse_at_sunset__2__png.png",
   },
 };
 
@@ -994,18 +1007,31 @@ export function getModelActivePhoto(model: ModelSpec, colorName: string): string
   const matchedColor = model.colors?.find(
     (c) => c.name.toLowerCase().trim() === colorName?.toLowerCase().trim()
   );
-  if (matchedColor?.image) {
+  if (matchedColor?.image && !matchedColor.image.startsWith("/src/assets/images/")) {
     return matchedColor.image;
   }
 
   // 2. Lookup in standard COLOR_PHOTO_MAP
   const modelMap = COLOR_PHOTO_MAP[model.id?.toLowerCase()];
-  if (modelMap && colorName && modelMap[colorName]) {
-    return modelMap[colorName];
+  if (modelMap && colorName) {
+    const trimmed = colorName.trim();
+    if (modelMap[trimmed]) return modelMap[trimmed];
+    for (const [k, v] of Object.entries(modelMap)) {
+      if (k.toLowerCase().trim() === trimmed.toLowerCase()) return v;
+    }
   }
 
-  // 3. Fallback to model's default image
-  return model.image || "/src/assets/images/volmo_vista_1780058817114.png";
+  // 3. Matched color image even if local fallback
+  if (matchedColor?.image) {
+    return matchedColor.image;
+  }
+
+  // 4. Fallback to model's default image or MODELS_DATA Cloudinary master
+  if (model.image && !model.image.startsWith("/src/assets/images/")) {
+    return model.image;
+  }
+  const defaultModel = MODELS_DATA.find((m) => m.id === model.id);
+  return defaultModel?.image || model.image || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791397061/volmo_assets/volmo_vista_sunset_showcase__1__png.png";
 }
 
 export const DEFAULT_ACCESSORIES: AccessoryItem[] = [

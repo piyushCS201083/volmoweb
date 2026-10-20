@@ -51,11 +51,21 @@ async function startServer() {
   const isStandaloneBackend = process.env.STANDALONE_BACKEND === "true";
   const distPath = path.resolve(__dirname, "dist");
   const distIndexPath = path.resolve(distPath, "index.html");
-  const isProduction = process.env.NODE_ENV === "production" || (!hasTsx && process.env.NODE_ENV !== "development");
+  const hasDist = fs.existsSync(distIndexPath);
 
-  if (!isStandaloneBackend && isProduction && fs.existsSync(distIndexPath)) {
+  if (!isStandaloneBackend && hasDist) {
     // Serve compiled static bundle from dist/ for ultra-fast, robust delivery without HMR or middleware WebSocket conflicts
     const express = await import("express");
+    const srcImagesDir = path.resolve(__dirname, "src", "assets", "images");
+    if (fs.existsSync(srcImagesDir)) {
+      app.use("/src/assets/images", express.default.static(srcImagesDir));
+      app.use("/assets/images", express.default.static(srcImagesDir));
+      app.use("/images", express.default.static(srcImagesDir));
+    }
+    const publicDir = path.resolve(__dirname, "public");
+    if (fs.existsSync(publicDir)) {
+      app.use(express.default.static(publicDir));
+    }
     app.use(
       express.default.static(distPath, {
         setHeaders: (res, filePath) => {
@@ -101,13 +111,14 @@ async function startServer() {
       if (
         req.originalUrl.startsWith("/api") ||
         req.originalUrl.startsWith("/uploads") ||
-        req.originalUrl.startsWith("/src/assets/images") ||
-        req.originalUrl.startsWith("/assets/images") ||
-        req.originalUrl.startsWith("/images") ||
+        req.originalUrl.startsWith("/src/") ||
+        req.originalUrl.startsWith("/assets/") ||
+        req.originalUrl.startsWith("/images/") ||
         req.originalUrl.startsWith("/@") ||
         req.originalUrl.startsWith("/node_modules") ||
         req.path === "/robots.txt" ||
         req.path === "/sitemap.xml" ||
+        req.path.includes(".") ||
         (req.path.startsWith("/google") && req.path.endsWith(".html"))
       ) {
         return next();
