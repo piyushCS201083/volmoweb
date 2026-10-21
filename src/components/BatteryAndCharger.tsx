@@ -548,39 +548,53 @@ export default function BatteryAndCharger({ onEnquireClick, onApplyPartnership, 
 
             {/* Visual Photo Banners of the Models */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-900">
-                <img
-                  src={cfg.lithiumBanner1Image || "/src/assets/images/volmo_lithium_sunset_1791521360520.jpg"}
-                  alt="Volmo 60V 24Ah Lithium-Ion Smart Series Battery Pack"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-5 flex flex-col justify-end text-white">
-                  <span className="text-[10px] font-mono font-bold text-orange-400 uppercase tracking-widest">
-                    Portable Handle &middot; Indoor Socket Charging
-                  </span>
-                  <h4 className="text-lg font-bold">Volmo Lithium-Ion Smart Series</h4>
-                  <p className="text-xs text-slate-300 font-light mt-1">
-                    60V 24Ah (1.4 kW) &middot; 60V 30Ah (1.8 kW) with 3 Years Long Warranty
-                  </p>
+              <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md flex flex-col group hover:shadow-lg transition-all duration-300">
+                <div className="relative w-full h-64 sm:h-72 overflow-hidden bg-slate-950 flex items-center justify-center">
+                  <img
+                    src={cfg.lithiumBanner1Image || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791517780/volmo_assets/volmo_lithium_battery_at_golden_hour_png.png"}
+                    alt="Volmo 60V 24Ah Lithium-Ion Smart Series Battery Pack"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                {/* Text shifted DOWN below the photo for clear and unobstructed visibility */}
+                <div className="p-5 sm:p-6 bg-slate-900 border-t border-slate-800 flex flex-col justify-between flex-1 text-white">
+                  <div>
+                    <span className="text-[10px] sm:text-xs font-mono font-bold text-orange-400 uppercase tracking-widest block mb-1.5">
+                      Portable Handle &middot; Indoor Socket Charging
+                    </span>
+                    <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                      Volmo Lithium-Ion Smart Series
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-300 font-light mt-1.5 leading-relaxed">
+                      60V 24Ah (1.4 kW) &middot; 60V 30Ah (1.8 kW) with 3 Years Long Warranty
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-md group bg-slate-900">
-                <img
-                  src={cfg.lithiumBanner2Image || "/src/assets/images/volmo_lfp_sunset_1791521393610.jpg"}
-                  alt="Volmo 60V 45Ah LFP High Capacity Battery Pack"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500 opacity-95"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-5 flex flex-col justify-end text-white">
-                  <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">
-                    LFP Thermal Safe &middot; Prismatic Cells
-                  </span>
-                  <h4 className="text-lg font-bold">Volmo LFP Long-Range &amp; Commercial Fleet</h4>
-                  <p className="text-xs text-slate-300 font-light mt-1">
-                    2.16 kW (100km), 2.7 kW (120km), 3.6 kW (150km) &amp; 4.3 kW (180km)
-                  </p>
+              <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-md flex flex-col group hover:shadow-lg transition-all duration-300">
+                <div className="relative w-full h-64 sm:h-72 overflow-hidden bg-slate-950 flex items-center justify-center">
+                  <img
+                    src={cfg.lithiumBanner2Image || "https://res.cloudinary.com/oz1mkn2s/image/upload/v1791693673/volmo_assets/volmo_lithium_sunset_1791521360520_jpg_png.png"}
+                    alt="Volmo 60V 45Ah LFP High Capacity Battery Pack"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                {/* Text shifted DOWN below the photo for clear and unobstructed visibility */}
+                <div className="p-5 sm:p-6 bg-slate-900 border-t border-slate-800 flex flex-col justify-between flex-1 text-white">
+                  <div>
+                    <span className="text-[10px] sm:text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest block mb-1.5">
+                      LFP Thermal Safe &middot; Prismatic Cells
+                    </span>
+                    <h4 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                      Volmo LFP Long-Range &amp; Commercial Fleet
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-300 font-light mt-1.5 leading-relaxed">
+                      2.16 kW (100km), 2.7 kW (120km), 3.6 kW (150km) &amp; 4.3 kW (180km)
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

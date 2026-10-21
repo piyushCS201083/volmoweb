@@ -224,10 +224,36 @@ function safeLoadObject<T extends object>(key: string, defaultVal: T): T {
 
 export function ensureAllFleetModels(models: ModelSpec[]): ModelSpec[] {
   if (!Array.isArray(models) || models.length === 0) return MODELS_DATA;
-  const existingIds = new Set(models.map((m) => m.id));
+
+  // Enrich each model and color to guarantee Cloudinary images are used even after factory reset or stale local storage
+  const updatedModels = models.map((m) => {
+    const defaultModel = MODELS_DATA.find((dm) => dm.id === m.id);
+    if (!defaultModel) return m;
+
+    const mergedColors = (m.colors || []).map((c) => {
+      const defaultColor = defaultModel.colors?.find(
+        (dc) => dc.name.toLowerCase().trim() === c.name.toLowerCase().trim()
+      );
+      if (!c.image || c.image.startsWith("/src/assets/")) {
+        return { ...c, image: defaultColor?.image || c.image };
+      }
+      return c;
+    });
+
+    const modelImage =
+      !m.image || m.image.startsWith("/src/assets/") ? defaultModel.image : m.image;
+
+    return {
+      ...defaultModel,
+      ...m,
+      image: modelImage,
+      colors: mergedColors.length > 0 ? mergedColors : defaultModel.colors,
+    };
+  });
+
+  const existingIds = new Set(updatedModels.map((m) => m.id));
   const missing = MODELS_DATA.filter((dm) => !existingIds.has(dm.id));
-  if (missing.length === 0) return models;
-  return [...models, ...missing];
+  return missing.length === 0 ? updatedModels : [...updatedModels, ...missing];
 }
 
 function safeLoadShowrooms(key: string, defaultVal: ShowroomItem[]): ShowroomItem[] {
