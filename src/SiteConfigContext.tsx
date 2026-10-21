@@ -82,6 +82,7 @@ export interface CustomContactInfo {
   phone: string;
   factoryAddress: string;
   headOfficeAddress: string;
+  facebookUrl?: string;
 }
 
 interface SiteConfigContextType {
@@ -222,6 +223,19 @@ function safeLoadObject<T extends object>(key: string, defaultVal: T): T {
   return defaultVal;
 }
 
+function safeLoadContactInfo(key: string, defaultVal: CustomContactInfo): CustomContactInfo {
+  const loaded = safeLoadObject<CustomContactInfo>(key, defaultVal);
+  let fb = loaded.facebookUrl;
+  if (!fb || fb === "https://www.facebook.com/share/1HiziVA6Sq/?mibextid=wwXIfr") {
+    fb = "https://www.facebook.com/share/1CBwsaPgve/?mibextid=wwXIfr";
+  }
+  return {
+    ...defaultVal,
+    ...loaded,
+    facebookUrl: fb,
+  };
+}
+
 export function ensureAllFleetModels(models: ModelSpec[]): ModelSpec[] {
   if (!Array.isArray(models) || models.length === 0) return MODELS_DATA;
 
@@ -302,7 +316,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
   });
   const [pulseData, setPulseData] = useState<CustomPulseData>(() => safeLoadObject("volmo_custom_pulse", PULSE_DATA));
   const [commonFeatures, setCommonFeatures] = useState<CustomFeature[]>(() => safeLoadArray("volmo_custom_features", COMMON_FEATURES));
-  const [contactInfo, setContactInfo] = useState<CustomContactInfo>(() => safeLoadObject("volmo_custom_contact", CONTACT_INFO));
+  const [contactInfo, setContactInfo] = useState<CustomContactInfo>(() => safeLoadContactInfo("volmo_custom_contact", CONTACT_INFO));
   const [heroConfig, setHeroConfig] = useState<HeroConfig>(() => safeLoadObject("volmo_custom_hero", DEFAULT_HERO_CONFIG));
   const [testimonialsData, setTestimonialsData] = useState<TestimonialItem[]>(() => safeLoadArray("volmo_custom_testimonials", DEFAULT_TESTIMONIALS));
   const [faqsData, setFaqsData] = useState<FAQItem[]>(() => safeLoadArray("volmo_custom_faqs", DEFAULT_FAQS));
@@ -388,7 +402,7 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
       if (storedFeatures) setCommonFeatures(safeLoadArray("volmo_custom_features", COMMON_FEATURES));
       else setCommonFeatures(COMMON_FEATURES);
 
-      if (storedContact) setContactInfo(safeLoadObject("volmo_custom_contact", CONTACT_INFO));
+      if (storedContact) setContactInfo(safeLoadContactInfo("volmo_custom_contact", CONTACT_INFO));
       else setContactInfo(CONTACT_INFO);
 
       if (storedHero) setHeroConfig(safeLoadObject("volmo_custom_hero", DEFAULT_HERO_CONFIG));
@@ -505,8 +519,17 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
             localStorage.setItem("volmo_custom_features", JSON.stringify(cloudConfig.features));
           }
           if (cloudConfig.contact && typeof cloudConfig.contact === "object") {
-            setContactInfo({ ...CONTACT_INFO, ...cloudConfig.contact });
-            localStorage.setItem("volmo_custom_contact", JSON.stringify(cloudConfig.contact));
+            const mergedContact = {
+              ...CONTACT_INFO,
+              ...cloudConfig.contact,
+              facebookUrl:
+                !cloudConfig.contact.facebookUrl ||
+                cloudConfig.contact.facebookUrl === "https://www.facebook.com/share/1HiziVA6Sq/?mibextid=wwXIfr"
+                  ? "https://www.facebook.com/share/1CBwsaPgve/?mibextid=wwXIfr"
+                  : cloudConfig.contact.facebookUrl,
+            };
+            setContactInfo(mergedContact);
+            localStorage.setItem("volmo_custom_contact", JSON.stringify(mergedContact));
           }
           if (cloudConfig.hero && typeof cloudConfig.hero === "object") {
             setHeroConfig({ ...DEFAULT_HERO_CONFIG, ...cloudConfig.hero });

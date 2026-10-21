@@ -237,7 +237,8 @@ export const CONTACT_INFO = {
   email: "sales@volmoelectrical.com",
   phone: "7880008401",
   factoryAddress: "Behind Arogyadhaam Hospital, City Center, Gwalior, Madhya Pradesh - 474011",
-  headOfficeAddress: "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006"
+  headOfficeAddress: "Shivhare Colony, Singhpur Road, Baradari Choraha, Morar, Gwalior, Madhya Pradesh - 474006",
+  facebookUrl: "https://www.facebook.com/share/1CBwsaPgve/?mibextid=wwXIfr",
 };
 
 export type ContactInfo = typeof CONTACT_INFO;

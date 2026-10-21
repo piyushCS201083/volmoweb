@@ -165,6 +165,25 @@ export default function BrandingCMS({ onShowToast }: BrandingCMSProps) {
                 />
               </div>
             </div>
+
+            <div className="space-y-1.5 sm:col-span-2">
+              <label className="text-xs text-slate-400 font-bold uppercase tracking-wider block">
+                Official Facebook Page Link
+              </label>
+              <div className="relative">
+                <Globe size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="url"
+                  value={contactForm.facebookUrl || ""}
+                  onChange={(e) => setContactForm({ ...contactForm, facebookUrl: e.target.value })}
+                  placeholder="https://www.facebook.com/share/1CBwsaPgve/?mibextid=wwXIfr"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white font-mono"
+                />
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Direct link to Volmo's Facebook community page shown in the website footer.
+              </p>
+            </div>
           </div>
         </div>
 

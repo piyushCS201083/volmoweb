@@ -89,7 +89,7 @@ const SOCIAL_CHANNELS = [
     name: "Facebook",
     label: "Follow Volmo on Facebook",
     handle: "Volmo Electrical",
-    url: "https://www.facebook.com/share/1HiziVA6Sq/?mibextid=wwXIfr",
+    url: "https://www.facebook.com/share/1CBwsaPgve/?mibextid=wwXIfr",
     badgeColor: "bg-[#1877F2]/10 text-[#1877F2] border-[#1877F2]/30 hover:bg-[#1877F2] hover:text-white",
     hoverBorder: "hover:border-[#1877F2]/60 hover:text-[#1877F2] hover:bg-[#1877F2]/5",
     icon: (
@@ -324,10 +324,12 @@ export default function Footer({
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-2.5">
-            {SOCIAL_CHANNELS.map((ch) => (
+            {SOCIAL_CHANNELS.map((ch) => {
+              const channelUrl = ch.name === "Facebook" && contactInfo?.facebookUrl ? contactInfo.facebookUrl : ch.url;
+              return (
               <a
                 key={ch.name}
-                href={ch.url}
+                href={channelUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => {
@@ -348,7 +350,8 @@ export default function Footer({
                 <span>{ch.name}</span>
                 <ExternalLink size={11} className="text-slate-400 group-hover:text-slate-600 opacity-60 group-hover:opacity-100 transition-opacity" />
               </a>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
